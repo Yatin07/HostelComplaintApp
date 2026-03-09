@@ -12,6 +12,15 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.HostelComplaintApp">
         <activity
+            android:name=".HomePage_Warden"
+            android:exported="false" />
+        <activity
+            android:name=".HomePage_Staff"
+            android:exported="false" />
+        <activity
+            android:name=".HomePage_Student"
+            android:exported="false" />
+        <activity
             android:name=".LoginActivity"
             android:exported="false" />
         <activity
