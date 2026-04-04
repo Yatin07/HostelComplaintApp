@@ -26,7 +26,7 @@ public class HomePage_Warden extends AppCompatActivity {
 
     TextView tv1WardenName, tv2WardenId;
     ImageView imgProfile1, imgprof, staff_manage, imgnotification;
-    LinearLayout cardAnnouncement, cardpending;
+    LinearLayout cardAnnouncement, cardpending, cardtotalcomplaint;
 
     // for auto sliding of announcement card on home page //
     Handler handler = new Handler(Looper.getMainLooper());
@@ -90,6 +90,18 @@ public class HomePage_Warden extends AppCompatActivity {
             }
         });
         //Pending card clickable code Ends here//
+
+
+        /// total complaint card code starts here ///
+        cardtotalcomplaint = findViewById(R.id.cardtotalcomplaint);
+        cardtotalcomplaint.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(HomePage_Warden.this, Totalcomplaint.class);
+                startActivity(intent);
+            }
+        });
+
 
 
         // 3 DOTS BELOW THE AUTOSLIDING CARD ON HOMEPAGE
