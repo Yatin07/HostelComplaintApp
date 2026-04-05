@@ -15,17 +15,17 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.DocumentSnapshot;
+import java.util.HashMap;
+import java.util.Map;
 
 public class staff_manage extends AppCompatActivity {
 
     ImageView btnBack;
     LinearLayout staffContainer;
-    DatabaseReference databaseRef;
+    FirebaseFirestore db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,62 +38,58 @@ public class staff_manage extends AppCompatActivity {
 
         btnBack.setOnClickListener(v -> finish());
 
-        // 🔥 Initialize Firebase ONCE
-        databaseRef = FirebaseDatabase.getInstance().getReference("Staff");
+        // 🔥 Initialize Firestore ONCE
+        db = FirebaseFirestore.getInstance();
 
-        // 🔥 LOAD DATA FROM FIREBASE
-        databaseRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot snapshot) {
-
-                staffContainer.removeAllViews();
-
-                for (DataSnapshot data : snapshot.getChildren()) {
-
-                    String key = data.getKey();
-                    String name = data.child("name").getValue(String.class);
-                    String id = data.child("id").getValue(String.class);
-                    String dept = data.child("dept").getValue(String.class);
-                    String email = data.child("email").getValue(String.class);
-                    String phone = data.child("phone").getValue(String.class);
-
-                    View cardView = getLayoutInflater().inflate(R.layout.newstaff_card, staffContainer, false);
-
-                    TextView nameTv = cardView.findViewById(R.id.tvName);
-                    TextView idTv = cardView.findViewById(R.id.tvId);
-                    TextView deptTv = cardView.findViewById(R.id.tvDept);
-                    ImageView arrowBtn = cardView.findViewById(R.id.arrowBtn);
-                    Button removeBtn = cardView.findViewById(R.id.removeBtn);
-
-                    nameTv.setText(name);
-                    idTv.setText("Staff ID: " + id);
-                    deptTv.setText("Department: " + dept);
-
-                    // 🔹 DETAILS POPUP
-                    arrowBtn.setOnClickListener(v -> {
-                        new AlertDialog.Builder(staff_manage.this)
-                                .setTitle("Staff Details")
-                                .setMessage(
-                                        "Name: " + name + "\n\n" +
-                                                "Staff ID: " + id + "\n\n" +
-                                                "Department: " + dept + "\n\n" +
-                                                "Email: " + email + "\n\n" +
-                                                "Phone: " + phone
-                                )
-                                .show();
-                    });
-
-                    // 🔥 REMOVE BUTTON
-                    removeBtn.setOnClickListener(v -> {
-                        databaseRef.child(key).removeValue();
-                    });
-
-                    staffContainer.addView(cardView);
-                }
+        // 🔥 LOAD DATA FROM FIRESTORE
+        db.collection("Staff").addSnapshotListener((snapshot, error) -> {
+            if (error != null || snapshot == null) {
+                return;
             }
 
-            @Override
-            public void onCancelled(DatabaseError error) {
+            staffContainer.removeAllViews();
+
+            for (DocumentSnapshot data : snapshot.getDocuments()) {
+
+                String key = data.getId();
+                String name = data.getString("name");
+                String id = data.getString("id");
+                String dept = data.getString("dept");
+                String email = data.getString("email");
+                String phone = data.getString("phone");
+
+                View cardView = getLayoutInflater().inflate(R.layout.newstaff_card, staffContainer, false);
+
+                TextView nameTv = cardView.findViewById(R.id.tvName);
+                TextView idTv = cardView.findViewById(R.id.tvId);
+                TextView deptTv = cardView.findViewById(R.id.tvDept);
+                ImageView arrowBtn = cardView.findViewById(R.id.arrowBtn);
+                Button removeBtn = cardView.findViewById(R.id.removeBtn);
+
+                nameTv.setText(name != null ? name : "");
+                idTv.setText("Staff ID: " + (id != null ? id : ""));
+                deptTv.setText("Department: " + (dept != null ? dept : ""));
+
+                // 🔹 DETAILS POPUP
+                arrowBtn.setOnClickListener(v -> {
+                    new AlertDialog.Builder(staff_manage.this)
+                            .setTitle("Staff Details")
+                            .setMessage(
+                                    "Name: " + name + "\n\n" +
+                                            "Staff ID: " + id + "\n\n" +
+                                            "Department: " + dept + "\n\n" +
+                                            "Email: " + email + "\n\n" +
+                                            "Phone: " + phone
+                            )
+                            .show();
+                });
+
+                // 🔥 REMOVE BUTTON
+                removeBtn.setOnClickListener(v -> {
+                    db.collection("Staff").document(key).delete();
+                });
+
+                staffContainer.addView(cardView);
             }
         });
 
@@ -121,13 +117,14 @@ public class staff_manage extends AppCompatActivity {
                         String emailStr = email.getText().toString();
                         String phoneStr = phone.getText().toString();
 
-                        String staffKey = databaseRef.push().getKey();
+                        Map<String, Object> staffData = new HashMap<>();
+                        staffData.put("name", nameStr);
+                        staffData.put("id", idStr);
+                        staffData.put("dept", deptStr);
+                        staffData.put("email", emailStr);
+                        staffData.put("phone", phoneStr);
 
-                        databaseRef.child(staffKey).child("name").setValue(nameStr);
-                        databaseRef.child(staffKey).child("id").setValue(idStr);
-                        databaseRef.child(staffKey).child("dept").setValue(deptStr);
-                        databaseRef.child(staffKey).child("email").setValue(emailStr);
-                        databaseRef.child(staffKey).child("phone").setValue(phoneStr);
+                        db.collection("Staff").add(staffData);
 
                     })
                     .setNegativeButton("Cancel", null)
