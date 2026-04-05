@@ -21,6 +21,23 @@
             android:name=".HomePage_Student"
             android:exported="false" />
         <activity
+            android:name=".worker.WorkerDashboardActivity"
+            android:parentActivityName=".HomePage_Staff"
+            android:exported="false" />
+
+        <activity
+            android:name=".worker.WorkerProfileActivity"
+            android:parentActivityName=".worker.WorkerDashboardActivity"
+            android:exported="false" />
+        <activity
+            android:name=".worker.WorkerTaskListActivity"
+            android:parentActivityName=".worker.WorkerDashboardActivity"
+            android:exported="false" />
+        <activity
+            android:name=".worker.WorkerTaskDetailsActivity"
+            android:parentActivityName=".worker.WorkerTaskListActivity"
+            android:exported="false" />
+        <activity
             android:name=".LoginActivity"
             android:exported="false" />
         <activity

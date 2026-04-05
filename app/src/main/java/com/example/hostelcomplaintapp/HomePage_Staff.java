@@ -15,6 +15,15 @@ public class HomePage_Staff extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_home_page_staff);
+        
+        android.widget.Button btnOpenWorker = findViewById(R.id.btnOpenWorkerModule);
+        if (btnOpenWorker != null) {
+            btnOpenWorker.setOnClickListener(v -> {
+                android.content.Intent intent = new android.content.Intent(HomePage_Staff.this, com.example.hostelcomplaintapp.worker.WorkerDashboardActivity.class);
+                startActivity(intent);
+            });
+        }
+        
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
