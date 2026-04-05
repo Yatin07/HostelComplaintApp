@@ -3,7 +3,12 @@ package com.example.hostelcomplaintapp;
 import android.annotation.SuppressLint;
 import android.graphics.Color;
 import android.os.Bundle;
+<<<<<<< HEAD
 import android.widget.ImageView;
+=======
+import android.widget.Button;
+import android.widget.EditText;
+>>>>>>> d978b16b349a7b879ee2872836e419e5c0cf9db3
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
@@ -24,6 +29,7 @@ import android.os.Looper;
 
 public class HomePage_Warden extends AppCompatActivity {
 
+<<<<<<< HEAD
     TextView tv1WardenName, tv2WardenId;
     ImageView imgProfile1, imgprof, staff_manage, imgnotification;
     LinearLayout cardAnnouncement, cardpending, cardtotalcomplaint;
@@ -36,12 +42,19 @@ public class HomePage_Warden extends AppCompatActivity {
 
 
     @SuppressLint("MissingInflatedId")
+=======
+    TextView tv1,tv2;
+    EditText et1,et2;
+    Button bt1;
+
+>>>>>>> d978b16b349a7b879ee2872836e419e5c0cf9db3
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_home_page_warden);
 
+<<<<<<< HEAD
        tv1WardenName = findViewById(R.id.tv1WardenName);
        tv2WardenId = findViewById(R.id.tv2WardenId);
 
@@ -199,6 +212,11 @@ public class HomePage_Warden extends AppCompatActivity {
 
 
 
+=======
+        et1=findViewById(R.id.et1);
+        et2=findViewById(R.id.et2);
+        bt1=findViewById(R.id.bt1);
+>>>>>>> d978b16b349a7b879ee2872836e419e5c0cf9db3
 
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {

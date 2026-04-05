@@ -15,6 +15,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.HostelComplaintApp">
         <activity
+<<<<<<< HEAD
             android:name=".activity_student_complaint"
             android:exported="false" />
         <activity
@@ -31,6 +32,9 @@
             android:exported="false" />
         <activity
             android:name=".AddAnnouncementActivity"
+=======
+            android:name=".MainActivity2_page1_staff"
+>>>>>>> d978b16b349a7b879ee2872836e419e5c0cf9db3
             android:exported="false" />
         <activity
             android:name=".HomePage_Warden"
