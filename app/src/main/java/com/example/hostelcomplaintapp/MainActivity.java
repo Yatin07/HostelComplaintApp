@@ -33,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         btnStaff.setOnClickListener(v -> {
-            Intent intent = new Intent(MainActivity.this, HomePage_Staff.class);
+            Intent intent = new Intent(MainActivity.this, com.example.hostelcomplaintapp.worker.WorkerDashboardActivity.class);
             intent.putExtra("role", "staff");
             startActivity(intent);
         });

@@ -55,6 +55,9 @@ dependencies {
             implementation("com.google.firebase:firebase-storage:20.3.0")
 
     testImplementation(libs.junit)
-    androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
+
+    // Firebase Integration
+    implementation(platform("com.google.firebase:firebase-bom:33.1.2"))
+    implementation("com.google.firebase:firebase-database")
 }
