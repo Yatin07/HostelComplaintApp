@@ -12,6 +12,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.HostelComplaintApp">
         <activity
+            android:name=".MainActivity2_page1_staff"
+            android:exported="false" />
+        <activity
             android:name=".HomePage_Warden"
             android:exported="false" />
         <activity
