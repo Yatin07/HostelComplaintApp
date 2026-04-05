@@ -1,5 +1,6 @@
 package com.example.hostelcomplaintapp;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -21,7 +22,7 @@ import java.util.Map;
 
 public class AddAnnouncementActivity extends AppCompatActivity {
 
-    ImageView btnBack, imgProfile;
+    ImageView btnBack, imgProfile1, gotohomepg, staff_manage, btnNotification, imgProfile;
     TextView tv1WardenName;
     EditText addannouncement;
     Button submitBtn;
@@ -62,7 +63,57 @@ public class AddAnnouncementActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+
+        gotohomepg = findViewById(R.id.gotohomepg);
+        gotohomepg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent1 = new Intent(AddAnnouncementActivity.this, HomePage_Warden.class);
+                startActivity(intent1);
+            }
+        });
+
+
+        imgProfile1 = findViewById(R.id.imgProfile1);
+        imgProfile1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent1 = new Intent(AddAnnouncementActivity.this, imgProfile_click.class);
+                startActivity(intent1);
+            }
+        });
+
+
+        staff_manage = findViewById(R.id.staff_manage);
+        staff_manage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent1 = new Intent(AddAnnouncementActivity.this, staff_manage.class);
+                startActivity(intent1);
+            }
+        });
+
+
+        btnNotification = findViewById(R.id.btnNotification);
+        btnNotification.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent1 = new Intent(AddAnnouncementActivity.this, Notification.class);
+                startActivity(intent1);
+            }
+        });
+
+        imgProfile = findViewById(R.id.imgProfile);
+        imgProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent1 = new Intent(AddAnnouncementActivity.this, imgProfile_click.class);
+                startActivity(intent1);
+            }
+        });
     }
+
 
     // ✅ FIXED FUNCTION
     private void saveAnnouncement(String text) {

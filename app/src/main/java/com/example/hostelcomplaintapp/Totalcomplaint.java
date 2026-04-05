@@ -1,6 +1,9 @@
 package com.example.hostelcomplaintapp;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.ImageView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,6 +19,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.ArrayList;
 
 public class Totalcomplaint extends AppCompatActivity {
+
+    ImageView btnBack, gotohomepg, btnNotification, staff_manage, imgprof;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +61,62 @@ public class Totalcomplaint extends AppCompatActivity {
                     adapter.notifyDataSetChanged(); // VERY IMPORTANT
                 });
         /// load data  from firestore end ///
+
+        /// back button code start ///
+
+        btnBack = findViewById(R.id.btnBack);
+        btnBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+        /// back button code end ///
+
+        /// home button code start ///
+        gotohomepg = findViewById(R.id.gotohomepg);
+        gotohomepg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+        /// home button code end ///
+
+        /// notification button code start ///
+        btnNotification = findViewById(R.id.btnNotification);
+        btnNotification.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Totalcomplaint.this, Notification.class);
+                startActivity(intent);
+            }
+        });
+        /// notification button code end ///
+
+        /// staff_manage button code start ///
+        staff_manage = findViewById(R.id.staff_manage);
+        staff_manage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Totalcomplaint.this, staff_manage.class);
+                startActivity(intent);
+            }
+        });
+        /// staff manage button code end ///
+
+        /// profile button code start ///
+        imgprof = findViewById(R.id.imgprof);
+        imgprof.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Totalcomplaint.this, imgProfile_click.class);
+                startActivity(intent);
+            }
+        });
+        /// profile button code end ///
+
+
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());

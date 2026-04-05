@@ -255,6 +255,7 @@
             android:orientation="vertical">
 
             <ImageView
+                android:id="@+id/gotohomepg"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:src="@drawable/baseline_home_24"/>
@@ -275,6 +276,7 @@
             android:orientation="vertical">
 
             <ImageView
+                android:id="@+id/btnNotification"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:src="@drawable/baseline_notifications_24"/>
@@ -294,6 +296,7 @@
             android:orientation="vertical">
 
             <ImageView
+                android:id="@+id/staff_manage"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:src="@drawable/baseline_person_add_alt_24"/>
@@ -313,6 +316,7 @@
             android:orientation="vertical">
 
             <ImageView
+                android:id="@+id/imgProfile"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:src="@drawable/baseline_account_circle_24"/>
