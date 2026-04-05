@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="60dp"
+    android:orientation="horizontal"
+    android:background="@drawable/bottom_nav_bg"
+    android:weightSum="4">
+
+    <!-- HOME -->
+    <LinearLayout
+        android:id="@+id/navHome4"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <View
+            android:id="@+id/lineHome3"
+            android:layout_width="20dp"
+            android:layout_height="3dp"
+            android:background="@android:color/transparent"
+            android:layout_marginBottom="4dp"/>
+
+        <ImageView
+            android:id="@+id/iconHome3"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/baseline_home_24"
+            android:tint="#777777"/>
+
+        <TextView
+            android:id="@+id/textHome2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Home"
+            android:textSize="14sp"
+            android:textColor="#777777"/>
+    </LinearLayout>
+
+    <!-- NOTIFICATION -->
+    <LinearLayout
+        android:id="@+id/navNotification5"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <View
+            android:id="@+id/lineNotification4"
+            android:layout_width="20dp"
+            android:layout_height="3dp"
+            android:background="@android:color/transparent"
+            android:layout_marginBottom="4dp"/>
+
+        <ImageView
+            android:id="@+id/iconNotification3"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/baseline_notifications_24"
+            android:tint="#777777"/>
+
+        <TextView
+            android:id="@+id/textNotification2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Notification"
+            android:textSize="14sp"
+            android:textColor="#777777"/>
+    </LinearLayout>
+
+    <!-- STAFF -->
+    <LinearLayout
+        android:id="@+id/navStaff5"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <View
+            android:id="@+id/lineStaff2"
+            android:layout_width="20dp"
+            android:layout_height="3dp"
+            android:background="@android:color/transparent"
+            android:layout_marginBottom="4dp"/>
+
+        <ImageView
+            android:id="@+id/iconStaff3"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/baseline_person_add_alt_24"
+            android:tint="#777777"/>
+
+        <TextView
+            android:id="@+id/textStaf4f"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Staff"
+            android:textSize="14sp"
+            android:textColor="#777777"/>
+    </LinearLayout>
+
+    <!-- PROFILE -->
+    <LinearLayout
+        android:id="@+id/navProfile1"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <View
+            android:id="@+id/lineProfile2"
+            android:layout_width="20dp"
+            android:layout_height="3dp"
+            android:background="@android:color/transparent"
+            android:layout_marginBottom="4dp"/>
+
+        <ImageView
+            android:id="@+id/iconProfile3"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/baseline_account_circle_24"
+            android:tint="#777777"/>
+
+        <TextView
+            android:id="@+id/textProfile4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Profile"
+            android:textSize="14sp"
+            android:textColor="#777777"/>
+    </LinearLayout>
+
+</LinearLayout>
