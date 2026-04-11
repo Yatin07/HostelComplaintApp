@@ -13,19 +13,26 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.hostelcomplaintapp.MainActivity;
 import com.example.hostelcomplaintapp.R;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class WorkerProfileActivity extends AppCompatActivity {
 
     private TextView tvWorkerName, tvWorkerEmail, tvWorkerRole, tvWorkerId;
-    private EditText etWorkerName, etWorkerRole;
+    private EditText etWorkerName, etWorkerEmail, etWorkerRole, etWorkerId;
     private Button btnLogout, btnBack, btnEditProfile;
     
     private boolean isEditing = false;
+    private FirebaseFirestore db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_worker_profile);
+
+        db = FirebaseFirestore.getInstance();
 
         tvWorkerName = findViewById(R.id.tvWorkerName);
         tvWorkerEmail = findViewById(R.id.tvWorkerEmail);
@@ -33,7 +40,9 @@ public class WorkerProfileActivity extends AppCompatActivity {
         tvWorkerId = findViewById(R.id.tvWorkerId);
         
         etWorkerName = findViewById(R.id.etWorkerName);
+        etWorkerEmail = findViewById(R.id.etWorkerEmail);
         etWorkerRole = findViewById(R.id.etWorkerRole);
+        etWorkerId = findViewById(R.id.etWorkerId);
 
         btnLogout = findViewById(R.id.btnLogout);
         btnBack = findViewById(R.id.btnBack);
@@ -57,64 +66,104 @@ public class WorkerProfileActivity extends AppCompatActivity {
 
             // Bring existing data to EditTexts
             etWorkerName.setText(tvWorkerName.getText().toString());
+            etWorkerEmail.setText(tvWorkerEmail.getText().toString());
             etWorkerRole.setText(tvWorkerRole.getText().toString());
+            etWorkerId.setText(tvWorkerId.getText().toString());
 
             // Switch visibility
             tvWorkerName.setVisibility(View.GONE);
+            tvWorkerEmail.setVisibility(View.GONE);
             tvWorkerRole.setVisibility(View.GONE);
+            tvWorkerId.setVisibility(View.GONE);
+
             etWorkerName.setVisibility(View.VISIBLE);
+            etWorkerEmail.setVisibility(View.VISIBLE);
             etWorkerRole.setVisibility(View.VISIBLE);
+            etWorkerId.setVisibility(View.VISIBLE);
+            
+            // Ensure focusability
+            etWorkerName.setEnabled(true);
+            etWorkerEmail.setEnabled(true);
+            etWorkerRole.setEnabled(true);
+            etWorkerId.setEnabled(true);
+            
         } else {
             // Validate and Save
             String updatedName = etWorkerName.getText().toString().trim();
+            String updatedEmail = etWorkerEmail.getText().toString().trim();
             String updatedRole = etWorkerRole.getText().toString().trim();
+            String updatedId = etWorkerId.getText().toString().trim();
 
-            if (updatedName.isEmpty()) {
-                Toast.makeText(this, "Name cannot be empty!", Toast.LENGTH_SHORT).show();
-                return;
-            }
-            if (updatedRole.isEmpty()) {
-                Toast.makeText(this, "Role cannot be empty!", Toast.LENGTH_SHORT).show();
+            if (updatedName.isEmpty() || updatedRole.isEmpty()) {
+                Toast.makeText(this, "Name and Role cannot be empty!", Toast.LENGTH_SHORT).show();
                 return;
             }
 
-            // Save to SharedPreferences
-            SharedPreferences sharedPreferences = getSharedPreferences("WorkerPrefs", Context.MODE_PRIVATE);
-            SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.putString("name", updatedName);
-            editor.putString("role", updatedRole);
-            editor.apply();
+            Map<String, Object> updates = new HashMap<>();
+            updates.put("Name", updatedName);
+            updates.put("Email", updatedEmail);
+            updates.put("Role", updatedRole);
+            updates.put("Work_id", updatedId);
 
-            // Update TextViews
-            tvWorkerName.setText(updatedName);
-            tvWorkerRole.setText(updatedRole);
+            db.collection("workers")
+              .document("W-12345")
+              .update(updates)
+              .addOnSuccessListener(aVoid -> {
+                  Toast.makeText(this, "Profile Updated", Toast.LENGTH_SHORT).show();
 
-            // Revert editing state
-            isEditing = false;
-            btnEditProfile.setText("Edit Profile");
+                  // Update TextViews
+                  tvWorkerName.setText(updatedName);
+                  tvWorkerEmail.setText(updatedEmail);
+                  tvWorkerRole.setText(updatedRole);
+                  tvWorkerId.setText(updatedId);
 
-            // Switch visibility back
-            etWorkerName.setVisibility(View.GONE);
-            etWorkerRole.setVisibility(View.GONE);
-            tvWorkerName.setVisibility(View.VISIBLE);
-            tvWorkerRole.setVisibility(View.VISIBLE);
+                  // Revert editing state
+                  isEditing = false;
+                  btnEditProfile.setText("Edit Profile");
 
-            Toast.makeText(this, "Profile Updated Successfully", Toast.LENGTH_SHORT).show();
+                  // Switch visibility back
+                  etWorkerName.setVisibility(View.GONE);
+                  etWorkerEmail.setVisibility(View.GONE);
+                  etWorkerRole.setVisibility(View.GONE);
+                  etWorkerId.setVisibility(View.GONE);
+
+                  tvWorkerName.setVisibility(View.VISIBLE);
+                  tvWorkerEmail.setVisibility(View.VISIBLE);
+                  tvWorkerRole.setVisibility(View.VISIBLE);
+                  tvWorkerId.setVisibility(View.VISIBLE);
+              })
+              .addOnFailureListener(e -> {
+                  Toast.makeText(this, "Update Failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+              });
         }
     }
 
     private void loadWorkerData() {
-        SharedPreferences sharedPreferences = getSharedPreferences("WorkerPrefs", Context.MODE_PRIVATE);
-        
-        String name = sharedPreferences.getString("name", "John Doe");
-        String email = sharedPreferences.getString("email", "john.doe@hostel.com");
-        String role = sharedPreferences.getString("role", "Electrician");
-        String id = sharedPreferences.getString("worker_id", "W-12345");
+        db.collection("workers").document("W-12345")
+          .get()
+          .addOnSuccessListener(document -> {
+              if (document != null && document.exists()) {
+                  String name = document.getString("Name");
+                  String email = document.getString("Email");
+                  String role = document.getString("Role");
+                  String workId = document.getString("Work_id");
 
-        tvWorkerName.setText(name);
-        tvWorkerEmail.setText(email);
-        tvWorkerRole.setText(role);
-        tvWorkerId.setText(id);
+                  tvWorkerName.setText(name != null ? name : "");
+                  tvWorkerEmail.setText(email != null ? email : "");
+                  tvWorkerRole.setText(role != null ? role : "");
+                  tvWorkerId.setText(workId != null ? workId : "");
+
+                  etWorkerName.setText(name != null ? name : "");
+                  etWorkerEmail.setText(email != null ? email : "");
+                  etWorkerRole.setText(role != null ? role : "");
+                  etWorkerId.setText(workId != null ? workId : "");
+              } else {
+                  Toast.makeText(this, "Worker document not found.", Toast.LENGTH_SHORT).show();
+              }
+          })
+          .addOnFailureListener(e -> {
+              Toast.makeText(this, "Failed to load data.", Toast.LENGTH_SHORT).show();
+          });
     }
 
     private void performLogout() {

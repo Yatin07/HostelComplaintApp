@@ -7,16 +7,13 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.hostelcomplaintapp.R;
-import com.example.hostelcomplaintapp.models.DataRepository;
-import com.example.hostelcomplaintapp.models.Task;
-
-import java.util.List;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 public class WorkerDashboardActivity extends AppCompatActivity {
 
     private TextView tvTotalCount, tvPendingCount, tvInProgressCount, tvCompletedCount, tvOverdueCount;
     private TextView tvAverageRating, tvRecentFeedback;
-    private Button btnViewAllTasks, btnProfileLogout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,26 +34,15 @@ public class WorkerDashboardActivity extends AppCompatActivity {
         tvAverageRating = findViewById(R.id.tvAverageRating);
         tvRecentFeedback = findViewById(R.id.tvRecentFeedback);
 
-        btnViewAllTasks = findViewById(R.id.btnViewAllTasks);
-        btnProfileLogout = findViewById(R.id.btnProfileLogout);
         Button btnBack = findViewById(R.id.btnBack);
 
         if (btnBack != null) {
             btnBack.setOnClickListener(v -> finish());
         }
 
-        btnViewAllTasks.setOnClickListener(v -> {
-            openTaskList("ALL");
-        });
-
         // Setup mock feedback
         tvAverageRating.setText("Avg Rating: 4.5 / 5.0 ⭐");
         tvRecentFeedback.setText("\"Great job fixing the fan!\" - Room 101\n\"Quick response\" - Room 304");
-
-        btnProfileLogout.setOnClickListener(v -> {
-            Intent intent = new Intent(WorkerDashboardActivity.this, WorkerProfileActivity.class);
-            startActivity(intent);
-        });
 
         // Setup Click Listeners for Dashboard Cards (Filter Passing)
         findViewById(R.id.cardTotal).setOnClickListener(v -> openTaskList("ALL"));
@@ -64,6 +50,10 @@ public class WorkerDashboardActivity extends AppCompatActivity {
         findViewById(R.id.cardInProgress).setOnClickListener(v -> openTaskList("IN_PROGRESS"));
         findViewById(R.id.cardCompleted).setOnClickListener(v -> openTaskList("COMPLETED"));
         findViewById(R.id.cardOverdue).setOnClickListener(v -> openTaskList("OVERDUE"));
+        
+        WorkerNavigationHelper.setupNavigation(this);
+        
+        setupRealTimeUpdates();
     }
 
     private void openTaskList(String filterType) {
@@ -75,7 +65,6 @@ public class WorkerDashboardActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        updateDashboardCounts();
     }
 
     @Override
@@ -87,34 +76,54 @@ public class WorkerDashboardActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void updateDashboardCounts() {
-        List<Task> tasks = DataRepository.getInstance().getTasks();
-        
-        int total = tasks.size();
-        int pending = 0;
-        int inProgress = 0;
-        int completed = 0;
-        int overdue = 0;
+    private void setupRealTimeUpdates() {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        String workerId = "W-12345"; // Default worker ID
 
-        long currentTime = System.currentTimeMillis();
+        db.collection("complaints")
+          .whereEqualTo("assignedWorkerId", workerId)
+          .addSnapshotListener((value, error) -> {
+              if (error != null || value == null) {
+                  return;
+              }
 
-        for (Task task : tasks) {
-            String status = task.getStatus();
-            if (task.getDeadline() < currentTime && !status.equalsIgnoreCase("Completed")) {
-                task.setStatus("Overdue"); // Auto update to overdue if missed deadline
-                status = "Overdue";
-            }
+              int total = value.size();
+              int pending = 0;
+              int inProgress = 0;
+              int completed = 0;
+              int overdue = 0;
 
-            if (status.equalsIgnoreCase("Pending")) pending++;
-            else if (status.equalsIgnoreCase("In Progress")) inProgress++;
-            else if (status.equalsIgnoreCase("Completed")) completed++;
-            else if (status.equalsIgnoreCase("Overdue")) overdue++;
-        }
+              long currentTime = System.currentTimeMillis();
 
-        tvTotalCount.setText(String.valueOf(total));
-        tvPendingCount.setText(String.valueOf(pending));
-        tvInProgressCount.setText(String.valueOf(inProgress));
-        tvCompletedCount.setText(String.valueOf(completed));
-        tvOverdueCount.setText(String.valueOf(overdue));
+              for (QueryDocumentSnapshot doc : value) {
+                  String status = doc.getString("status");
+                  if (status == null) status = "Pending";
+
+                  Object deadlineObj = doc.get("deadline");
+                  long deadline = 0;
+                  if (deadlineObj instanceof Long) {
+                      deadline = (Long) deadlineObj;
+                  } else if (deadlineObj instanceof String) {
+                      try { deadline = Long.parseLong((String)deadlineObj); } catch(Exception e){}
+                  }
+
+                  if (deadline > 0 && currentTime > deadline && !status.equals("Completed") && !status.equals("Overdue")) {
+                      status = "Overdue";
+                      db.collection("complaints").document(doc.getId()).update("status", "Overdue");
+                  }
+
+                  if (status.equalsIgnoreCase("Pending")) pending++;
+                  else if (status.equalsIgnoreCase("In Progress")) inProgress++;
+                  else if (status.equalsIgnoreCase("Completed")) completed++;
+                  else if (status.equalsIgnoreCase("Overdue")) overdue++;
+                  else pending++;
+              }
+
+              tvTotalCount.setText(String.valueOf(total));
+              tvPendingCount.setText(String.valueOf(pending));
+              tvInProgressCount.setText(String.valueOf(inProgress));
+              tvCompletedCount.setText(String.valueOf(completed));
+              tvOverdueCount.setText(String.valueOf(overdue));
+          });
     }
 }

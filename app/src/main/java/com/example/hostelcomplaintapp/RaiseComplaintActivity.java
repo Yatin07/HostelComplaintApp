@@ -67,13 +67,28 @@ public class RaiseComplaintActivity extends AppCompatActivity {
                 return;
             }
 
-            // Simulate Save (no DB yet)
-            Toast.makeText(this, "Complaint Submitted!", Toast.LENGTH_LONG).show();
+            // Save to Database
+            java.util.Map<String, Object> complaint = new java.util.HashMap<>();
+            complaint.put("text", category + ": " + title + " - " + description);
+            complaint.put("room", room);
+            complaint.put("timestamp", System.currentTimeMillis());
+            complaint.put("status", "Pending");
+            complaint.put("bedNumber", "N/A"); // Default fallback
+            complaint.put("studentId", "Student-01"); // Dummy student user
+            complaint.put("assignedWorkerId", "W-12345"); // Auto-assign to default worker for testing staff UI
 
-            // Clear form
-            etTitle.setText("");
-            etDescription.setText("");
-            etRoom.setText("");
+            com.google.firebase.firestore.FirebaseFirestore db = com.google.firebase.firestore.FirebaseFirestore.getInstance();
+            db.collection("complaints").add(complaint)
+                    .addOnSuccessListener(documentReference -> {
+                        Toast.makeText(this, "Complaint Submitted Successfully!", Toast.LENGTH_LONG).show();
+                        // Clear form
+                        etTitle.setText("");
+                        etDescription.setText("");
+                        etRoom.setText("");
+                    })
+                    .addOnFailureListener(e -> {
+                        Toast.makeText(this, "Submission failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    });
         });
 
         // Image Button Logic
