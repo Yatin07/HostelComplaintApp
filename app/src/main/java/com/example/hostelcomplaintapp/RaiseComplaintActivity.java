@@ -15,10 +15,16 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import com.google.firebase.firestore.FieldValue;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.HashMap;
+import java.util.Map;
+
 public class RaiseComplaintActivity extends AppCompatActivity {
 
     Spinner spinnerCategory;
-    EditText etRoom, etTitle, etDescription;
+    EditText etRoom, etTitle, etDescription, etStudentId;
     Button btnSubmit, btnUploadImage;
     ImageView imagePreview;
 
@@ -39,6 +45,8 @@ public class RaiseComplaintActivity extends AppCompatActivity {
         btnUploadImage = findViewById(R.id.btnUploadImage);
         imagePreview = findViewById(R.id.imagePreview);
         Button btnLocation = findViewById(R.id.btnLocation);
+        etStudentId = findViewById(R.id.etStudentId);
+
 
         // Spinner Data
         String[] categories = {

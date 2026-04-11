@@ -22,6 +22,10 @@ import java.util.List;
 import android.os.Handler;
 import android.os.Looper;
 
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
+
 public class HomePage_Warden extends AppCompatActivity {
 
     TextView tv1WardenName, tv2WardenId;
@@ -113,15 +117,31 @@ public class HomePage_Warden extends AppCompatActivity {
 
         ViewPager2 viewPager = findViewById(R.id.viewPagerAnnouncements);
 
+        /// announcement autosliding fetches only latest 3 from firestore code start ///
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
         List<String> announcements = new ArrayList<>();
-        announcements.add("FOSS MPSTME Core Recruitment 2026-27");
-        announcements.add("Holiday notice");
-        announcements.add("Exam schedule");
 
-        AnnouncementAdapter adapter = new AnnouncementAdapter(announcements);
-        viewPager.setAdapter(adapter);
+        db.collection("announcements")
+                .orderBy("timestamp", Query.Direction.DESCENDING)
+                .limit(3)
+                .addSnapshotListener((value, error) -> {
 
-        viewPager.setAdapter(adapter);
+                    if (error != null || value == null) return;
+
+                    announcements.clear();
+
+                    for (DocumentSnapshot doc : value.getDocuments()) {
+                        String text = doc.getString("text");
+                        announcements.add(text);
+                    }
+
+                    AnnouncementAdapter adapter = new AnnouncementAdapter(announcements);
+                    viewPager.setAdapter(adapter);
+
+                    currentPage = 0;
+                });
+        /// announcement autosliding fetches only latest 3 from firestore code start ///
+
 
 
         ///  For AUTO-SLIDING OF THE ANNOUNCEMENT CARD ///
@@ -192,6 +212,7 @@ public class HomePage_Warden extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
 
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {

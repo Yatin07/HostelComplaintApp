@@ -1,10 +1,15 @@
 package com.example.hostelcomplaintapp;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -20,7 +25,7 @@ public class Notification extends AppCompatActivity {
     ArrayList<Notificationpgdatastore> list;
     NotificationAdapter adapter;
     FirebaseFirestore db;
-    ImageView btnBack;
+    ImageView btnBack, gotohomepg, imgprof, btnNotification, staff_manage;
 
 
     @Override
@@ -70,5 +75,55 @@ public class Notification extends AppCompatActivity {
                         adapter.notifyDataSetChanged();
                     }
                 });
+
+        gotohomepg = findViewById(R.id.gotohomepg);
+        gotohomepg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent1 = new Intent(Notification.this, HomePage_Warden.class);
+                startActivity(intent1);
+            }
+        });
+
+
+        imgprof = findViewById(R.id.imgprof);
+
+        imgprof.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Notification.this, imgProfile_click.class);
+                startActivity(intent);
+
+            }
+        });
+
+        btnNotification = findViewById(R.id.btnNotification);
+        btnNotification.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent1 = new Intent(Notification.this, Notification.class);
+                startActivity(intent1);
+            }
+        });
+
+
+        staff_manage = findViewById(R.id.staff_manage);
+        staff_manage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent1 = new Intent(Notification.this, staff_manage.class);
+                startActivity(intent1);
+            }
+        });
+
+        /// battery level,wifi,time visible ///
+        getWindow().getDecorView().setSystemUiVisibility(0);
+        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+            return insets;
+        });
     }
 }

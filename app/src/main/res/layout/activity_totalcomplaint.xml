@@ -41,6 +41,13 @@
                 android:textStyle="bold"
                 android:gravity="center"/>
 
+            <!-- RIGHT SIDE PROFILE ICON -->
+            <ImageView
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:id="@+id/imgnmlogo"
+                android:src="@drawable/nmm"/>
+
         </LinearLayout>
 
     </androidx.appcompat.widget.Toolbar>

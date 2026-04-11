@@ -42,23 +42,22 @@ dependencies {
     implementation(libs.activity)
     implementation(libs.constraintlayout)
 
-    implementation("com.google.firebase:firebase-database:20.3.0")
-    implementation("com.google.firebase:firebase-auth:22.3.0")
-    implementation("com.google.firebase:firebase-storage:20.3.0")
-    implementation("com.google.firebase:firebase-firestore:24.10.0")
+    // Firebase BOM
+    implementation(platform("com.google.firebase:firebase-bom:33.1.2"))
+
+// Firebase services (NO version)
+    implementation("com.google.firebase:firebase-firestore")
+    implementation("com.google.firebase:firebase-database")
+    implementation("com.google.firebase:firebase-auth")
+    implementation("com.google.firebase:firebase-storage")
 
     implementation("com.github.bumptech.glide:glide:4.16.0")
 
     implementation(libs.credentials)
     implementation(libs.credentials.play.services.auth)
     implementation(libs.googleid)
-            implementation("com.google.firebase:firebase-storage:20.3.0")
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.espresso.core)
 
-    // Firebase Integration
-    implementation(platform("com.google.firebase:firebase-bom:33.1.2"))
-    implementation("com.google.firebase:firebase-database")
-    implementation("com.google.firebase:firebase-firestore")
 }
