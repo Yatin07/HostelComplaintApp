@@ -1,5 +1,6 @@
 package com.example.hostelcomplaintapp;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
@@ -23,7 +24,7 @@ import java.util.Map;
 
 public class staff_manage extends AppCompatActivity {
 
-    ImageView btnBack;
+    ImageView btnBack, gotohomepg, btnNotification, imgprof, staff_manage;
     LinearLayout staffContainer;
     FirebaseFirestore db;
 
@@ -124,12 +125,62 @@ public class staff_manage extends AppCompatActivity {
                         staffData.put("email", emailStr);
                         staffData.put("phone", phoneStr);
 
-                        db.collection("Staff").add(staffData);
-
+                        db.collection("Staff")
+                                .add(staffData)
+                                .addOnSuccessListener(documentReference -> {
+                                    // success
+                                })
+                                .addOnFailureListener(e -> {
+                                    e.printStackTrace();
+                                });
                     })
                     .setNegativeButton("Cancel", null)
                     .show();
         });
+
+
+
+        gotohomepg = findViewById(R.id.gotohomepg);
+        gotohomepg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent1 = new Intent(staff_manage.this, HomePage_Warden.class);
+                startActivity(intent1);
+            }
+        });
+
+
+        imgprof = findViewById(R.id.imgprof);
+
+        imgprof.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(staff_manage.this, imgProfile_click.class);
+                startActivity(intent);
+
+            }
+        });
+
+        btnNotification = findViewById(R.id.btnNotification);
+        btnNotification.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent1 = new Intent(staff_manage.this, Notification.class);
+                startActivity(intent1);
+            }
+        });
+
+
+        staff_manage = findViewById(R.id.staff_manage);
+        staff_manage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent1 = new Intent(staff_manage.this, staff_manage.class);
+                startActivity(intent1);
+            }
+        });
+
+
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
