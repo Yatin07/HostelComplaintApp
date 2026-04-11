@@ -15,10 +15,16 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import com.google.firebase.firestore.FieldValue;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.HashMap;
+import java.util.Map;
+
 public class RaiseComplaintActivity extends AppCompatActivity {
 
     Spinner spinnerCategory;
-    EditText etRoom, etTitle, etDescription;
+    EditText etRoom, etTitle, etDescription, etStudentId;
     Button btnSubmit, btnUploadImage;
     ImageView imagePreview;
 
@@ -39,6 +45,8 @@ public class RaiseComplaintActivity extends AppCompatActivity {
         btnUploadImage = findViewById(R.id.btnUploadImage);
         imagePreview = findViewById(R.id.imagePreview);
         Button btnLocation = findViewById(R.id.btnLocation);
+        etStudentId = findViewById(R.id.etStudentId);
+
 
         // Spinner Data
         String[] categories = {
@@ -68,7 +76,38 @@ public class RaiseComplaintActivity extends AppCompatActivity {
             }
 
             // Simulate Save (no DB yet)
-            Toast.makeText(this, "Complaint Submitted!", Toast.LENGTH_LONG).show();
+
+
+
+            // 🔥 FIRESTORE CODE
+            FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+            Map<String, Object> data = new HashMap<>();
+            data.put("title", etTitle.getText().toString());
+            data.put("description", etDescription.getText().toString());
+            data.put("room", etRoom.getText().toString());
+            data.put("studentId", etStudentId.getText().toString());
+            data.put("timestamp", FieldValue.serverTimestamp()); // 🔥 ADD THIS
+            data.put("status", "Pending");
+
+            db.collection("complaints")
+                    .add(data)
+                    .addOnSuccessListener(doc -> {
+
+                        String docId = doc.getId(); // 🔥 get id
+
+                        // save docId inside document
+                        db.collection("complaints")
+                                .document(docId)
+                                .update("docId", docId);
+
+                        Toast.makeText(this, "Saved ✅", Toast.LENGTH_LONG).show();
+                    })
+                    .addOnFailureListener(e -> {
+                        Toast.makeText(this, "Error ❌: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                    });
+
+
 
             // Clear form
             etTitle.setText("");

@@ -5,8 +5,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Button;
+import android.widget.Toast;
 
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 
@@ -51,30 +54,20 @@ public class ComplaintAdapter extends RecyclerView.Adapter<ComplaintAdapter.View
 
         ComplaintModel model = list.get(position);
 
-        // Set data
-        holder.tvName.setText(model.getText());
+        // ✅ Set correct Firestore data
+        holder.tvName.setText(model.getTitle());
         holder.txtRoom.setText("Room: " + model.getRoom());
 
         // Temporary priority
         holder.txtPriority.setText("High Priority");
 
-        // Button click (optional)
-        holder.removeBtn.setOnClickListener(v -> {
-            // For now just remove from list
-            list.remove(position);
-            notifyDataSetChanged();
-        });
-
-
-        // Get status
+        // Status logic
         String status = model.getStatus();
 
-// If status is null → show Pending
         if (status == null || status.isEmpty()) {
             holder.txtStatus.setText("Pending");
             holder.txtStatus.setTextColor(android.graphics.Color.parseColor("#FFA000"));
         } else {
-
             holder.txtStatus.setText(status);
 
             if (status.equals("Completed")) {
@@ -84,7 +77,21 @@ public class ComplaintAdapter extends RecyclerView.Adapter<ComplaintAdapter.View
             }
         }
 
+        // Remove button (local only)
+        holder.removeBtn.setText("Resolve");
 
+        holder.removeBtn.setOnClickListener(v -> {
+
+            FirebaseFirestore.getInstance()
+                    .collection("complaints")
+                    .document(model.getDocId())
+                    .update("status", "Completed")
+                    .addOnSuccessListener(unused -> {
+                        Toast.makeText(v.getContext(), "Marked as Completed ✅", Toast.LENGTH_SHORT).show();
+                    });
+        });
+
+        // 🔥 Details popup
         holder.itemView.findViewById(R.id.arrowBtn).setOnClickListener(v -> {
 
             android.app.AlertDialog.Builder builder =
@@ -93,9 +100,9 @@ public class ComplaintAdapter extends RecyclerView.Adapter<ComplaintAdapter.View
             builder.setTitle("Complaint Details");
 
             String message =
-                    "Complaint: " + model.getText() + "\n\n" +
+                    "Complaint: " + model.getTitle() + "\n\n" +
+                            "Description: " + model.getDescription() + "\n\n" +
                             "Room: " + model.getRoom() + "\n\n" +
-                            "Bed: " + (model.getBedNumber() == null ? "N/A" : model.getBedNumber()) + "\n\n" +
                             "Student ID: " + (model.getStudentId() == null ? "N/A" : model.getStudentId()) + "\n\n" +
                             "Status: " + (model.getStatus() == null ? "Pending" : model.getStatus());
 
@@ -105,7 +112,6 @@ public class ComplaintAdapter extends RecyclerView.Adapter<ComplaintAdapter.View
 
             builder.show();
         });
-
     }
 
     @Override

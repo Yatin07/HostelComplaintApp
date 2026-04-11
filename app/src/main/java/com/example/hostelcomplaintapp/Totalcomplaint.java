@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 
 import java.util.ArrayList;
 
@@ -48,17 +49,19 @@ public class Totalcomplaint extends AppCompatActivity {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
         db.collection("complaints")
-                .get()
-                .addOnSuccessListener(queryDocumentSnapshots -> {
+                .orderBy("timestamp", Query.Direction.DESCENDING) // latest first
+                .addSnapshotListener((value, error) -> {
+
+                    if (error != null || value == null) return;
 
                     list.clear();
 
-                    for (DocumentSnapshot doc : queryDocumentSnapshots) {
+                    for (DocumentSnapshot doc : value.getDocuments()) {
                         ComplaintModel model = doc.toObject(ComplaintModel.class);
                         list.add(model);
                     }
 
-                    adapter.notifyDataSetChanged(); // VERY IMPORTANT
+                    adapter.notifyDataSetChanged(); // refresh UI
                 });
         /// load data  from firestore end ///
 

@@ -104,8 +104,8 @@ public class AddAnnouncementActivity extends AppCompatActivity {
             }
         });
 
-        imgProfile = findViewById(R.id.imgProfile);
-        imgProfile.setOnClickListener(new View.OnClickListener() {
+        imgProfile1 = findViewById(R.id.imgProfile1);
+        imgProfile1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent1 = new Intent(AddAnnouncementActivity.this, imgProfile_click.class);

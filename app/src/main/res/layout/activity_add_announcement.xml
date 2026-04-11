@@ -45,13 +45,12 @@
                 android:textStyle="bold"
                 android:gravity="center" />
 
-            <!-- PROFILE ICON -->
+            <!-- RIGHT SIDE PROFILE ICON -->
             <ImageView
-                android:id="@+id/imgProfile"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:src="@drawable/baseline_account_circle_24"
-                app:tint="@color/white" />
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:id="@+id/imgnmlogo"
+                android:src="@drawable/nmm"/>
 
         </LinearLayout>
 
