@@ -1,11 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="16dp"
     android:background="#F5F5F5">
+
+    <include layout="@layout/top_bar"
+        android:id="@+id/inc_top_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true" />
+
+    <include layout="@layout/bottom_nav"
+        android:id="@+id/inc_bottom_nav"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="16dp"
+        android:layout_below="@id/inc_top_bar"
+        android:layout_above="@id/inc_bottom_nav">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -75,6 +93,19 @@
                 android:textColor="@color/black"
                 android:layout_marginBottom="12dp" />
 
+            <EditText
+                android:id="@+id/etWorkerId"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="W-12345"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textColor="@color/black"
+                android:layout_marginBottom="12dp"
+                android:enabled="true"
+                android:focusable="true"
+                android:visibility="gone" />
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -101,6 +132,8 @@
                 android:textStyle="bold"
                 android:textColor="@color/black"
                 android:layout_marginBottom="12dp"
+                android:enabled="true"
+                android:focusable="true"
                 android:visibility="gone" />
 
             <TextView
@@ -119,6 +152,19 @@
                 android:textStyle="bold"
                 android:textColor="@color/black"
                 android:layout_marginBottom="12dp" />
+
+            <EditText
+                android:id="@+id/etWorkerEmail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="worker@hostel.com"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textColor="@color/black"
+                android:layout_marginBottom="12dp"
+                android:enabled="true"
+                android:focusable="true"
+                android:visibility="gone" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -144,6 +190,8 @@
                 android:textSize="18sp"
                 android:textStyle="bold"
                 android:textColor="@color/black"
+                android:enabled="true"
+                android:focusable="true"
                 android:visibility="gone" />
 
         </LinearLayout>
@@ -178,4 +226,5 @@
         android:layout_marginBottom="8dp"
         android:padding="12dp" />
 
-</LinearLayout>
+    </LinearLayout>
+</RelativeLayout>

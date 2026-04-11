@@ -11,8 +11,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.hostelcomplaintapp.R;
 import com.example.hostelcomplaintapp.adapters.TaskAdapter;
-import com.example.hostelcomplaintapp.models.DataRepository;
 import com.example.hostelcomplaintapp.models.Task;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +23,7 @@ public class WorkerTaskListActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private TaskAdapter taskAdapter;
     private Spinner spinnerFilter;
-    private List<Task> allTasks;
+    private List<Task> allTasks = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,18 +45,77 @@ public class WorkerTaskListActivity extends AppCompatActivity {
             btnBack.setOnClickListener(v -> finish());
         }
         
-        allTasks = DataRepository.getInstance().getTasks();
         taskAdapter = new TaskAdapter(this, allTasks);
         recyclerView.setAdapter(taskAdapter);
 
         setupFilter();
+        
+        WorkerNavigationHelper.setupNavigation(this);
+        
+        fetchComplaints();
+    }
+
+    private void fetchComplaints() {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        String workerId = "W-12345"; // Default worker ID
+
+        db.collection("complaints")
+          .whereEqualTo("assignedWorkerId", workerId)
+          .addSnapshotListener((value, error) -> {
+              if (error != null || value == null) {
+                  return;
+              }
+
+              List<Task> fetchedTasks = new ArrayList<>();
+              long currentTime = System.currentTimeMillis();
+
+              for (QueryDocumentSnapshot doc : value) {
+                  Task task = new Task();
+                  task.setTaskId(doc.getId());
+                  task.setRoomNumber(doc.getString("room"));
+                  task.setStudentName(doc.getString("studentId"));
+                  task.setDescription(doc.getString("text"));
+                  task.setTitle("Complaint: Room " + doc.getString("room"));
+                  task.setPriority("Medium"); 
+
+                  String status = doc.getString("status");
+                  if (status == null) status = "Pending";
+
+                  Object deadlineObj = doc.get("deadline");
+                  long deadline = 0;
+                  if (deadlineObj instanceof Long) {
+                      deadline = (Long) deadlineObj;
+                  } else if (deadlineObj instanceof String) {
+                      try {
+                          deadline = Long.parseLong((String) deadlineObj);
+                      } catch (Exception e) {}
+                  }
+                  task.setDeadline(deadline);
+
+                  if (deadline > 0 && currentTime > deadline && (!status.equals("Completed") && !status.equals("Overdue"))) {
+                      status = "Overdue";
+                      db.collection("complaints").document(doc.getId()).update("status", "Overdue");
+                  }
+
+                  task.setStatus(status);
+                  fetchedTasks.add(task);
+              }
+
+              allTasks = fetchedTasks;
+              if (spinnerFilter != null && spinnerFilter.getSelectedItem() != null) {
+                  filterTasks(spinnerFilter.getSelectedItem().toString());
+              } else {
+                  filterTasks("All");
+              }
+          });
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        allTasks = DataRepository.getInstance().getTasks();
-        filterTasks(spinnerFilter.getSelectedItem().toString());
+        if (spinnerFilter != null && spinnerFilter.getSelectedItem() != null) {
+            filterTasks(spinnerFilter.getSelectedItem().toString());
+        }
     }
 
     @Override

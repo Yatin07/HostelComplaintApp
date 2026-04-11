@@ -12,8 +12,8 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.hostelcomplaintapp.R;
-import com.example.hostelcomplaintapp.models.DataRepository;
 import com.example.hostelcomplaintapp.models.Task;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 public class WorkerTaskDetailsActivity extends AppCompatActivity {
 
@@ -50,17 +50,31 @@ public class WorkerTaskDetailsActivity extends AppCompatActivity {
 
         String taskId = getIntent().getStringExtra("TASK_ID");
         if (taskId != null) {
-            currentTask = DataRepository.getInstance().getTaskById(taskId);
-            if (currentTask != null) {
-                populateData();
-            }
+            FirebaseFirestore db = FirebaseFirestore.getInstance();
+            db.collection("complaints").document(taskId)
+              .addSnapshotListener((doc, e) -> {
+                  if (e != null || doc == null || !doc.exists()) return;
+                  currentTask = new Task();
+                  currentTask.setTaskId(doc.getId());
+                  currentTask.setRoomNumber(doc.getString("room"));
+                  currentTask.setStudentName(doc.getString("studentId"));
+                  currentTask.setDescription(doc.getString("text"));
+                  currentTask.setTitle("Complaint: Room " + doc.getString("room"));
+                  
+                  String status = doc.getString("status");
+                  currentTask.setStatus(status != null ? status : "Pending");
+
+                  populateData();
+              });
         }
 
         btnAcceptTask.setOnClickListener(v -> {
-            currentTask.setStatus("In Progress");
-            DataRepository.getInstance().updateTaskStatus(currentTask.getTaskId(), "In Progress");
-            Toast.makeText(this, "Task Accepted", Toast.LENGTH_SHORT).show();
-            populateData();
+            if (currentTask != null) {
+                FirebaseFirestore.getInstance().collection("complaints")
+                    .document(currentTask.getTaskId())
+                    .update("status", "In Progress");
+                Toast.makeText(this, "Task Accepted", Toast.LENGTH_SHORT).show();
+            }
         });
 
         btnCompleteTask.setOnClickListener(v -> {
@@ -114,10 +128,10 @@ public class WorkerTaskDetailsActivity extends AppCompatActivity {
             if (desc.isEmpty()) {
                 Toast.makeText(this, "Proof description is required!", Toast.LENGTH_SHORT).show();
             } else {
-                currentTask.setStatus("Completed");
-                DataRepository.getInstance().updateTaskStatus(currentTask.getTaskId(), "Completed");
+                FirebaseFirestore.getInstance().collection("complaints")
+                    .document(currentTask.getTaskId())
+                    .update("status", "Completed");
                 Toast.makeText(this, "Task Completed Successfully!", Toast.LENGTH_LONG).show();
-                populateData();
             }
         });
 

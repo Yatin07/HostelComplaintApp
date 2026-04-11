@@ -75,44 +75,28 @@ public class RaiseComplaintActivity extends AppCompatActivity {
                 return;
             }
 
-            // Simulate Save (no DB yet)
+            // Save to Database
+            java.util.Map<String, Object> complaint = new java.util.HashMap<>();
+            complaint.put("text", category + ": " + title + " - " + description);
+            complaint.put("room", room);
+            complaint.put("timestamp", System.currentTimeMillis());
+            complaint.put("status", "Pending");
+            complaint.put("bedNumber", "N/A"); // Default fallback
+            complaint.put("studentId", "Student-01"); // Dummy student user
+            complaint.put("assignedWorkerId", "W-12345"); // Auto-assign to default worker for testing staff UI
 
-
-
-            // 🔥 FIRESTORE CODE
-            FirebaseFirestore db = FirebaseFirestore.getInstance();
-
-            Map<String, Object> data = new HashMap<>();
-            data.put("title", etTitle.getText().toString());
-            data.put("description", etDescription.getText().toString());
-            data.put("room", etRoom.getText().toString());
-            data.put("studentId", etStudentId.getText().toString());
-            data.put("timestamp", FieldValue.serverTimestamp()); // 🔥 ADD THIS
-            data.put("status", "Pending");
-
-            db.collection("complaints")
-                    .add(data)
-                    .addOnSuccessListener(doc -> {
-
-                        String docId = doc.getId(); // 🔥 get id
-
-                        // save docId inside document
-                        db.collection("complaints")
-                                .document(docId)
-                                .update("docId", docId);
-
-                        Toast.makeText(this, "Saved ✅", Toast.LENGTH_LONG).show();
+            com.google.firebase.firestore.FirebaseFirestore db = com.google.firebase.firestore.FirebaseFirestore.getInstance();
+            db.collection("complaints").add(complaint)
+                    .addOnSuccessListener(documentReference -> {
+                        Toast.makeText(this, "Complaint Submitted Successfully!", Toast.LENGTH_LONG).show();
+                        // Clear form
+                        etTitle.setText("");
+                        etDescription.setText("");
+                        etRoom.setText("");
                     })
                     .addOnFailureListener(e -> {
-                        Toast.makeText(this, "Error ❌: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                        Toast.makeText(this, "Submission failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                     });
-
-
-
-            // Clear form
-            etTitle.setText("");
-            etDescription.setText("");
-            etRoom.setText("");
         });
 
         // Image Button Logic
