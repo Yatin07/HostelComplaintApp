@@ -50,6 +50,7 @@
 
 
     <!-- 🔥 THIS IS MAIN FIX -->
+<<<<<<< HEAD
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -238,6 +239,14 @@
         </LinearLayout>
 
     </ScrollView>
+=======
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:padding="8dp"/>
+>>>>>>> main
 
 
     <!-- 🟠 BOTTOM NAVBAR -->

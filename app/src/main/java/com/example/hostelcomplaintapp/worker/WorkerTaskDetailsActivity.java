@@ -50,6 +50,7 @@ public class WorkerTaskDetailsActivity extends AppCompatActivity {
 
         String taskId = getIntent().getStringExtra("TASK_ID");
         if (taskId != null) {
+<<<<<<< HEAD
             // Complaint details fetching disabled for Worker module
             currentTask = new Task();
             currentTask.setTitle("Access Restricted");
@@ -62,6 +63,33 @@ public class WorkerTaskDetailsActivity extends AppCompatActivity {
 
         btnAcceptTask.setOnClickListener(v -> {
             Toast.makeText(this, "Feature disabled.", Toast.LENGTH_SHORT).show();
+=======
+            FirebaseFirestore db = FirebaseFirestore.getInstance();
+            db.collection("complaints").document(taskId)
+              .addSnapshotListener((doc, e) -> {
+                  if (e != null || doc == null || !doc.exists()) return;
+                  currentTask = new Task();
+                  currentTask.setTaskId(doc.getId());
+                  currentTask.setRoomNumber(doc.getString("room"));
+                  currentTask.setStudentName(doc.getString("studentId"));
+                  currentTask.setDescription(doc.getString("text"));
+                  currentTask.setTitle("Complaint: Room " + doc.getString("room"));
+                  
+                  String status = doc.getString("status");
+                  currentTask.setStatus(status != null ? status : "Pending");
+
+                  populateData();
+              });
+        }
+
+        btnAcceptTask.setOnClickListener(v -> {
+            if (currentTask != null) {
+                FirebaseFirestore.getInstance().collection("complaints")
+                    .document(currentTask.getTaskId())
+                    .update("status", "In Progress");
+                Toast.makeText(this, "Task Accepted", Toast.LENGTH_SHORT).show();
+            }
+>>>>>>> main
         });
 
         btnCompleteTask.setOnClickListener(v -> {
@@ -115,7 +143,14 @@ public class WorkerTaskDetailsActivity extends AppCompatActivity {
             if (desc.isEmpty()) {
                 Toast.makeText(this, "Proof description is required!", Toast.LENGTH_SHORT).show();
             } else {
+<<<<<<< HEAD
                 Toast.makeText(this, "Feature disabled.", Toast.LENGTH_LONG).show();
+=======
+                FirebaseFirestore.getInstance().collection("complaints")
+                    .document(currentTask.getTaskId())
+                    .update("status", "Completed");
+                Toast.makeText(this, "Task Completed Successfully!", Toast.LENGTH_LONG).show();
+>>>>>>> main
             }
         });
 

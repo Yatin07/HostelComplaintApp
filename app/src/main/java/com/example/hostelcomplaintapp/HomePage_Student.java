@@ -29,7 +29,11 @@ import java.util.List;
 
 public class HomePage_Student extends AppCompatActivity {
     TextView tv1StudentName, tv2StudentId;
+<<<<<<< HEAD
     ImageView imgProfile1, imgprof, staff_manage, imgnotification;
+=======
+    ImageView imgProfile1, imgprof, howtouseapp, imgnotification;
+>>>>>>> main
     LinearLayout cardraisecomplaint, cardpending, cardtotalcomplaint;
 
     // for auto sliding of announcement card on home page //
@@ -183,8 +187,13 @@ public class HomePage_Student extends AppCompatActivity {
         });
 
 
+<<<<<<< HEAD
         staff_manage = findViewById(R.id.staff_manage);
         staff_manage.setOnClickListener(new View.OnClickListener() {
+=======
+        howtouseapp = findViewById(R.id.howtouseapp);
+        howtouseapp.setOnClickListener(new View.OnClickListener() {
+>>>>>>> main
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(HomePage_Student.this, RaiseComplaintActivity.class);

@@ -28,7 +28,16 @@ public class WorkerNavigationHelper {
             });
 
             activity.findViewById(R.id.nav_tasks).setOnClickListener(v -> {
+<<<<<<< HEAD
                 Toast.makeText(activity, "Task list disabled.", Toast.LENGTH_SHORT).show();
+=======
+                if (!(activity instanceof WorkerTaskListActivity)) {
+                    Intent intent = new Intent(activity, WorkerTaskListActivity.class);
+                    intent.putExtra("FILTER_TYPE", "ALL");
+                    activity.startActivity(intent);
+                    if (!(activity instanceof WorkerDashboardActivity)) activity.finish();
+                }
+>>>>>>> main
             });
 
             activity.findViewById(R.id.nav_profile).setOnClickListener(v -> {

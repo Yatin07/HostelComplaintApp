@@ -48,6 +48,7 @@ public class RaiseComplaintActivity extends AppCompatActivity {
         etStudentId = findViewById(R.id.etStudentId);
         bednumber = findViewById(R.id.bednumber);
 
+<<<<<<< HEAD
         ImageView btnBack = findViewById(R.id.btnBack);
         btnBack.setOnClickListener(v -> onBackPressed());
 
@@ -66,6 +67,11 @@ public class RaiseComplaintActivity extends AppCompatActivity {
         );
         spinnerCategory.setAdapter(adapter);
 
+=======
+
+
+
+>>>>>>> main
         // Submit Button Logic
         btnSubmit.setOnClickListener(v -> {
 
@@ -102,6 +108,7 @@ public class RaiseComplaintActivity extends AppCompatActivity {
                     .addOnSuccessListener(documentReference -> {
                         Toast.makeText(this, "Complaint Submitted Successfully!", Toast.LENGTH_LONG).show();
                         // Clear form
+<<<<<<< HEAD
                         etStudentId.setText("");
                         etRoom.setText("");
                         etTitle.setText("");
@@ -109,6 +116,11 @@ public class RaiseComplaintActivity extends AppCompatActivity {
                         bednumber.setText("");
                         spinnerCategory.setSelection(0);
                         imagePreview.setVisibility(View.GONE);
+=======
+                        etTitle.setText("");
+                        etDescription.setText("");
+                        etRoom.setText("");
+>>>>>>> main
                     })
                     .addOnFailureListener(e -> {
                         Toast.makeText(this, "Submission failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();

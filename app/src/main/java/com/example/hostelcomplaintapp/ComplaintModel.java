@@ -8,7 +8,10 @@ public class ComplaintModel {
     private String docId;
     private String title, description, roomNumber, bednumber, studentId, status, category, assignedWorkerId;
     private long timestamp;
+<<<<<<< HEAD
     private long deadline;
+=======
+>>>>>>> main
 
     public ComplaintModel() {}
 
@@ -21,6 +24,7 @@ public class ComplaintModel {
     public String getCategory() { return category; }
     public String getAssignedWorkerId() { return assignedWorkerId; }
     public long getTimestamp() { return timestamp; }
+<<<<<<< HEAD
     public long getDeadline() { return deadline; }
     public String getDocId() { return docId; }
 
@@ -36,4 +40,9 @@ public class ComplaintModel {
     public void setAssignedWorkerId(String assignedWorkerId) { this.assignedWorkerId = assignedWorkerId; }
     public void setTimestamp(long timestamp) { this.timestamp = timestamp; }
     public void setDeadline(long deadline) { this.deadline = deadline; }
+=======
+    public String getDocId() { return docId; }
+
+    public void setDocId(String docId) { this.docId = docId; }
+>>>>>>> main
 }

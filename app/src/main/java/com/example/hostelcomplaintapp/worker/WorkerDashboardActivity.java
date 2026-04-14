@@ -8,6 +8,10 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.hostelcomplaintapp.R;
 import com.google.firebase.firestore.FirebaseFirestore;
+<<<<<<< HEAD
+=======
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+>>>>>>> main
 
 public class WorkerDashboardActivity extends AppCompatActivity {
 
@@ -43,7 +47,11 @@ public class WorkerDashboardActivity extends AppCompatActivity {
         tvAverageRating.setText("Avg Rating: 4.5 / 5.0 ⭐");
         tvRecentFeedback.setText("\"Great job fixing the fan!\" - Room 101\n\"Quick response\" - Room 304");
 
+<<<<<<< HEAD
         // Card navigation enabled
+=======
+        // Setup Click Listeners for Dashboard Cards (Filter Passing)
+>>>>>>> main
         findViewById(R.id.cardTotal).setOnClickListener(v -> openTaskList("ALL"));
         findViewById(R.id.cardPending).setOnClickListener(v -> openTaskList("PENDING"));
         findViewById(R.id.cardInProgress).setOnClickListener(v -> openTaskList("IN_PROGRESS"));
@@ -56,7 +64,11 @@ public class WorkerDashboardActivity extends AppCompatActivity {
     }
 
     private void openTaskList(String filterType) {
+<<<<<<< HEAD
         Intent intent = new Intent(this, WorkerTaskListActivity.class);
+=======
+        Intent intent = new Intent(WorkerDashboardActivity.this, WorkerTaskListActivity.class);
+>>>>>>> main
         intent.putExtra("FILTER_TYPE", filterType);
         startActivity(intent);
     }
@@ -77,6 +89,7 @@ public class WorkerDashboardActivity extends AppCompatActivity {
 
     private void setupRealTimeUpdates() {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
+<<<<<<< HEAD
         db.collection("complaints").addSnapshotListener((value, error) -> {
             if (error != null || value == null) {
                 return;
@@ -102,5 +115,54 @@ public class WorkerDashboardActivity extends AppCompatActivity {
             tvCompletedCount.setText(String.valueOf(completed));
             tvOverdueCount.setText(String.valueOf(overdue));
         });
+=======
+        String workerId = "W-12345"; // Default worker ID
+
+        db.collection("complaints")
+          .whereEqualTo("assignedWorkerId", workerId)
+          .addSnapshotListener((value, error) -> {
+              if (error != null || value == null) {
+                  return;
+              }
+
+              int total = value.size();
+              int pending = 0;
+              int inProgress = 0;
+              int completed = 0;
+              int overdue = 0;
+
+              long currentTime = System.currentTimeMillis();
+
+              for (QueryDocumentSnapshot doc : value) {
+                  String status = doc.getString("status");
+                  if (status == null) status = "Pending";
+
+                  Object deadlineObj = doc.get("deadline");
+                  long deadline = 0;
+                  if (deadlineObj instanceof Long) {
+                      deadline = (Long) deadlineObj;
+                  } else if (deadlineObj instanceof String) {
+                      try { deadline = Long.parseLong((String)deadlineObj); } catch(Exception e){}
+                  }
+
+                  if (deadline > 0 && currentTime > deadline && !status.equals("Completed") && !status.equals("Overdue")) {
+                      status = "Overdue";
+                      db.collection("complaints").document(doc.getId()).update("status", "Overdue");
+                  }
+
+                  if (status.equalsIgnoreCase("Pending")) pending++;
+                  else if (status.equalsIgnoreCase("In Progress")) inProgress++;
+                  else if (status.equalsIgnoreCase("Completed")) completed++;
+                  else if (status.equalsIgnoreCase("Overdue")) overdue++;
+                  else pending++;
+              }
+
+              tvTotalCount.setText(String.valueOf(total));
+              tvPendingCount.setText(String.valueOf(pending));
+              tvInProgressCount.setText(String.valueOf(inProgress));
+              tvCompletedCount.setText(String.valueOf(completed));
+              tvOverdueCount.setText(String.valueOf(overdue));
+          });
+>>>>>>> main
     }
 }

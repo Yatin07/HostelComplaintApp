@@ -1,30 +1,48 @@
 package com.example.hostelcomplaintapp.worker;
 
 import android.os.Bundle;
+<<<<<<< HEAD
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
+=======
+import android.view.View;
+import android.widget.Button;
+
+>>>>>>> main
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+<<<<<<< HEAD
+=======
+import com.example.hostelcomplaintapp.ComplaintAdapter;
+>>>>>>> main
 import com.example.hostelcomplaintapp.ComplaintModel;
 import com.example.hostelcomplaintapp.R;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.ArrayList;
+<<<<<<< HEAD
 import java.util.List;
+=======
+>>>>>>> main
 
 public class WorkerTaskListActivity extends AppCompatActivity {
 
     private RecyclerView recyclerView;
+<<<<<<< HEAD
     private Spinner spinnerFilter;
     private WorkerComplaintAdapter adapter;
     private List<ComplaintModel> allComplaints = new ArrayList<>();
+=======
+    private ComplaintAdapter adapter;
+    private ArrayList<ComplaintModel> list;
+>>>>>>> main
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +50,7 @@ public class WorkerTaskListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_worker_task_list);
 
         recyclerView = findViewById(R.id.recyclerViewTasks);
+<<<<<<< HEAD
         spinnerFilter = findViewById(R.id.spinnerFilter);
         
         if (getSupportActionBar() != null) {
@@ -147,3 +166,52 @@ public class WorkerTaskListActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 }
+=======
+        Button btnBack = findViewById(R.id.btnBack);
+
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        list = new ArrayList<>();
+
+        // 🔥 SAME adapter + worker mode ON
+        adapter = new ComplaintAdapter(list);
+        adapter.setWorker(true); // 👈 IMPORTANT
+
+        recyclerView.setAdapter(adapter);
+
+        // 🔙 Back button
+        if (btnBack != null) {
+            btnBack.setOnClickListener(v -> finish());
+        }
+
+        // 🔥 Fetch data from Firebase
+        fetchComplaints();
+    }
+
+    private void fetchComplaints() {
+
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        db.collection("complaints")
+                .whereEqualTo("status", "pending") // 👈 only pending complaints
+                .addSnapshotListener((value, error) -> {
+
+                    if (error != null || value == null) return;
+
+                    list.clear();
+
+                    for (QueryDocumentSnapshot doc : value) {
+
+                        ComplaintModel model = doc.toObject(ComplaintModel.class);
+
+                        // 🔥 VERY IMPORTANT (for resolve button)
+                        model.setDocId(doc.getId());
+
+                        list.add(model);
+                    }
+
+                    adapter.notifyDataSetChanged();
+                });
+    }
+}
+>>>>>>> main
