@@ -57,7 +57,6 @@
         </LinearLayout>
 
         <!-- RIGHT SIDE -->
-        <!-- RIGHT SIDE -->
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -92,10 +91,9 @@
                 android:text="Pending"
                 android:textStyle="bold"
                 android:textSize="12sp"
-                android:textColor="@android:color/white"
-                android:padding="6dp"
-                android:layout_marginTop="8dp"
-                android:background="@drawable/status_pending"/>
+                android:textColor="#FFA000"
+                android:layout_marginTop="8dp"/>
+
         </LinearLayout>
 
     </LinearLayout>

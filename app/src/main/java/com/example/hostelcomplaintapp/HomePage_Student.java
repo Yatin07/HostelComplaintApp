@@ -55,7 +55,6 @@ public class HomePage_Student extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(HomePage_Student.this, student_profile_pg.class);
                 startActivity(intent);
-
             }
         });
 
@@ -97,7 +96,6 @@ public class HomePage_Student extends AppCompatActivity {
 
 
         // 3 DOTS BELOW THE AUTOSLIDING CARD ON HOMEPAGE
-
         dot1 = findViewById(R.id.dot1);
         dot2 = findViewById(R.id.dot2);
         dot3 = findViewById(R.id.dot3);
@@ -178,7 +176,6 @@ public class HomePage_Student extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(HomePage_Student.this, student_profile_pg.class);
                 startActivity(intent);
-
             }
         });
 
@@ -215,4 +212,4 @@ public class HomePage_Student extends AppCompatActivity {
         super.onDestroy();
         handler.removeCallbacksAndMessages(null);
     }
-} 
+}

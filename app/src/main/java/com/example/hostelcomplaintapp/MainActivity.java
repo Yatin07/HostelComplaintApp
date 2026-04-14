@@ -2,6 +2,7 @@ package com.example.hostelcomplaintapp;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 
 import androidx.activity.EdgeToEdge;
@@ -12,9 +13,7 @@ import androidx.core.view.WindowInsetsCompat;
 
 public class MainActivity extends AppCompatActivity {
 
-
-    Button btnStudent,btnStaff,btnWarden;
-
+    Button btnStudent, btnStaff, btnWarden;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,30 +25,25 @@ public class MainActivity extends AppCompatActivity {
         Button btnStaff = findViewById(R.id.btnStaff);
         Button btnWarden = findViewById(R.id.btnWarden);
 
-        btnStudent.setOnClickListener(v -> {
-            Intent intent = new Intent(MainActivity.this, LoginForm.class);
-            intent.putExtra("role", "student");
-            startActivity(intent);
-        });
-
-        btnStaff.setOnClickListener(v -> {
-            Intent intent = new Intent(MainActivity.this, LoginForm.class);
-            intent.putExtra("role", "staff");
-            startActivity(intent);
-        });
-
-        btnWarden.setOnClickListener(v -> {
-            Intent intent = new Intent(MainActivity.this, LoginForm.class);
-            intent.putExtra("role", "warden");
-            startActivity(intent);
-        });
-
-
+        btnStudent.setOnClickListener(v -> navigateBasedOnRole("Student"));
+        btnStaff.setOnClickListener(v -> navigateBasedOnRole("Worker"));
+        btnWarden.setOnClickListener(v -> navigateBasedOnRole("Warden"));
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+    }
+
+    private void navigateBasedOnRole(String role) {
+        Log.d("ROLE_CHECK", role);
+        if (role.equals("Student")) {
+            startActivity(new Intent(MainActivity.this, HomePage_Student.class));
+        } else if (role.equals("Warden")) {
+            startActivity(new Intent(MainActivity.this, HomePage_Warden.class));
+        } else if (role.equals("Worker")) {
+            startActivity(new Intent(MainActivity.this, com.example.hostelcomplaintapp.worker.WorkerDashboardActivity.class));
+        }
     }
 }

@@ -78,6 +78,10 @@
             android:exported="false"
             android:parentActivityName=".worker.WorkerTaskListActivity" />
         <activity
+            android:name=".worker.ComplaintDetailActivity"
+            android:exported="false"
+            android:parentActivityName=".worker.WorkerTaskListActivity" />
+        <activity
             android:name=".LoginActivity"
             android:exported="false"
             tools:ignore="MissingClass" />
@@ -87,7 +91,6 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

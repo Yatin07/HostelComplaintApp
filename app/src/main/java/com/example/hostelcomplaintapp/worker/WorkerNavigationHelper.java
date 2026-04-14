@@ -48,7 +48,7 @@ public class WorkerNavigationHelper {
         // Setup Top Bar Text
         TextView tvWorkerTopName = activity.findViewById(R.id.tvWorkerTopName);
         TextView tvWorkerTopId = activity.findViewById(R.id.tvWorkerTopId);
-        
+
         if (tvWorkerTopName != null && tvWorkerTopId != null) {
             SharedPreferences prefs = activity.getSharedPreferences("WorkerPrefs", Context.MODE_PRIVATE);
             tvWorkerTopName.setText("Worker: " + prefs.getString("name", "John Doe"));

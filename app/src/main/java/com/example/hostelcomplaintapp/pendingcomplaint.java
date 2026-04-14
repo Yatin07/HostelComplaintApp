@@ -7,12 +7,11 @@ import android.widget.ImageView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -34,7 +33,7 @@ public class pendingcomplaint extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_pendingcomplaint);
 
-        // 🔥 RecyclerView setup
+        // RecyclerView setup
         recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
@@ -42,11 +41,11 @@ public class pendingcomplaint extends AppCompatActivity {
         adapter = new ComplaintAdapter(list);
         recyclerView.setAdapter(adapter);
 
-        // 🔥 Firestore
+        // Firestore - fetch only pending complaints
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
         db.collection("complaints")
-                .whereEqualTo("status", "pending") // ✅ filter
+                .whereEqualTo("status", "pending")
                 .orderBy("timestamp", Query.Direction.DESCENDING)
                 .addSnapshotListener((value, error) -> {
 
@@ -62,29 +61,29 @@ public class pendingcomplaint extends AppCompatActivity {
                     adapter.notifyDataSetChanged();
                 });
 
-        /// 🔙 Back
+        /// Back
         btnBack = findViewById(R.id.btnBack);
         btnBack.setOnClickListener(v -> finish());
 
-        /// 🏠 Home
+        /// Home
         gotohomepg = findViewById(R.id.gotohomepg);
         gotohomepg.setOnClickListener(v -> {
             startActivity(new Intent(pendingcomplaint.this, HomePage_Warden.class));
         });
 
-        /// 🔔 Notification
+        /// Notification
         btnNotification = findViewById(R.id.btnNotification);
         btnNotification.setOnClickListener(v -> {
             startActivity(new Intent(pendingcomplaint.this, Notification.class));
         });
 
-        /// 👨‍🔧 Staff
+        /// Staff
         staff_manage = findViewById(R.id.staff_manage);
         staff_manage.setOnClickListener(v -> {
             startActivity(new Intent(pendingcomplaint.this, staff_manage.class));
         });
 
-        /// 👤 Profile
+        /// Profile
         imgProfile = findViewById(R.id.imgProfile);
         imgProfile.setOnClickListener(v -> {
             startActivity(new Intent(pendingcomplaint.this, imgProfile_click.class));

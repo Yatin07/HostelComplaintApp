@@ -15,7 +15,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
-import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
@@ -48,8 +47,21 @@ public class RaiseComplaintActivity extends AppCompatActivity {
         etStudentId = findViewById(R.id.etStudentId);
         bednumber = findViewById(R.id.bednumber);
 
+        ImageView btnBack = findViewById(R.id.btnBack);
+        btnBack.setOnClickListener(v -> onBackPressed());
 
+        // Spinner Data
+        String[] categories = {
+                "Electrical", "Plumbing", "Cleaning",
+                "Wi-Fi", "Furniture", "Mess", "Others"
+        };
 
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(
+                this,
+                android.R.layout.simple_spinner_dropdown_item,
+                categories
+        );
+        spinnerCategory.setAdapter(adapter);
 
         // Submit Button Logic
         btnSubmit.setOnClickListener(v -> {
@@ -78,26 +90,26 @@ public class RaiseComplaintActivity extends AppCompatActivity {
             complaint.put("bednumber", bed);
             complaint.put("studentId", studentId);
             complaint.put("timestamp", System.currentTimeMillis());
-            complaint.put("status", "pending"); // always start as pending
-            complaint.put("assignedWorkerId", ""); // not assigned yet
+            complaint.put("status", "pending");
+            complaint.put("assignedWorkerId", "");
 
-
-            com.google.firebase.firestore.FirebaseFirestore db = com.google.firebase.firestore.FirebaseFirestore.getInstance();
+            FirebaseFirestore db = FirebaseFirestore.getInstance();
             db.collection("complaints").add(complaint)
                     .addOnSuccessListener(documentReference -> {
                         Toast.makeText(this, "Complaint Submitted Successfully!", Toast.LENGTH_LONG).show();
                         // Clear form
+                        etStudentId.setText("");
+                        etRoom.setText("");
                         etTitle.setText("");
                         etDescription.setText("");
-                        etRoom.setText("");
+                        bednumber.setText("");
+                        spinnerCategory.setSelection(0);
+                        imagePreview.setVisibility(View.GONE);
                     })
                     .addOnFailureListener(e -> {
                         Toast.makeText(this, "Submission failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                     });
         });
-
-
-
 
         // Image Button Logic
         btnUploadImage.setOnClickListener(v -> {
