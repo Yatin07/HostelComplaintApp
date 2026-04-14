@@ -1,7 +1,5 @@
 <resources>
     <string name="app_name">HostelComplaintApp</string>
-<<<<<<< HEAD
-=======
 
     <string-array name="categories">
         <item>Electrical</item>
@@ -13,6 +11,4 @@
         <item>Others</item>
 
     </string-array>
-
->>>>>>> main
 </resources>

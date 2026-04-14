@@ -1,7 +1,6 @@
 package com.example.hostelcomplaintapp.worker;
 
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -28,7 +27,7 @@ public class WorkerTaskDetailsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_worker_task_details);
 
         tvDetailTitle = findViewById(R.id.tvDetailTitle);
-        
+
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setTitle("Task Details");
@@ -38,7 +37,7 @@ public class WorkerTaskDetailsActivity extends AppCompatActivity {
         tvDetailDesc = findViewById(R.id.tvDetailDesc);
         tvDetailStatus = findViewById(R.id.tvDetailStatus);
         tvProofDesc = findViewById(R.id.tvProofDesc);
-        
+
         btnAcceptTask = findViewById(R.id.btnAcceptTask);
         btnCompleteTask = findViewById(R.id.btnCompleteTask);
         ivProofImage = findViewById(R.id.ivProofImage);
@@ -50,31 +49,17 @@ public class WorkerTaskDetailsActivity extends AppCompatActivity {
 
         String taskId = getIntent().getStringExtra("TASK_ID");
         if (taskId != null) {
-<<<<<<< HEAD
-            // Complaint details fetching disabled for Worker module
-            currentTask = new Task();
-            currentTask.setTitle("Access Restricted");
-            currentTask.setDescription("Complaints are no longer accessible from the worker module.");
-            currentTask.setRoomNumber("N/A");
-            currentTask.setStudentName("N/A");
-            currentTask.setStatus("N/A");
-            populateData();
-        }
-
-        btnAcceptTask.setOnClickListener(v -> {
-            Toast.makeText(this, "Feature disabled.", Toast.LENGTH_SHORT).show();
-=======
             FirebaseFirestore db = FirebaseFirestore.getInstance();
             db.collection("complaints").document(taskId)
               .addSnapshotListener((doc, e) -> {
                   if (e != null || doc == null || !doc.exists()) return;
                   currentTask = new Task();
                   currentTask.setTaskId(doc.getId());
-                  currentTask.setRoomNumber(doc.getString("room"));
+                  currentTask.setRoomNumber(doc.getString("roomNumber"));
                   currentTask.setStudentName(doc.getString("studentId"));
-                  currentTask.setDescription(doc.getString("text"));
-                  currentTask.setTitle("Complaint: Room " + doc.getString("room"));
-                  
+                  currentTask.setDescription(doc.getString("description"));
+                  currentTask.setTitle(doc.getString("title") != null ? doc.getString("title") : "Complaint: Room " + doc.getString("roomNumber"));
+
                   String status = doc.getString("status");
                   currentTask.setStatus(status != null ? status : "Pending");
 
@@ -89,13 +74,11 @@ public class WorkerTaskDetailsActivity extends AppCompatActivity {
                     .update("status", "In Progress");
                 Toast.makeText(this, "Task Accepted", Toast.LENGTH_SHORT).show();
             }
->>>>>>> main
         });
 
         btnCompleteTask.setOnClickListener(v -> {
             showProofUploadDialog();
         });
-
     }
 
     private void populateData() {
@@ -143,14 +126,10 @@ public class WorkerTaskDetailsActivity extends AppCompatActivity {
             if (desc.isEmpty()) {
                 Toast.makeText(this, "Proof description is required!", Toast.LENGTH_SHORT).show();
             } else {
-<<<<<<< HEAD
-                Toast.makeText(this, "Feature disabled.", Toast.LENGTH_LONG).show();
-=======
                 FirebaseFirestore.getInstance().collection("complaints")
                     .document(currentTask.getTaskId())
                     .update("status", "Completed");
                 Toast.makeText(this, "Task Completed Successfully!", Toast.LENGTH_LONG).show();
->>>>>>> main
             }
         });
 

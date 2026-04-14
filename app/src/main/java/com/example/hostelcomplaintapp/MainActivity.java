@@ -2,10 +2,7 @@ package com.example.hostelcomplaintapp;
 
 import android.content.Intent;
 import android.os.Bundle;
-<<<<<<< HEAD
 import android.util.Log;
-=======
->>>>>>> main
 import android.widget.Button;
 
 import androidx.activity.EdgeToEdge;
@@ -16,9 +13,7 @@ import androidx.core.view.WindowInsetsCompat;
 
 public class MainActivity extends AppCompatActivity {
 
-
-    Button btnStudent,btnStaff,btnWarden;
-
+    Button btnStudent, btnStaff, btnWarden;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,33 +25,9 @@ public class MainActivity extends AppCompatActivity {
         Button btnStaff = findViewById(R.id.btnStaff);
         Button btnWarden = findViewById(R.id.btnWarden);
 
-<<<<<<< HEAD
         btnStudent.setOnClickListener(v -> navigateBasedOnRole("Student"));
-
         btnStaff.setOnClickListener(v -> navigateBasedOnRole("Worker"));
-
         btnWarden.setOnClickListener(v -> navigateBasedOnRole("Warden"));
-=======
-        btnStudent.setOnClickListener(v -> {
-            Intent intent = new Intent(MainActivity.this, LoginForm.class);
-            intent.putExtra("role", "student");
-            startActivity(intent);
-        });
-
-        btnStaff.setOnClickListener(v -> {
-            Intent intent = new Intent(MainActivity.this, LoginForm.class);
-            intent.putExtra("role", "staff");
-            startActivity(intent);
-        });
-
-        btnWarden.setOnClickListener(v -> {
-            Intent intent = new Intent(MainActivity.this, LoginForm.class);
-            intent.putExtra("role", "warden");
-            startActivity(intent);
-        });
->>>>>>> main
-
-
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -64,7 +35,6 @@ public class MainActivity extends AppCompatActivity {
             return insets;
         });
     }
-<<<<<<< HEAD
 
     private void navigateBasedOnRole(String role) {
         Log.d("ROLE_CHECK", role);
@@ -76,6 +46,4 @@ public class MainActivity extends AppCompatActivity {
             startActivity(new Intent(MainActivity.this, com.example.hostelcomplaintapp.worker.WorkerDashboardActivity.class));
         }
     }
-=======
->>>>>>> main
 }

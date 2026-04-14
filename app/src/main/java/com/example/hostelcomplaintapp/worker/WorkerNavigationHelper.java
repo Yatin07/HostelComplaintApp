@@ -28,16 +28,12 @@ public class WorkerNavigationHelper {
             });
 
             activity.findViewById(R.id.nav_tasks).setOnClickListener(v -> {
-<<<<<<< HEAD
-                Toast.makeText(activity, "Task list disabled.", Toast.LENGTH_SHORT).show();
-=======
                 if (!(activity instanceof WorkerTaskListActivity)) {
                     Intent intent = new Intent(activity, WorkerTaskListActivity.class);
                     intent.putExtra("FILTER_TYPE", "ALL");
                     activity.startActivity(intent);
                     if (!(activity instanceof WorkerDashboardActivity)) activity.finish();
                 }
->>>>>>> main
             });
 
             activity.findViewById(R.id.nav_profile).setOnClickListener(v -> {
@@ -52,7 +48,7 @@ public class WorkerNavigationHelper {
         // Setup Top Bar Text
         TextView tvWorkerTopName = activity.findViewById(R.id.tvWorkerTopName);
         TextView tvWorkerTopId = activity.findViewById(R.id.tvWorkerTopId);
-        
+
         if (tvWorkerTopName != null && tvWorkerTopId != null) {
             SharedPreferences prefs = activity.getSharedPreferences("WorkerPrefs", Context.MODE_PRIVATE);
             tvWorkerTopName.setText("Worker: " + prefs.getString("name", "John Doe"));

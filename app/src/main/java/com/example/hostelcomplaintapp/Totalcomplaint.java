@@ -29,31 +29,25 @@ public class Totalcomplaint extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_totalcomplaint);
 
-/// make card design start  ///
+        /// make card design start ///
         RecyclerView recyclerView;
         ArrayList<ComplaintModel> list;
         ComplaintAdapter adapter;
 
         recyclerView = findViewById(R.id.recyclerView);
-
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         list = new ArrayList<>();
-
         adapter = new ComplaintAdapter(list);
-<<<<<<< HEAD
-=======
         adapter.setWorker(false);
->>>>>>> main
-
         recyclerView.setAdapter(adapter);
-/// make card design end  ///
+        /// make card design end ///
 
-        /// Load Data from Firestore///
+        /// Load Data from Firestore ///
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
         db.collection("complaints")
-                .orderBy("timestamp", Query.Direction.DESCENDING) // latest first
+                .orderBy("timestamp", Query.Direction.DESCENDING)
                 .addSnapshotListener((value, error) -> {
 
                     if (error != null || value == null) return;
@@ -62,19 +56,15 @@ public class Totalcomplaint extends AppCompatActivity {
 
                     for (DocumentSnapshot doc : value.getDocuments()) {
                         ComplaintModel model = doc.toObject(ComplaintModel.class);
-<<<<<<< HEAD
-=======
-                        model.setDocId(doc.getId()); // 👈 MUST ADD
->>>>>>> main
+                        model.setDocId(doc.getId());
                         list.add(model);
                     }
 
-                    adapter.notifyDataSetChanged(); // refresh UI
+                    adapter.notifyDataSetChanged();
                 });
-        /// load data  from firestore end ///
+        /// load data from firestore end ///
 
         /// back button code start ///
-
         btnBack = findViewById(R.id.btnBack);
         btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -126,8 +116,6 @@ public class Totalcomplaint extends AppCompatActivity {
             }
         });
         /// profile button code end ///
-
-
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());

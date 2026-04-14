@@ -17,27 +17,14 @@ public class ComplaintAdapter extends RecyclerView.Adapter<ComplaintAdapter.View
 
     ArrayList<ComplaintModel> list;
 
-<<<<<<< HEAD
-=======
-    // 🔥 NEW: role check (default false)
+    // Role check (default false = student/warden, no resolve button)
     boolean isWorker = false;
 
-    // ✅ SAME constructor (no change)
->>>>>>> main
     public ComplaintAdapter(ArrayList<ComplaintModel> list) {
         this.list = list;
     }
 
-<<<<<<< HEAD
-    public static class ViewHolder extends RecyclerView.ViewHolder {
-
-        TextView tvName;
-        TextView txtRoom;
-        TextView txtPriority;
-        Button removeBtn;
-        TextView txtStatus;
-=======
-    // 🔥 NEW: setter (use this in worker activity)
+    // Use this in worker activity to show resolve button
     public void setWorker(boolean worker) {
         this.isWorker = worker;
     }
@@ -46,7 +33,6 @@ public class ComplaintAdapter extends RecyclerView.Adapter<ComplaintAdapter.View
 
         TextView tvName, txtRoom, txtPriority, txtStatus;
         Button removeBtn;
->>>>>>> main
         View arrowBtn;
 
         public ViewHolder(View itemView) {
@@ -55,23 +41,16 @@ public class ComplaintAdapter extends RecyclerView.Adapter<ComplaintAdapter.View
             tvName = itemView.findViewById(R.id.tvName);
             txtRoom = itemView.findViewById(R.id.txtRoom);
             txtPriority = itemView.findViewById(R.id.txtPriority);
-<<<<<<< HEAD
-            removeBtn = itemView.findViewById(R.id.removeBtn);
-            txtStatus = itemView.findViewById(R.id.txtStatus);
-=======
             txtStatus = itemView.findViewById(R.id.txtStatus);
             removeBtn = itemView.findViewById(R.id.removeBtn);
->>>>>>> main
             arrowBtn = itemView.findViewById(R.id.arrowBtn);
         }
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.totalcomplaint_card, parent, false);
-
         return new ViewHolder(view);
     }
 
@@ -82,58 +61,13 @@ public class ComplaintAdapter extends RecyclerView.Adapter<ComplaintAdapter.View
 
         holder.tvName.setText(model.getTitle());
         holder.txtRoom.setText("Room: " + model.getRoomNumber() + " (Bed: " + model.getBednumber() + ")");
-<<<<<<< HEAD
-
-        // You mentioned category should be dynamic. We can show it as priority or add a new field.
-        holder.txtPriority.setText(model.getCategory());
+        holder.txtPriority.setText("Category: " + model.getCategory());
 
         String status = model.getStatus();
 
         if (status == null || status.isEmpty() || status.equalsIgnoreCase("pending")) {
             holder.txtStatus.setText("Pending");
             holder.txtStatus.setTextColor(android.graphics.Color.parseColor("#FFA000"));
-            holder.removeBtn.setVisibility(View.VISIBLE);
-            holder.removeBtn.setText("Resolve");
-        } else {
-            holder.txtStatus.setText(status);
-            if (status.equalsIgnoreCase("Completed")) {
-                holder.txtStatus.setTextColor(android.graphics.Color.GREEN);
-                holder.removeBtn.setVisibility(View.GONE);
-            } else {
-                holder.txtStatus.setTextColor(android.graphics.Color.parseColor("#FFA000"));
-                holder.removeBtn.setVisibility(View.VISIBLE);
-            }
-        }
-
-        holder.removeBtn.setOnClickListener(v -> {
-            if (model.getDocId() == null) {
-                Toast.makeText(v.getContext(), "Error: Document ID is null", Toast.LENGTH_SHORT).show();
-                return;
-            }
-            FirebaseFirestore.getInstance()
-                    .collection("complaints")
-                    .document(model.getDocId())
-                    .update("status", "Completed")
-                    .addOnSuccessListener(unused -> {
-                        Toast.makeText(v.getContext(), "Marked as Completed ✅", Toast.LENGTH_SHORT).show();
-                    })
-                    .addOnFailureListener(e -> {
-                        Toast.makeText(v.getContext(), "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                    });
-        });
-
-=======
-        holder.txtPriority.setText("SAP ID: " + model.getStudentId());
-
-
-        String status = model.getStatus();
-
-        // 🔥 STATUS + BUTTON LOGIC
-        if (status == null || status.isEmpty() || status.equalsIgnoreCase("pending")) {
-
-            holder.txtStatus.setText("Pending");
-            holder.txtStatus.setTextColor(android.graphics.Color.WHITE);
-            holder.txtStatus.setBackgroundResource(R.drawable.status_pending);
 
             if (isWorker) {
                 holder.removeBtn.setVisibility(View.VISIBLE);
@@ -141,52 +75,48 @@ public class ComplaintAdapter extends RecyclerView.Adapter<ComplaintAdapter.View
             } else {
                 holder.removeBtn.setVisibility(View.GONE);
             }
-
         } else {
-
-            holder.txtStatus.setText("Completed");
-            holder.txtStatus.setTextColor(android.graphics.Color.WHITE);
-            holder.txtStatus.setBackgroundResource(R.drawable.status_completed);
-
-            holder.removeBtn.setVisibility(View.GONE);
+            holder.txtStatus.setText(status);
+            if (status.equalsIgnoreCase("Completed")) {
+                holder.txtStatus.setTextColor(android.graphics.Color.GREEN);
+                holder.removeBtn.setVisibility(View.GONE);
+            } else {
+                holder.txtStatus.setTextColor(android.graphics.Color.parseColor("#FFA000"));
+                if (isWorker) {
+                    holder.removeBtn.setVisibility(View.VISIBLE);
+                } else {
+                    holder.removeBtn.setVisibility(View.GONE);
+                }
+            }
         }
 
-        // 🔥 RESOLVE BUTTON CLICK (ONLY WORKER)
+        // Resolve Button Click (only for worker)
         if (isWorker) {
             holder.removeBtn.setOnClickListener(v -> {
-
                 if (model.getDocId() == null) {
-                    Toast.makeText(v.getContext(),
-                            "Error: Document ID missing", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(v.getContext(), "Error: Document ID is null", Toast.LENGTH_SHORT).show();
                     return;
                 }
-
                 FirebaseFirestore.getInstance()
                         .collection("complaints")
                         .document(model.getDocId())
                         .update("status", "Completed")
-                        .addOnSuccessListener(unused ->
-                                Toast.makeText(v.getContext(),
-                                        "Marked as Completed ✅", Toast.LENGTH_SHORT).show()
-                        )
-                        .addOnFailureListener(e ->
-                                Toast.makeText(v.getContext(),
-                                        "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show()
-                        );
+                        .addOnSuccessListener(unused -> {
+                            Toast.makeText(v.getContext(), "Marked as Completed ✅", Toast.LENGTH_SHORT).show();
+                        })
+                        .addOnFailureListener(e -> {
+                            Toast.makeText(v.getContext(), "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        });
             });
         }
 
-        // 🔥 DETAILS POPUP
->>>>>>> main
+        // Details popup on arrow click
         holder.arrowBtn.setOnClickListener(v -> {
-
             android.app.AlertDialog.Builder builder =
                     new android.app.AlertDialog.Builder(v.getContext());
-
             builder.setTitle("Complaint Details");
 
             String message =
-<<<<<<< HEAD
                     "Category: " + model.getCategory() + "\n\n" +
                     "Complaint: " + model.getTitle() + "\n\n" +
                     "Description: " + model.getDescription() + "\n\n" +
@@ -195,20 +125,7 @@ public class ComplaintAdapter extends RecyclerView.Adapter<ComplaintAdapter.View
                     "Status: " + (model.getStatus() == null ? "Pending" : model.getStatus());
 
             builder.setMessage(message);
-
             builder.setPositiveButton("OK", (dialog, which) -> dialog.dismiss());
-
-=======
-                    "Complaint: " + model.getTitle() + "\n\n" +
-                            "SAP ID: " + model.getStudentId() + "\n\n" +
-                            "Category: " + model.getCategory() + "\n\n" +
-                            "Description: " + model.getDescription() + "\n\n" +
-                            "Room: " + model.getRoomNumber() + " (Bed: " + model.getBednumber() + ")\n\n" +
-                            "Status: " + (model.getStatus() == null ? "Pending" : model.getStatus());
-
-            builder.setMessage(message);
-            builder.setPositiveButton("OK", (dialog, which) -> dialog.dismiss());
->>>>>>> main
             builder.show();
         });
     }
