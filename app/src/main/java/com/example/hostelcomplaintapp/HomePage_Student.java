@@ -154,6 +154,7 @@ public class HomePage_Student extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), emergency_issue_student.class);
+                intent.putExtra("role", "student");
                 startActivity(intent);
             }
         });
