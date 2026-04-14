@@ -41,6 +41,7 @@ public class Totalcomplaint extends AppCompatActivity {
         list = new ArrayList<>();
 
         adapter = new ComplaintAdapter(list);
+        adapter.setWorker(false);
 
         recyclerView.setAdapter(adapter);
 /// make card design end  ///
@@ -58,6 +59,7 @@ public class Totalcomplaint extends AppCompatActivity {
 
                     for (DocumentSnapshot doc : value.getDocuments()) {
                         ComplaintModel model = doc.toObject(ComplaintModel.class);
+                        model.setDocId(doc.getId()); // 👈 MUST ADD
                         list.add(model);
                     }
 

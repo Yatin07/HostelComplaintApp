@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
-    <uses-permission android:name="android.permission.CAMERA"/>
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
 
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -16,7 +16,21 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.HostelComplaintApp">
-
+        <activity
+            android:name=".LoginForm"
+            android:exported="false" />
+        <activity
+            android:name=".Notification_student"
+            android:exported="false" />
+        <activity
+            android:name=".Totalcomplaint_student"
+            android:exported="false" />
+        <activity
+            android:name=".pendingcomplaint_student"
+            android:exported="false" />
+        <activity
+            android:name=".student_profile_pg"
+            android:exported="false" />
         <activity
             android:name=".RaiseComplaintActivity"
             android:exported="false" />
@@ -49,21 +63,20 @@
             android:exported="false" />
         <activity
             android:name=".worker.WorkerDashboardActivity"
-            android:parentActivityName=".HomePage_Staff"
-            android:exported="false" />
-
+            android:exported="false"
+            android:parentActivityName=".HomePage_Staff" />
         <activity
             android:name=".worker.WorkerProfileActivity"
-            android:parentActivityName=".worker.WorkerDashboardActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:parentActivityName=".worker.WorkerDashboardActivity" />
         <activity
             android:name=".worker.WorkerTaskListActivity"
-            android:parentActivityName=".worker.WorkerDashboardActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:parentActivityName=".worker.WorkerDashboardActivity" />
         <activity
             android:name=".worker.WorkerTaskDetailsActivity"
-            android:parentActivityName=".worker.WorkerTaskListActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:parentActivityName=".worker.WorkerTaskListActivity" />
         <activity
             android:name=".LoginActivity"
             android:exported="false"

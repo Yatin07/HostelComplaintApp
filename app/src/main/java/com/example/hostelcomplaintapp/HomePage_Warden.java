@@ -140,7 +140,7 @@ public class HomePage_Warden extends AppCompatActivity {
 
                     currentPage = 0;
                 });
-        /// announcement autosliding fetches only latest 3 from firestore code start ///
+        /// announcement autosliding fetches only latest 3 from firestore code end ///
 
 
 

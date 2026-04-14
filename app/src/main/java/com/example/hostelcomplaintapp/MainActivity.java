@@ -27,19 +27,19 @@ public class MainActivity extends AppCompatActivity {
         Button btnWarden = findViewById(R.id.btnWarden);
 
         btnStudent.setOnClickListener(v -> {
-            Intent intent = new Intent(MainActivity.this, HomePage_Student.class);
+            Intent intent = new Intent(MainActivity.this, LoginForm.class);
             intent.putExtra("role", "student");
             startActivity(intent);
         });
 
         btnStaff.setOnClickListener(v -> {
-            Intent intent = new Intent(MainActivity.this, com.example.hostelcomplaintapp.worker.WorkerDashboardActivity.class);
+            Intent intent = new Intent(MainActivity.this, LoginForm.class);
             intent.putExtra("role", "staff");
             startActivity(intent);
         });
 
         btnWarden.setOnClickListener(v -> {
-            Intent intent = new Intent(MainActivity.this, HomePage_Warden.class);
+            Intent intent = new Intent(MainActivity.this, LoginForm.class);
             intent.putExtra("role", "warden");
             startActivity(intent);
         });

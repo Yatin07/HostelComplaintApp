@@ -22,12 +22,21 @@
         <Spinner
             android:id="@+id/spinnerCategory"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:entries="@array/categories"/>
 
         <!-- Room -->
         <EditText
             android:id="@+id/etRoom"
             android:hint="Room Number"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"/>
+
+        <!-- Bed Number -->
+        <EditText
+            android:id="@+id/bednumber"
+            android:hint="Bed Number"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"/>
@@ -50,13 +59,6 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"/>
 
-        <!-- Image Button -->
-        <Button
-            android:id="@+id/btnUploadImage"
-            android:text="Upload Image"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"/>
 
         <EditText
             android:id="@+id/etStudentId"
@@ -71,6 +73,14 @@
             android:layout_height="200dp"
             android:scaleType="centerCrop"
             android:layout_marginTop="10dp"/>
+
+        <!-- Image Button -->
+        <Button
+            android:id="@+id/btnUploadImage"
+            android:text="Upload Image"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"/>
 
         <Button
             android:id="@+id/btnLocation"

@@ -7,12 +7,11 @@ import android.widget.ImageView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -20,9 +19,9 @@ import com.google.firebase.firestore.Query;
 
 import java.util.ArrayList;
 
-public class pendingcomplaint extends AppCompatActivity {
+public class Totalcomplaint_student extends AppCompatActivity {
 
-    ImageView btnBack, gotohomepg, btnNotification, staff_manage, imgProfile;
+    ImageView btnBack, gotohomepg, btnNotification, imgProfile;
 
     RecyclerView recyclerView;
     ArrayList<ComplaintModel> list;
@@ -32,21 +31,24 @@ public class pendingcomplaint extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_pendingcomplaint);
+        setContentView(R.layout.activity_totalcomplaint_student);
 
-        // 🔥 RecyclerView setup
+        /// RecyclerView setup ///
         recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         list = new ArrayList<>();
         adapter = new ComplaintAdapter(list);
+
+        // ❌ Student = NO resolve button
+        adapter.setWorker(false);
+
         recyclerView.setAdapter(adapter);
 
-        // 🔥 Firestore
+        /// 🔥 SAME AS WARDEN (NO FILTER) ///
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
         db.collection("complaints")
-                .whereEqualTo("status", "pending") // ✅ filter
                 .orderBy("timestamp", Query.Direction.DESCENDING)
                 .addSnapshotListener((value, error) -> {
 
@@ -56,38 +58,36 @@ public class pendingcomplaint extends AppCompatActivity {
 
                     for (DocumentSnapshot doc : value.getDocuments()) {
                         ComplaintModel model = doc.toObject(ComplaintModel.class);
-                        list.add(model);
+
+                        if (model != null) {
+                            model.setDocId(doc.getId()); // IMPORTANT
+                            list.add(model);
+                        }
                     }
 
                     adapter.notifyDataSetChanged();
                 });
 
-        /// 🔙 Back
+        /// Back button ///
         btnBack = findViewById(R.id.btnBack);
         btnBack.setOnClickListener(v -> finish());
 
-        /// 🏠 Home
+        /// Home button ///
         gotohomepg = findViewById(R.id.gotohomepg);
-        gotohomepg.setOnClickListener(v -> {
-            startActivity(new Intent(pendingcomplaint.this, HomePage_Warden.class));
-        });
+        gotohomepg.setOnClickListener(v -> finish());
 
-        /// 🔔 Notification
+        /// Notification ///
         btnNotification = findViewById(R.id.btnNotification);
         btnNotification.setOnClickListener(v -> {
-            startActivity(new Intent(pendingcomplaint.this, Notification.class));
+            Intent intent = new Intent(Totalcomplaint_student.this, Notification_student.class);
+            startActivity(intent);
         });
 
-        /// 👨‍🔧 Staff
-        staff_manage = findViewById(R.id.staff_manage);
-        staff_manage.setOnClickListener(v -> {
-            startActivity(new Intent(pendingcomplaint.this, staff_manage.class));
-        });
-
-        /// 👤 Profile
+        /// Profile ///
         imgProfile = findViewById(R.id.imgProfile);
         imgProfile.setOnClickListener(v -> {
-            startActivity(new Intent(pendingcomplaint.this, imgProfile_click.class));
+            Intent intent = new Intent(Totalcomplaint_student.this, imgProfile_click.class);
+            startActivity(intent);
         });
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {

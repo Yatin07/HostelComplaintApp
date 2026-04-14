@@ -1,3 +1,15 @@
 <resources>
     <string name="app_name">HostelComplaintApp</string>
+
+    <string-array name="categories">
+        <item>Electrical</item>
+        <item>Plumbing</item>
+        <item>Cleaning</item>
+        <item>Wi-Fi</item>
+        <item>Furniture</item>
+        <item>Mess</item>
+        <item>Others</item>
+
+    </string-array>
+
 </resources>

@@ -17,17 +17,24 @@ public class ComplaintAdapter extends RecyclerView.Adapter<ComplaintAdapter.View
 
     ArrayList<ComplaintModel> list;
 
+    // 🔥 NEW: role check (default false)
+    boolean isWorker = false;
+
+    // ✅ SAME constructor (no change)
     public ComplaintAdapter(ArrayList<ComplaintModel> list) {
         this.list = list;
     }
 
+    // 🔥 NEW: setter (use this in worker activity)
+    public void setWorker(boolean worker) {
+        this.isWorker = worker;
+    }
+
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
-        TextView tvName;
-        TextView txtRoom;
-        TextView txtPriority;
+        TextView tvName, txtRoom, txtPriority, txtStatus;
         Button removeBtn;
-        TextView txtStatus;
+        View arrowBtn;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -35,8 +42,9 @@ public class ComplaintAdapter extends RecyclerView.Adapter<ComplaintAdapter.View
             tvName = itemView.findViewById(R.id.tvName);
             txtRoom = itemView.findViewById(R.id.txtRoom);
             txtPriority = itemView.findViewById(R.id.txtPriority);
-            removeBtn = itemView.findViewById(R.id.removeBtn);
             txtStatus = itemView.findViewById(R.id.txtStatus);
+            removeBtn = itemView.findViewById(R.id.removeBtn);
+            arrowBtn = itemView.findViewById(R.id.arrowBtn);
         }
     }
 
@@ -54,45 +62,63 @@ public class ComplaintAdapter extends RecyclerView.Adapter<ComplaintAdapter.View
 
         ComplaintModel model = list.get(position);
 
-        // ✅ Set correct Firestore data
         holder.tvName.setText(model.getTitle());
-        holder.txtRoom.setText("Room: " + model.getRoom());
+        holder.txtRoom.setText("Room: " + model.getRoomNumber() + " (Bed: " + model.getBednumber() + ")");
+        holder.txtPriority.setText("SAP ID: " + model.getStudentId());
 
-        // Temporary priority
-        holder.txtPriority.setText("High Priority");
 
-        // Status logic
         String status = model.getStatus();
 
-        if (status == null || status.isEmpty()) {
-            holder.txtStatus.setText("Pending");
-            holder.txtStatus.setTextColor(android.graphics.Color.parseColor("#FFA000"));
-        } else {
-            holder.txtStatus.setText(status);
+        // 🔥 STATUS + BUTTON LOGIC
+        if (status == null || status.isEmpty() || status.equalsIgnoreCase("pending")) {
 
-            if (status.equals("Completed")) {
-                holder.txtStatus.setTextColor(android.graphics.Color.GREEN);
+            holder.txtStatus.setText("Pending");
+            holder.txtStatus.setTextColor(android.graphics.Color.WHITE);
+            holder.txtStatus.setBackgroundResource(R.drawable.status_pending);
+
+            if (isWorker) {
+                holder.removeBtn.setVisibility(View.VISIBLE);
+                holder.removeBtn.setText("Resolve");
             } else {
-                holder.txtStatus.setTextColor(android.graphics.Color.parseColor("#FFA000"));
+                holder.removeBtn.setVisibility(View.GONE);
             }
+
+        } else {
+
+            holder.txtStatus.setText("Completed");
+            holder.txtStatus.setTextColor(android.graphics.Color.WHITE);
+            holder.txtStatus.setBackgroundResource(R.drawable.status_completed);
+
+            holder.removeBtn.setVisibility(View.GONE);
         }
 
-        // Remove button (local only)
-        holder.removeBtn.setText("Resolve");
+        // 🔥 RESOLVE BUTTON CLICK (ONLY WORKER)
+        if (isWorker) {
+            holder.removeBtn.setOnClickListener(v -> {
 
-        holder.removeBtn.setOnClickListener(v -> {
+                if (model.getDocId() == null) {
+                    Toast.makeText(v.getContext(),
+                            "Error: Document ID missing", Toast.LENGTH_SHORT).show();
+                    return;
+                }
 
-            FirebaseFirestore.getInstance()
-                    .collection("complaints")
-                    .document(model.getDocId())
-                    .update("status", "Completed")
-                    .addOnSuccessListener(unused -> {
-                        Toast.makeText(v.getContext(), "Marked as Completed ✅", Toast.LENGTH_SHORT).show();
-                    });
-        });
+                FirebaseFirestore.getInstance()
+                        .collection("complaints")
+                        .document(model.getDocId())
+                        .update("status", "Completed")
+                        .addOnSuccessListener(unused ->
+                                Toast.makeText(v.getContext(),
+                                        "Marked as Completed ✅", Toast.LENGTH_SHORT).show()
+                        )
+                        .addOnFailureListener(e ->
+                                Toast.makeText(v.getContext(),
+                                        "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show()
+                        );
+            });
+        }
 
-        // 🔥 Details popup
-        holder.itemView.findViewById(R.id.arrowBtn).setOnClickListener(v -> {
+        // 🔥 DETAILS POPUP
+        holder.arrowBtn.setOnClickListener(v -> {
 
             android.app.AlertDialog.Builder builder =
                     new android.app.AlertDialog.Builder(v.getContext());
@@ -101,15 +127,14 @@ public class ComplaintAdapter extends RecyclerView.Adapter<ComplaintAdapter.View
 
             String message =
                     "Complaint: " + model.getTitle() + "\n\n" +
+                            "SAP ID: " + model.getStudentId() + "\n\n" +
+                            "Category: " + model.getCategory() + "\n\n" +
                             "Description: " + model.getDescription() + "\n\n" +
-                            "Room: " + model.getRoom() + "\n\n" +
-                            "Student ID: " + (model.getStudentId() == null ? "N/A" : model.getStudentId()) + "\n\n" +
+                            "Room: " + model.getRoomNumber() + " (Bed: " + model.getBednumber() + ")\n\n" +
                             "Status: " + (model.getStatus() == null ? "Pending" : model.getStatus());
 
             builder.setMessage(message);
-
             builder.setPositiveButton("OK", (dialog, which) -> dialog.dismiss());
-
             builder.show();
         });
     }

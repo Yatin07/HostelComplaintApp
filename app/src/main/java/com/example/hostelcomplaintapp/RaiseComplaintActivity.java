@@ -24,7 +24,7 @@ import java.util.Map;
 public class RaiseComplaintActivity extends AppCompatActivity {
 
     Spinner spinnerCategory;
-    EditText etRoom, etTitle, etDescription, etStudentId;
+    EditText etRoom, etTitle, etDescription, etStudentId, bednumber;
     Button btnSubmit, btnUploadImage;
     ImageView imagePreview;
 
@@ -46,20 +46,10 @@ public class RaiseComplaintActivity extends AppCompatActivity {
         imagePreview = findViewById(R.id.imagePreview);
         Button btnLocation = findViewById(R.id.btnLocation);
         etStudentId = findViewById(R.id.etStudentId);
+        bednumber = findViewById(R.id.bednumber);
 
 
-        // Spinner Data
-        String[] categories = {
-                "Electrical", "Plumbing", "Cleaning",
-                "Wi-Fi", "Furniture", "Mess", "Others"
-        };
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(
-                this,
-                android.R.layout.simple_spinner_dropdown_item,
-                categories
-        );
-        spinnerCategory.setAdapter(adapter);
 
         // Submit Button Logic
         btnSubmit.setOnClickListener(v -> {
@@ -76,14 +66,21 @@ public class RaiseComplaintActivity extends AppCompatActivity {
             }
 
             // Save to Database
-            java.util.Map<String, Object> complaint = new java.util.HashMap<>();
-            complaint.put("text", category + ": " + title + " - " + description);
-            complaint.put("room", room);
+            Map<String, Object> complaint = new HashMap<>();
+
+            String studentId = etStudentId.getText().toString();
+            String bed = bednumber.getText().toString();
+
+            complaint.put("category", category);
+            complaint.put("title", title);
+            complaint.put("description", description);
+            complaint.put("roomNumber", room);
+            complaint.put("bednumber", bed);
+            complaint.put("studentId", studentId);
             complaint.put("timestamp", System.currentTimeMillis());
-            complaint.put("status", "Pending");
-            complaint.put("bedNumber", "N/A"); // Default fallback
-            complaint.put("studentId", "Student-01"); // Dummy student user
-            complaint.put("assignedWorkerId", "W-12345"); // Auto-assign to default worker for testing staff UI
+            complaint.put("status", "pending"); // always start as pending
+            complaint.put("assignedWorkerId", ""); // not assigned yet
+
 
             com.google.firebase.firestore.FirebaseFirestore db = com.google.firebase.firestore.FirebaseFirestore.getInstance();
             db.collection("complaints").add(complaint)
@@ -98,6 +95,9 @@ public class RaiseComplaintActivity extends AppCompatActivity {
                         Toast.makeText(this, "Submission failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                     });
         });
+
+
+
 
         // Image Button Logic
         btnUploadImage.setOnClickListener(v -> {
