@@ -63,150 +63,290 @@
     </androidx.appcompat.widget.Toolbar>
 
 
-    <!-- ✅ FIXED STRUCTURE (IMPORTANT CHANGE) -->
+    <!-- ✅ MODERNIZED MIDDLE UI -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
         android:orientation="vertical"
-        android:padding="11dp">
+        android:background="#F8FAFC">
 
         <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:overScrollMode="never"
+            android:scrollbars="none">
 
             <LinearLayout
                 android:orientation="vertical"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:padding="20dp">
 
-                <!-- Profile Image -->
-                <ImageView
-                    android:id="@+id/profileImage"
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
-                    android:layout_gravity="center"
-                    android:src="@drawable/baseline_person_add_alt_24"
-                    android:background="@drawable/imgprofile_roundedcard"
-                    android:clipToOutline="true"
-                    android:scaleType="centerCrop"
-                    android:padding="10dp"
-                    android:layout_marginTop="40dp"/>
+                <!-- 🌟 HERO PROFILE CARD -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:background="@drawable/profile_hero_bg"
+                    android:paddingTop="30dp"
+                    android:paddingBottom="30dp"
+                    android:elevation="8dp"
+                    android:gravity="center">
 
-                <!-- Name -->
+                    <FrameLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+
+                        <ImageView
+                            android:id="@+id/profileImage"
+                            android:layout_width="110dp"
+                            android:layout_height="110dp"
+                            android:src="@drawable/baseline_person_add_alt_24"
+                            android:background="@drawable/profile_avatar_ring"
+                            android:clipToOutline="true"
+                            android:scaleType="centerCrop"
+                            android:padding="12dp"
+                            android:elevation="4dp"/>
+                    </FrameLayout>
+
+                    <TextView
+                        android:id="@+id/tvName1"
+                        android:text="Student Name Here"
+                        android:textColor="#FFFFFF"
+                        android:textSize="24sp"
+                        android:textStyle="bold"
+                        android:layout_marginTop="16dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+
+                    <TextView
+                        android:id="@+id/tvRoomno"
+                        android:text="Room NO : 223"
+                        android:textColor="#E2E8F0"
+                        android:textSize="15sp"
+                        android:textStyle="bold"
+                        android:layout_marginTop="4dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+
+                    <TextView
+                        android:id="@+id/tvEmail"
+                        android:text="pchinmay098@gmail.com"
+                        android:textColor="#FBBF24"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        android:background="@drawable/status_bg"
+                        android:backgroundTint="#33000000"
+                        android:paddingHorizontal="12dp"
+                        android:paddingVertical="4dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+                </LinearLayout>
+
                 <TextView
-                    android:id="@+id/tvName1"
-                    android:text="Student Name Here"
-                    android:textSize="22sp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Settings"
                     android:textStyle="bold"
-                    android:layout_marginTop="10dp"
-                    android:layout_gravity="center"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="3dp"/>
+                    android:textColor="#64748B"
+                    android:textSize="16sp"
+                    android:layout_marginTop="24dp"
+                    android:layout_marginBottom="12dp"
+                    android:layout_marginStart="8dp"/>
 
-                <!-- Room Number -->
-                <TextView
-                    android:id="@+id/tvRoomno"
-                    android:text="Room N0 : 223"
-                    android:textSize="14sp"
-                    android:gravity="center"
-                    android:layout_gravity="center"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="3dp"/>
-
-                <!-- Email -->
-                <TextView
-                    android:id="@+id/tvEmail"
-                    android:text="pchinmay098@gmail.com"
-                    android:textSize="14sp"
-                    android:gravity="center"
-                    android:layout_gravity="center"
-                    android:background="@color/yellow"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="3dp"/>
-
-                <!-- Card 1 -->
+                <!-- 🔳 MENU ITEMS CONTAINER -->
                 <LinearLayout
-                    android:orientation="vertical"
-                    android:padding="15dp"
-                    android:layout_marginTop="20dp"
-                    android:background="@drawable/imgprofile_roundedcard"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:background="@drawable/menu_card_bg"
+                    android:elevation="2dp"
+                    android:paddingVertical="8dp">
 
-                    <TextView
-                        android:text="Edit Profile Information"
+                    <!-- Menu 1: Edit Profile -->
+                    <LinearLayout
                         android:id="@+id/EditProfileinformation"
-                        android:textSize="17sp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"/>
-                </LinearLayout>
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:background="?attr/selectableItemBackground"
+                        android:paddingHorizontal="16dp"
+                        android:paddingVertical="12dp">
 
-                <!-- Card 2 -->
-                <LinearLayout
-                    android:orientation="vertical"
-                    android:padding="15dp"
-                    android:layout_marginTop="15dp"
-                    android:background="@drawable/imgprofile_roundedcard"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                        <ImageView
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:src="@drawable/ic_edit_profile"
+                            android:background="@drawable/menu_icon_bg"
+                            android:padding="8dp"/>
 
-                    <TextView
-                        android:text="Security"
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="wrap_content"
+                            android:text="Edit Profile Information"
+                            android:textSize="16sp"
+                            android:textColor="#1E293B"
+                            android:textStyle="bold"
+                            android:layout_marginStart="16dp"/>
+
+                        <ImageView
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:src="@drawable/ic_chevron_right"/>
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="#F1F5F9"
+                        android:layout_marginStart="72dp"
+                        android:layout_marginEnd="16dp"/>
+
+                    <!-- Menu 2: Security -->
+                    <LinearLayout
                         android:id="@+id/security"
-                        android:textSize="17sp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"/>
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:background="?attr/selectableItemBackground"
+                        android:paddingHorizontal="16dp"
+                        android:paddingVertical="12dp">
+
+                        <ImageView
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:src="@drawable/ic_security_shield"
+                            android:background="@drawable/menu_icon_bg"
+                            android:padding="8dp"/>
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="wrap_content"
+                            android:text="Security"
+                            android:textSize="16sp"
+                            android:textColor="#1E293B"
+                            android:textStyle="bold"
+                            android:layout_marginStart="16dp"/>
+
+                        <ImageView
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:src="@drawable/ic_chevron_right"/>
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="#F1F5F9"
+                        android:layout_marginStart="72dp"
+                        android:layout_marginEnd="16dp"/>
+
+                    <!-- Menu 3: Theme -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:paddingHorizontal="16dp"
+                        android:paddingVertical="12dp">
+
+                        <ImageView
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:src="@drawable/ic_theme_mode"
+                            android:background="@drawable/menu_icon_bg"
+                            android:padding="8dp"/>
+
+                        <TextView
+                            android:id="@+id/theme"
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="wrap_content"
+                            android:text="Dark Mode"
+                            android:textSize="16sp"
+                            android:textColor="#1E293B"
+                            android:textStyle="bold"
+                            android:layout_marginStart="16dp"/>
+
+                        <Switch
+                            android:id="@+id/switchTheme"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:thumbTint="#1E3A8A"
+                            android:trackTint="#CBD5E1"/>
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="#F1F5F9"
+                        android:layout_marginStart="72dp"
+                        android:layout_marginEnd="16dp"/>
+
+                    <!-- Menu 4: Help -->
+                    <LinearLayout
+                        android:id="@+id/contactus"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:background="?attr/selectableItemBackground"
+                        android:paddingHorizontal="16dp"
+                        android:paddingVertical="12dp">
+
+                        <ImageView
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:src="@drawable/ic_help_support"
+                            android:background="@drawable/menu_icon_bg"
+                            android:padding="8dp"/>
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="wrap_content"
+                            android:text="Help &amp; Support"
+                            android:textSize="16sp"
+                            android:textColor="#1E293B"
+                            android:textStyle="bold"
+                            android:layout_marginStart="16dp"/>
+
+                        <ImageView
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:src="@drawable/ic_chevron_right"/>
+                    </LinearLayout>
+
                 </LinearLayout>
 
-                <!-- Card 3 (Theme Toggle) -->
-                <LinearLayout
-                    android:orientation="horizontal"
-                    android:padding="15dp"
-                    android:layout_marginTop="10dp"
-                    android:background="@drawable/imgprofile_roundedcard"
+                <!-- Logout Button -->
+                <Button
+                    android:id="@+id/btnLogout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center_vertical">
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/theme"
-                        android:layout_weight="1"
-                        android:text="Theme"
-                        android:textSize="16sp"/>
-
-                    <Switch
-                        android:id="@+id/switchTheme"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"/>
-                </LinearLayout>
-
-                <!-- Card 4 -->
-                <LinearLayout
-                    android:orientation="vertical"
-                    android:padding="15dp"
-                    android:layout_marginTop="15dp"
-                    android:background="@drawable/imgprofile_roundedcard"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <TextView
-                        android:text="Help &amp; Support"
-                        android:id="@+id/contactus"
-                        android:textSize="17sp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"/>
-                </LinearLayout>
+                    android:text="Logout"
+                    android:backgroundTint="#EF4444"
+                    android:textColor="@color/white"
+                    android:textStyle="bold"
+                    android:padding="14dp"
+                    app:cornerRadius="12dp"
+                    android:layout_marginTop="24dp"
+                    android:layout_marginBottom="12dp" />
 
             </LinearLayout>
-
         </ScrollView>
-
     </LinearLayout>
 
 

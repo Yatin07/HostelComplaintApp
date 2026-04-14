@@ -24,7 +24,8 @@ public class student_profile_pg extends AppCompatActivity {
     ImageView btnBack, gotohomepg, imgprof, btnNotification, staff_manage, backBtn;
     EditText etName;
     Button btnSave;
-    TextView tvName, EditProfileinformation, security;
+    TextView tvName;
+    View EditProfileinformation, security;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -126,7 +127,7 @@ public class student_profile_pg extends AppCompatActivity {
 
         /// after clicking help and security popup show code starts here////
 
-        TextView contactus = findViewById(R.id.contactus);
+        View contactus = findViewById(R.id.contactus);
 
         contactus.setOnClickListener(v -> {
             Dialog dialog = new Dialog(v.getContext());
@@ -178,6 +179,20 @@ public class student_profile_pg extends AppCompatActivity {
                 Intent intent1 = new Intent(student_profile_pg.this, HomePage_Student.class);
                 startActivity(intent1);
             }
+        });
+
+
+        Button btnLogout = findViewById(R.id.btnLogout);
+        btnLogout.setOnClickListener(v -> {
+            // Clear any user preferences if necessary
+            SharedPreferences prefs = getSharedPreferences("MyPrefs", MODE_PRIVATE);
+            prefs.edit().clear().apply();
+
+            // Redirect back to role selection and clear backstack
+            Intent intent = new Intent(student_profile_pg.this, MainActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
+            finish();
         });
 
 
