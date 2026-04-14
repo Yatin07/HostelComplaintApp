@@ -15,6 +15,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import android.content.SharedPreferences;
+
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
@@ -80,8 +82,12 @@ public class RaiseComplaintActivity extends AppCompatActivity {
             // Save to Database
             Map<String, Object> complaint = new HashMap<>();
 
-            String studentId = etStudentId.getText().toString();
+            String studentId = etStudentId.getText().toString().trim();
             String bed = bednumber.getText().toString();
+
+            // Persist studentId to SharedPreferences so "My Complaints" fetch can match it
+            SharedPreferences prefs = getSharedPreferences("MyPrefs", MODE_PRIVATE);
+            prefs.edit().putString("sapid", studentId).apply();
 
             complaint.put("category", category);
             complaint.put("title", title);

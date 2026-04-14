@@ -71,9 +71,21 @@ public class Totalcomplaint_student extends AppCompatActivity {
 
         // Retrieve logged-in student's ID
         SharedPreferences prefs = getSharedPreferences("MyPrefs", MODE_PRIVATE);
-        String studentId = prefs.getString("sapid", "S12345");
+        String studentId = prefs.getString("sapid", null);
 
-        Log.d("DEBUG", "Student ID: " + studentId);
+        Log.d("DEBUG", "StudentId used for query: " + studentId);
+
+        // Guard: if studentId is null or empty, we cannot query reliably
+        if (studentId == null || studentId.trim().isEmpty()) {
+            progressBar.setVisibility(View.GONE);
+            tvEmptyState.setText("No student ID found. Please submit a complaint first.");
+            tvEmptyState.setVisibility(View.VISIBLE);
+            Log.e("DEBUG", "studentId is null or empty — aborting fetch");
+            return;
+        }
+
+        // Trim to avoid whitespace mismatch with Firestore value
+        studentId = studentId.trim();
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection("complaints")

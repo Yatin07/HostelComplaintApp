@@ -30,7 +30,7 @@ import java.util.List;
 public class HomePage_Student extends AppCompatActivity {
     TextView tv1StudentName, tv2StudentId;
     ImageView imgProfile1, imgprof, howtouseapp, imgnotification;
-    LinearLayout cardraisecomplaint, cardpending, cardtotalcomplaint;
+    LinearLayout cardraisecomplaint, cardpending, cardtotalcomplaint,cardemergencyissue;
 
     // for auto sliding of announcement card on home page //
     Handler handler = new Handler(Looper.getMainLooper());
@@ -44,6 +44,11 @@ public class HomePage_Student extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_home_page_student);
+
+        cardtotalcomplaint = findViewById(R.id.cardtotalcomplaint);
+        cardpending = findViewById(R.id.cardpending);
+        cardemergencyissue = findViewById(R.id.cardemergencyissue);
+        cardraisecomplaint = findViewById(R.id.cardraisecomplaint);
 
         tv1StudentName = findViewById(R.id.tv1StudentName);
         tv2StudentId = findViewById(R.id.tv2StudentId);
@@ -144,6 +149,14 @@ public class HomePage_Student extends AppCompatActivity {
         };
 
         handler.postDelayed(runnable, 10000);
+
+        cardemergencyissue.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), emergency_issue_student.class);
+                startActivity(intent);
+            }
+        });
 
         /// 3 DOTS BELOW THE AUTO SLIDING ANNOUNCEMENT CARD
         viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {

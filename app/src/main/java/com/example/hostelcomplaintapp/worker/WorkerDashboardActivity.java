@@ -8,11 +8,13 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.hostelcomplaintapp.R;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.ListenerRegistration;
 
 public class WorkerDashboardActivity extends AppCompatActivity {
 
     private TextView tvTotalCount, tvPendingCount, tvInProgressCount, tvCompletedCount, tvOverdueCount;
     private TextView tvAverageRating, tvRecentFeedback;
+    private ListenerRegistration dashboardListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,8 +78,13 @@ public class WorkerDashboardActivity extends AppCompatActivity {
     }
 
     private void setupRealTimeUpdates() {
+        // Prevent multiple listeners from being registered
+        if (dashboardListener != null) {
+            return;
+        }
+
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection("complaints").addSnapshotListener((value, error) -> {
+        dashboardListener = db.collection("complaints").addSnapshotListener((value, error) -> {
             if (error != null || value == null) {
                 return;
             }
@@ -102,5 +109,15 @@ public class WorkerDashboardActivity extends AppCompatActivity {
             tvCompletedCount.setText(String.valueOf(completed));
             tvOverdueCount.setText(String.valueOf(overdue));
         });
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        // Remove Firestore listener to prevent memory leaks
+        if (dashboardListener != null) {
+            dashboardListener.remove();
+            dashboardListener = null;
+        }
     }
 }
