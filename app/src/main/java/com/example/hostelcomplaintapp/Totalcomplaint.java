@@ -2,6 +2,7 @@ package com.example.hostelcomplaintapp;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -13,15 +14,17 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.ArrayList;
 
 public class Totalcomplaint extends AppCompatActivity {
 
     ImageView btnBack, gotohomepg, btnNotification, staff_manage, imgprof;
+
+    private ArrayList<ComplaintModel> list;
+    private ComplaintAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,11 +33,7 @@ public class Totalcomplaint extends AppCompatActivity {
         setContentView(R.layout.activity_totalcomplaint);
 
         /// make card design start ///
-        RecyclerView recyclerView;
-        ArrayList<ComplaintModel> list;
-        ComplaintAdapter adapter;
-
-        recyclerView = findViewById(R.id.recyclerView);
+        RecyclerView recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         list = new ArrayList<>();
@@ -43,26 +42,8 @@ public class Totalcomplaint extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
         /// make card design end ///
 
-        /// Load Data from Firestore ///
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-
-        db.collection("complaints")
-                .orderBy("timestamp", Query.Direction.DESCENDING)
-                .addSnapshotListener((value, error) -> {
-
-                    if (error != null || value == null) return;
-
-                    list.clear();
-
-                    for (DocumentSnapshot doc : value.getDocuments()) {
-                        ComplaintModel model = doc.toObject(ComplaintModel.class);
-                        model.setDocId(doc.getId());
-                        list.add(model);
-                    }
-
-                    adapter.notifyDataSetChanged();
-                });
-        /// load data from firestore end ///
+        /// Load Data from Firestore using .get() — avoids composite index requirement ///
+        loadComplaints();
 
         /// back button code start ///
         btnBack = findViewById(R.id.btnBack);
@@ -122,5 +103,34 @@ public class Totalcomplaint extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+    }
+
+    private void loadComplaints() {
+        // Use .get() (one-time fetch) instead of addSnapshotListener + orderBy.
+        // addSnapshotListener + orderBy("timestamp") requires a composite Firestore index
+        // that does NOT exist — this causes a FAILED_PRECONDITION crash.
+        // .get() works without any index and is safe for a read-only warden view.
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("complaints")
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    list.clear();
+
+                    for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
+                        try {
+                            ComplaintModel model = doc.toObject(ComplaintModel.class);
+                            if (model == null) continue; // skip malformed documents
+                            model.setDocId(doc.getId());
+                            list.add(model);
+                        } catch (Exception e) {
+                            Log.e("WARDEN_COMPLAINTS", "Error parsing doc: " + doc.getId(), e);
+                        }
+                    }
+
+                    adapter.notifyDataSetChanged();
+                })
+                .addOnFailureListener(e -> {
+                    Log.e("WARDEN_COMPLAINTS", "Failed to load: " + e.getMessage());
+                });
     }
 }

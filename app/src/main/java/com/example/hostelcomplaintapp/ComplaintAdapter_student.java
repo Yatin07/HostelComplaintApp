@@ -82,7 +82,8 @@ public class ComplaintAdapter_student extends RecyclerView.Adapter<ComplaintAdap
             holder.progressBar.setProgress(0);
         }
 
-        // Capitalize first letter strictly for UI display
+        // Capitalize first letter — guard against empty string to prevent StringIndexOutOfBoundsException
+        if (status.isEmpty()) status = "pending";
         String displayStatus = status.substring(0, 1).toUpperCase() + status.substring(1);
         holder.tvStatus.setText(displayStatus);
 

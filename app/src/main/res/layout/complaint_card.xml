@@ -1,50 +1,76 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="10dp"
-    app:cardCornerRadius="10dp"
-    app:cardElevation="5dp">
+    android:layout_marginStart="12dp"
+    android:layout_marginEnd="12dp"
+    android:layout_marginTop="8dp"
+    android:layout_marginBottom="8dp"
+    app:cardCornerRadius="16dp"
+    app:cardElevation="6dp"
+    app:strokeWidth="0dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="15dp">
+        android:padding="16dp">
 
+        <!-- Category chip-style label -->
         <TextView
             android:id="@+id/txtCategory"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Category"
-            android:textColor="@color/black"
-            android:textSize="14sp"
-            android:textStyle="bold" />
+            android:textColor="#5C6BC0"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            android:background="@drawable/category_chip_bg"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            android:paddingTop="3dp"
+            android:paddingBottom="3dp" />
 
+        <!-- Title -->
         <TextView
             android:id="@+id/txtTitle"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Title"
-            android:textColor="@color/black"
-            android:textSize="16sp"
+            android:textColor="#1A1A2E"
+            android:textSize="17sp"
             android:textStyle="bold"
-            android:layout_marginTop="5dp" />
+            android:layout_marginTop="10dp" />
 
+        <!-- Divider line -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#E8EAF6"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp" />
+
+        <!-- Description -->
         <TextView
             android:id="@+id/txtDescription"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Description"
             android:textSize="14sp"
-            android:layout_marginTop="5dp" />
+            android:textColor="#4A4A6A"
+            android:lineSpacingExtra="3dp"
+            android:maxLines="3"
+            android:ellipsize="end" />
 
+        <!-- Room + Status row -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_marginTop="10dp">
+            android:gravity="center_vertical"
+            android:layout_marginTop="12dp">
 
             <TextView
                 android:id="@+id/taxtRoom"
@@ -52,35 +78,48 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="Room"
-                android:textSize="14sp"
-                android:textStyle="bold" />
+                android:textSize="13sp"
+                android:textColor="#607D8B"
+                android:drawablePadding="4dp" />
 
             <TextView
                 android:id="@+id/tvStatus"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Pending"
-                android:textColor="#FFA000"
-                android:textStyle="bold" />
+                android:textSize="13sp"
+                android:textStyle="bold"
+                android:textColor="#F44336"
+                android:background="@drawable/status_badge_bg"
+                android:paddingStart="12dp"
+                android:paddingEnd="12dp"
+                android:paddingTop="4dp"
+                android:paddingBottom="4dp" />
+
         </LinearLayout>
 
+        <!-- Progress Bar -->
         <ProgressBar
             android:id="@+id/progressBar"
             style="?android:attr/progressBarStyleHorizontal"
             android:layout_width="match_parent"
-            android:layout_height="6dp"
-            android:layout_marginTop="8dp"
-            android:max="100"/>
+            android:layout_height="8dp"
+            android:layout_marginTop="12dp"
+            android:max="100"
+            android:progressTint="#5C6BC0"
+            android:progressBackgroundTint="#E8EAF6" />
 
+        <!-- Timestamp -->
         <TextView
             android:id="@+id/txtTime"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Time"
-            android:textSize="12sp"
+            android:textSize="11sp"
+            android:textColor="#9E9E9E"
             android:gravity="end"
             android:layout_marginTop="10dp" />
 
     </LinearLayout>
 
-</androidx.cardview.widget.CardView>
+</com.google.android.material.card.MaterialCardView>
