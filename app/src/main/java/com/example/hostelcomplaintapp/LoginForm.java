@@ -38,56 +38,56 @@ public class LoginForm extends AppCompatActivity {
         // 🔹 Set title
         tvTitle.setText(role + " Login");
 
-        // 🔥 LOGIN BUTTON
-//        btnLogin.setOnClickListener(v -> {
-//
-//            String email = Email.getText().toString().trim();
-//            String password = Password.getText().toString().trim();
-//
-//            // ✅ Debug (remove later if you want)
-//            Toast.makeText(this, "Role: " + role, Toast.LENGTH_SHORT).show();
-//
-//            // ✅ Validation
-//            if (email.isEmpty() || password.isEmpty()) {
-//                Toast.makeText(LoginForm.this, "Please fill all fields", Toast.LENGTH_SHORT).show();
-//                return;
-//            }
-//
-//            // 🔵 WARDEN LOGIN
-//            if (role.equalsIgnoreCase("Warden")) {
-//
-//                if (email.equalsIgnoreCase("warden@gmail.com") && password.equals("123")) {
-//                    startActivity(new Intent(LoginForm.this, HomePage_Warden.class));
-//                    finish();
-//                } else {
-//                    showError();
-//                }
-//
-//            }
-//
-//            // 🟠 STAFF LOGIN
-//            else if (role.equalsIgnoreCase("Staff")) {
-//
-//                if (email.equalsIgnoreCase("staff@gmail.com") && password.equals("123")) {
-//                    startActivity(new Intent(LoginForm.this, WorkerDashboardActivity.class));
-//                    finish();
-//                } else {
-//                    showError();
-//                }
-//
-//            }
-//
-//            // 🟢 STUDENT LOGIN
-//            else {
-//
-//                if (email.equalsIgnoreCase("student@gmail.com") && password.equals("123")) {
-//                    startActivity(new Intent(LoginForm.this, HomePage_Student.class));
-//                    finish();
-//                } else {
-//                    showError();
-//                }
-//            }
-//        });
+        btnLogin.setOnClickListener(v -> {
+
+//         🔥 LOGIN BUTTON
+            String email = Email.getText().toString().trim();
+            String password = Password.getText().toString().trim();
+
+            // ✅ Debug (remove later if you want)
+            Toast.makeText(this, "Role: " + role, Toast.LENGTH_SHORT).show();
+
+            // ✅ Validation
+            if (email.isEmpty() || password.isEmpty()) {
+                Toast.makeText(LoginForm.this, "Please fill all fields", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            // 🔵 WARDEN LOGIN
+            if (role.equalsIgnoreCase("Warden")) {
+
+                if (email.equalsIgnoreCase("w") && password.equals("123")) {
+                    startActivity(new Intent(LoginForm.this, HomePage_Warden.class));
+                    finish();
+                } else {
+                    showError();
+                }
+
+            }
+
+            // 🟠 STAFF LOGIN
+            else if (role.equalsIgnoreCase("Staff")) {
+
+                if (email.equalsIgnoreCase("s") && password.equals("123")) {
+                    startActivity(new Intent(LoginForm.this, WorkerDashboardActivity.class));
+                    finish();
+                } else {
+                    showError();
+                }
+
+            }
+
+            // 🟢 STUDENT LOGIN
+            else {
+
+                if (email.equalsIgnoreCase("st") && password.equals("123")) {
+                    startActivity(new Intent(LoginForm.this, HomePage_Student.class));
+                    finish();
+                } else {
+                    showError();
+                }
+            }
+        });
 
         // 🔹 Forgot Password
         tvForgotPassword.setOnClickListener(v ->

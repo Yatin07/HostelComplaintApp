@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.hostelcomplaintapp.ComplaintModel;
 import com.example.hostelcomplaintapp.R;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.ArrayList;
@@ -25,6 +26,8 @@ public class WorkerTaskListActivity extends AppCompatActivity {
     private Spinner spinnerFilter;
     private WorkerComplaintAdapter adapter;
     private List<ComplaintModel> allComplaints = new ArrayList<>();
+    private ListenerRegistration complaintsListener;
+    private boolean isDataLoaded = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,9 +60,14 @@ public class WorkerTaskListActivity extends AppCompatActivity {
     }
 
     private void fetchComplaintsRealtime() {
+        // Prevent multiple listeners from being registered
+        if (complaintsListener != null) {
+            return;
+        }
+
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-        db.collection("complaints").addSnapshotListener((value, error) -> {
+        complaintsListener = db.collection("complaints").addSnapshotListener((value, error) -> {
             if (error != null) {
                 Log.e("WORKER_COMPLAINTS", "Error active listener query", error);
                 return;
@@ -83,6 +91,7 @@ public class WorkerTaskListActivity extends AppCompatActivity {
                         Log.e("WORKER_COMPLAINTS", "Doc parse fail", e);
                     }
                 }
+                isDataLoaded = true;
                 applyFilter();
             }
         });
@@ -117,7 +126,19 @@ public class WorkerTaskListActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        // Remove Firestore listener to prevent memory leaks and duplicate triggers
+        if (complaintsListener != null) {
+            complaintsListener.remove();
+            complaintsListener = null;
+        }
+    }
+
     private void applyFilter() {
+        // Do not apply filter until data has been loaded at least once
+        if (!isDataLoaded) return;
         if (spinnerFilter == null || spinnerFilter.getSelectedItem() == null) return;
         String filterString = spinnerFilter.getSelectedItem().toString().toLowerCase();
 
