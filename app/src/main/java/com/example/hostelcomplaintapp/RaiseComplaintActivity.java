@@ -28,6 +28,7 @@ public class RaiseComplaintActivity extends AppCompatActivity {
     EditText etRoom, etTitle, etDescription, etStudentId;
     Button btnSubmit, btnUploadImage;
     ImageView imagePreview;
+    private String base64ImageUrl = "";
 
     static final int CAMERA_REQUEST = 100;
     static final int GALLERY_REQUEST = 200;
@@ -86,6 +87,7 @@ public class RaiseComplaintActivity extends AppCompatActivity {
             data.put("studentId", studentId);
             data.put("timestamp", FieldValue.serverTimestamp());
             data.put("status", "Pending");
+            data.put("imageUrl", base64ImageUrl);
 
             db.collection("complaints")
                     .add(data)
@@ -105,6 +107,7 @@ public class RaiseComplaintActivity extends AppCompatActivity {
                         etDescription.setText("");
                         etRoom.setText("");
                         imagePreview.setImageDrawable(null);
+                        base64ImageUrl = "";
 
                         // Redirect to home page
                         Intent intent = new Intent(RaiseComplaintActivity.this, HomePage_Student.class);
@@ -146,11 +149,41 @@ public class RaiseComplaintActivity extends AppCompatActivity {
 
         if (resultCode == Activity.RESULT_OK && data != null) {
             if (requestCode == CAMERA_REQUEST && data.getExtras() != null) {
-                Bitmap photo = (Bitmap) data.getExtras().get("data");
-                imagePreview.setImageBitmap(photo);
-            } else if (requestCode == GALLERY_REQUEST && data.getData() != null) {
-                imagePreview.setImageURI(data.getData());
+                Bitmap raw = (Bitmap) data.getExtras().get("data");
+                if (raw != null) {
+                    Bitmap compressed = compressBitmap(raw);
+                    base64ImageUrl = bitmapToBase64DataUrl(compressed);
+                    imagePreview.setImageBitmap(compressed);
+                }
             }
         }
+    }
+
+    // ────────────────────────────────────────────────────────
+    //  IMAGE COMPRESSION & BASE64 ENCODING
+    // ────────────────────────────────────────────────────────
+    private Bitmap compressBitmap(Bitmap original) {
+        int maxDim = 1024;
+        int w = original.getWidth();
+        int h = original.getHeight();
+
+        if (w > maxDim || h > maxDim) {
+            float ratio = Math.min((float) maxDim / w, (float) maxDim / h);
+            w = Math.round(w * ratio);
+            h = Math.round(h * ratio);
+            original = Bitmap.createScaledBitmap(original, w, h, true);
+        }
+
+        java.io.ByteArrayOutputStream baos = new java.io.ByteArrayOutputStream();
+        original.compress(Bitmap.CompressFormat.JPEG, 85, baos);
+        byte[] compressedBytes = baos.toByteArray();
+        return android.graphics.BitmapFactory.decodeByteArray(compressedBytes, 0, compressedBytes.length);
+    }
+
+    private String bitmapToBase64DataUrl(Bitmap bitmap) {
+        java.io.ByteArrayOutputStream baos = new java.io.ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 85, baos);
+        byte[] bytes = baos.toByteArray();
+        return "data:image/jpeg;base64," + android.util.Base64.encodeToString(bytes, android.util.Base64.NO_WRAP);
     }
 }
