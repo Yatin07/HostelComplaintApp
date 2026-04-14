@@ -59,7 +59,8 @@
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
         android:minHeight="48dp"
-        android:background="@android:drawable/btn_dropdown"/>
+        android:background="@android:drawable/btn_dropdown"
+        android:visibility="gone"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewTasks"
