@@ -16,6 +16,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.HostelComplaintApp">
+
+        <activity android:name=".worker.Worker_notification_clk" />
+        <activity
+            android:name=".worker_guide_clk"
+            android:exported="false" />
         <activity
             android:name=".emergency_issue_student"
             android:exported="false" />

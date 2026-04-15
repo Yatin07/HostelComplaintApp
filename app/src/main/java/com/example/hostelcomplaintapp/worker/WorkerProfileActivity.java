@@ -7,12 +7,18 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 
 import com.example.hostelcomplaintapp.MainActivity;
 import com.example.hostelcomplaintapp.R;
+import com.example.hostelcomplaintapp.worker.Worker_notification_clk;
+import com.example.hostelcomplaintapp.worker_guide_clk;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
@@ -23,6 +29,7 @@ public class WorkerProfileActivity extends AppCompatActivity {
     private TextView tvWorkerName, tvWorkerEmail, tvWorkerRole, tvWorkerId;
     private EditText etWorkerName, etWorkerEmail, etWorkerRole, etWorkerId;
     private Button btnLogout, btnBack, btnEditProfile;
+    ImageView prof, rules, notify, home;
     
     private boolean isEditing = false;
     private FirebaseFirestore db;
@@ -31,6 +38,52 @@ public class WorkerProfileActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_worker_profile);
+
+        prof = findViewById(R.id.prof);
+        rules = findViewById(R.id.rules);
+        notify = findViewById(R.id.notify);
+        home = findViewById(R.id.home);
+
+        prof.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(WorkerProfileActivity.this, WorkerProfileActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        rules.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(WorkerProfileActivity.this, worker_guide_clk.class);
+                startActivity(intent);
+            }
+        });
+
+        notify.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(WorkerProfileActivity.this, Worker_notification_clk.class);
+                startActivity(intent);
+            }
+        });
+
+     home.setOnClickListener(new View.OnClickListener() {
+         @Override
+         public void onClick(View v) {
+             Intent intent = new Intent(WorkerProfileActivity.this, WorkerDashboardActivity.class);
+             startActivity(intent);
+         }
+     });
+
+
+
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+            return insets;
+        });
+
 
         db = FirebaseFirestore.getInstance();
 
@@ -135,6 +188,9 @@ public class WorkerProfileActivity extends AppCompatActivity {
               .addOnFailureListener(e -> {
                   Toast.makeText(this, "Update Failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
               });
+
+
+
         }
     }
 

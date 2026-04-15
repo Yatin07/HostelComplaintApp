@@ -1,33 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     android:background="#F5F5F5">
 
-    <include layout="@layout/top_bar"
-        android:id="@+id/inc_top_bar"
+    <!-- TOP NAVBAR -->
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true" />
+        android:layout_height="80dp"
+        android:background="@drawable/toolbar_bg">
 
-    <include layout="@layout/bottom_nav"
-        android:id="@+id/inc_bottom_nav"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:paddingStart="12dp"
+            android:paddingEnd="16dp">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:padding="16dp"
-        android:layout_below="@id/inc_top_bar"
-        android:layout_above="@id/inc_bottom_nav">
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
 
+                <TextView
+                    android:id="@+id/tv1WardenName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Rahul Patil"
+                    android:textColor="@color/white"
+                    android:textSize="25sp"
+                    android:textStyle="bold"/>
+
+                <TextView
+                    android:id="@+id/tv2WardenId"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="123"
+                    android:textColor="@color/white"
+                    android:textSize="16sp"/>
+            </LinearLayout>
+
+            <ImageView
+                android:id="@+id/imgProfile1"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:src="@drawable/nmm"/>
+        </LinearLayout>
+    </androidx.appcompat.widget.Toolbar>
+
+    <!-- SCROLLABLE CONTENT -->
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
         android:overScrollMode="never"
         android:scrollbars="none">
 
@@ -35,36 +66,29 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:paddingBottom="24dp">
+            android:padding="16dp">
 
-            <!-- 🌟 HERO BADGE -->
+            <!-- HERO -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
                 android:orientation="vertical"
                 android:background="@drawable/profile_hero_bg"
                 android:paddingTop="30dp"
                 android:paddingBottom="30dp"
-                android:elevation="4dp"
                 android:gravity="center">
 
-                <FrameLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
-
-                    <ImageView
-                        android:layout_width="110dp"
-                        android:layout_height="110dp"
-                        android:src="@drawable/baseline_account_circle_24"
-                        android:background="@drawable/profile_avatar_ring"
-                        android:clipToOutline="true"
-                        android:scaleType="centerCrop"
-                        android:padding="12dp"
-                        app:tint="#1E3A8A"
-                        android:elevation="4dp"/>
-                </FrameLayout>
+                <ImageView
+                    android:layout_width="110dp"
+                    android:layout_height="110dp"
+                    android:src="@drawable/baseline_account_circle_24"
+                    android:background="@drawable/profile_avatar_ring"
+                    android:padding="12dp"
+                    app:tint="#1E3A8A"/>
             </LinearLayout>
 
+            <!-- TITLE -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -73,16 +97,14 @@
                 android:textColor="#64748B"
                 android:textSize="16sp"
                 android:layout_marginTop="24dp"
-                android:layout_marginBottom="12dp"
-                android:layout_marginStart="8dp"/>
+                android:layout_marginBottom="12dp"/>
 
-            <!-- 🔳 DETAILS CARD -->
+            <!-- DETAILS CARD -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:background="@drawable/menu_card_bg"
-                android:elevation="2dp"
                 android:padding="16dp">
 
                 <!-- Worker ID -->
@@ -122,6 +144,7 @@
 
                 <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#F1F5F9" android:layout_marginBottom="12dp"/>
 
+
                 <!-- Name -->
                 <TextView
                     android:layout_width="wrap_content"
@@ -158,6 +181,7 @@
                     android:visibility="gone" />
 
                 <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#F1F5F9" android:layout_marginBottom="12dp"/>
+
 
                 <!-- Email -->
                 <TextView
@@ -196,6 +220,7 @@
 
                 <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#F1F5F9" android:layout_marginBottom="12dp"/>
 
+
                 <!-- Role -->
                 <TextView
                     android:layout_width="wrap_content"
@@ -229,11 +254,12 @@
                     android:focusable="true"
                     android:visibility="gone" />
 
+
             </LinearLayout>
 
             <Space
                 android:layout_width="match_parent"
-                android:layout_height="24dp" />
+                android:layout_height="20dp"/>
 
             <Button
                 android:id="@+id/btnEditProfile"
@@ -242,10 +268,7 @@
                 android:text="Edit Profile"
                 android:backgroundTint="#3B6FD4"
                 android:textColor="@color/white"
-                android:textStyle="bold"
-                android:padding="14dp"
-                app:cornerRadius="12dp"
-                android:layout_marginBottom="12dp" />
+                android:layout_marginBottom="10dp"/>
 
             <Button
                 android:id="@+id/btnLogout"
@@ -253,13 +276,95 @@
                 android:layout_height="wrap_content"
                 android:text="Logout"
                 android:backgroundTint="#EF4444"
-                android:textColor="@color/white"
-                android:textStyle="bold"
-                android:padding="14dp"
-                app:cornerRadius="12dp" />
+                android:textColor="@color/white"/>
 
         </LinearLayout>
     </ScrollView>
 
+    <!-- BOTTOM NAV -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:orientation="horizontal"
+        android:background="@drawable/bottom_nav_bg"
+        android:weightSum="4">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/home"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/baseline_home_24"/>
+
+            <TextView
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:text="Home"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/notify"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/baseline_notifications_24"/>
+
+            <TextView
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:text="Notification"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/rules"
+                android:layout_width="24dp"
+                android:layout_height="wrap_content"
+                android:src="@drawable/baseline_person_add_alt_24" />
+
+            <TextView
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:text="Rules"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/prof"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/baseline_account_circle_24"/>
+
+            <TextView
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:text="Profile"/>
+        </LinearLayout>
+
     </LinearLayout>
-</RelativeLayout>
+
+</LinearLayout>
