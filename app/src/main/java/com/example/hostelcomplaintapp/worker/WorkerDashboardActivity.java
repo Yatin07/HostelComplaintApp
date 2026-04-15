@@ -1,15 +1,24 @@
 package com.example.hostelcomplaintapp.worker;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.hostelcomplaintapp.HomePage_Warden;
+import com.example.hostelcomplaintapp.Notification_student;
 import com.example.hostelcomplaintapp.R;
+import com.example.hostelcomplaintapp.imgProfile_click;
+import com.example.hostelcomplaintapp.staff_manage;
+import com.example.hostelcomplaintapp.worker.Worker_notification_clk;
+import com.example.hostelcomplaintapp.worker_guide_clk;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.ListenerRegistration;
 
@@ -18,11 +27,76 @@ public class WorkerDashboardActivity extends AppCompatActivity {
     private TextView tvTotalCount, tvPendingCount, tvInProgressCount, tvCompletedCount, tvOverdueCount;
     private TextView tvAverageRating, tvRecentFeedback;
     private ListenerRegistration dashboardListener;
+    private ImageView gotohomepg, imgprof, btnNotification, staff_manage;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_worker_dashboard);
+
+
+        TextView txtName = findViewById(R.id.txtName);
+
+        SharedPreferences prefs = getSharedPreferences("user", MODE_PRIVATE);
+        String name = prefs.getString("name", "User");
+
+        txtName.setText(name);
+
+
+
+        btnNotification = findViewById(R.id.btnNotification);
+        btnNotification.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent1 = new Intent(WorkerDashboardActivity.this, Worker_notification_clk.class);
+                startActivity(intent1);
+            }
+        });
+
+
+        gotohomepg = findViewById(R.id.gotohomepg);
+        gotohomepg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent1 = new Intent(WorkerDashboardActivity.this, WorkerDashboardActivity.class);
+                startActivity(intent1);
+            }
+        });
+
+
+        imgprof = findViewById(R.id.imgprof);
+
+        imgprof.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(WorkerDashboardActivity.this, WorkerProfileActivity.class);
+                startActivity(intent);
+
+            }
+        });
+
+
+
+
+        staff_manage = findViewById(R.id.staff_manage);
+        staff_manage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent1 = new Intent(WorkerDashboardActivity.this, worker_guide_clk.class);
+                startActivity(intent1);
+            }
+        });
+
+
+
+
+
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+            return insets;
+        });
 
         tvTotalCount = findViewById(R.id.tvTotalCount);
 
@@ -37,6 +111,7 @@ public class WorkerDashboardActivity extends AppCompatActivity {
 
         tvAverageRating = findViewById(R.id.tvAverageRating);
         tvRecentFeedback = findViewById(R.id.tvRecentFeedback);
+
 
         Button btnBack = findViewById(R.id.btnBack);
 
@@ -122,6 +197,41 @@ public class WorkerDashboardActivity extends AppCompatActivity {
             dashboardListener.remove();
             dashboardListener = null;
         }
+
+
+        gotohomepg = findViewById(R.id.gotohomepg);
+        gotohomepg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent1 = new Intent(WorkerDashboardActivity.this, HomePage_Warden.class);
+                startActivity(intent1);
+            }
+        });
+
+
+        imgprof = findViewById(R.id.imgprof);
+
+        imgprof.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(WorkerDashboardActivity.this, imgProfile_click.class);
+                startActivity(intent);
+
+            }
+        });
+
+
+
+
+        staff_manage = findViewById(R.id.staff_manage);
+        staff_manage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent1 = new Intent(WorkerDashboardActivity.this, staff_manage.class);
+                startActivity(intent1);
+            }
+        });
+
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
