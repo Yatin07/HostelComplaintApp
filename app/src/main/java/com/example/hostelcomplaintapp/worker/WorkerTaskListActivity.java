@@ -85,6 +85,7 @@ public class WorkerTaskListActivity extends AppCompatActivity {
                         model.setStatus(document.getString("status"));
                         model.setCategory(document.getString("category"));
                         model.setStudentId(document.getString("studentId"));
+                        model.setImageUrl(document.getString("imageUrl")); // Base64 image from raise complaint
 
                         allComplaints.add(model);
                     } catch (Exception e) {

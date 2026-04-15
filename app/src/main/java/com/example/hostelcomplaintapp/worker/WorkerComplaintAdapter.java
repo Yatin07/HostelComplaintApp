@@ -1,11 +1,17 @@
 package com.example.hostelcomplaintapp.worker;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.os.Handler;
+import android.os.Looper;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -82,6 +88,35 @@ public class WorkerComplaintAdapter extends RecyclerView.Adapter<WorkerComplaint
             intent.putExtra("docId", model.getDocId());
             context.startActivity(intent);
         });
+
+        // Load complaint image (stored as Base64 data URL from RaiseComplaintActivity)
+        String imageUrl = model.getImageUrl();
+        if (imageUrl != null && !imageUrl.isEmpty()) {
+            holder.ivComplaintImage.setVisibility(View.VISIBLE);
+            // Decode on background thread to keep RecyclerView scroll smooth
+            new Thread(() -> {
+                try {
+                    // Strip "data:image/jpeg;base64," prefix before decoding
+                    String base64Data = imageUrl.contains(",")
+                            ? imageUrl.substring(imageUrl.indexOf(",") + 1)
+                            : imageUrl;
+                    byte[] decodedBytes = Base64.decode(base64Data, Base64.DEFAULT);
+                    Bitmap bitmap = BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.length);
+                    new Handler(Looper.getMainLooper()).post(() -> {
+                        if (bitmap != null) {
+                            holder.ivComplaintImage.setImageBitmap(bitmap);
+                        } else {
+                            holder.ivComplaintImage.setVisibility(View.GONE);
+                        }
+                    });
+                } catch (Exception e) {
+                    new Handler(Looper.getMainLooper()).post(() ->
+                            holder.ivComplaintImage.setVisibility(View.GONE));
+                }
+            }).start();
+        } else {
+            holder.ivComplaintImage.setVisibility(View.GONE);
+        }
     }
 
     private void updateStatus(String docId, String newStatus) {
@@ -104,15 +139,17 @@ public class WorkerComplaintAdapter extends RecyclerView.Adapter<WorkerComplaint
     public static class ComplaintViewHolder extends RecyclerView.ViewHolder {
         TextView tvComplaintTitle, tvRoomNumber, tvDescription, tvStatus;
         Button btnStartWork, btnCompleteWork;
+        ImageView ivComplaintImage;
 
         public ComplaintViewHolder(@NonNull View itemView) {
             super(itemView);
-            tvComplaintTitle = itemView.findViewById(R.id.tvComplaintTitle);
-            tvRoomNumber = itemView.findViewById(R.id.tvRoomNumber);
-            tvDescription = itemView.findViewById(R.id.tvDescription);
-            tvStatus = itemView.findViewById(R.id.tvStatus);
-            btnStartWork = itemView.findViewById(R.id.btnStartWork);
-            btnCompleteWork = itemView.findViewById(R.id.btnCompleteWork);
+            tvComplaintTitle   = itemView.findViewById(R.id.tvComplaintTitle);
+            tvRoomNumber       = itemView.findViewById(R.id.tvRoomNumber);
+            tvDescription      = itemView.findViewById(R.id.tvDescription);
+            tvStatus           = itemView.findViewById(R.id.tvStatus);
+            btnStartWork       = itemView.findViewById(R.id.btnStartWork);
+            btnCompleteWork    = itemView.findViewById(R.id.btnCompleteWork);
+            ivComplaintImage   = itemView.findViewById(R.id.ivComplaintImage);
         }
     }
 }

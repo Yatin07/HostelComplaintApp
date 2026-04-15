@@ -1,8 +1,12 @@
 package com.example.hostelcomplaintapp;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Button;
 import android.widget.Toast;
@@ -34,6 +38,7 @@ public class ComplaintAdapter extends RecyclerView.Adapter<ComplaintAdapter.View
         TextView tvName, txtRoom, txtPriority, txtStatus;
         Button removeBtn;
         View arrowBtn;
+        ImageView imgComplaint;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -44,6 +49,7 @@ public class ComplaintAdapter extends RecyclerView.Adapter<ComplaintAdapter.View
             txtStatus = itemView.findViewById(R.id.txtStatus);
             removeBtn = itemView.findViewById(R.id.removeBtn);
             arrowBtn = itemView.findViewById(R.id.arrowBtn);
+            imgComplaint = itemView.findViewById(R.id.imgComplaint);
         }
     }
 
@@ -60,8 +66,23 @@ public class ComplaintAdapter extends RecyclerView.Adapter<ComplaintAdapter.View
         ComplaintModel model = list.get(position);
 
         holder.tvName.setText(model.getTitle());
-        holder.txtRoom.setText("Room: " + model.getRoomNumber() + " (Bed: " + model.getBednumber() + ")");
+        holder.txtRoom.setText("Room: " + (model.getRoom() != null ? model.getRoom() : "N/A"));
         holder.txtPriority.setText("Category: " + model.getCategory());
+
+        // Load image if available (Base64)
+        String imgData = model.getImageUrl();
+        if (imgData != null && imgData.startsWith("data:image")) {
+            try {
+                String base64Image = imgData.split(",")[1];
+                byte[] decodedString = Base64.decode(base64Image, Base64.DEFAULT);
+                Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+                holder.imgComplaint.setImageBitmap(decodedByte);
+            } catch (Exception e) {
+                holder.imgComplaint.setImageResource(R.drawable.baseline_account_circle_24);
+            }
+        } else {
+            holder.imgComplaint.setImageResource(R.drawable.baseline_account_circle_24);
+        }
 
         String status = model.getStatus();
 
@@ -120,7 +141,7 @@ public class ComplaintAdapter extends RecyclerView.Adapter<ComplaintAdapter.View
                     "Category: " + model.getCategory() + "\n\n" +
                     "Complaint: " + model.getTitle() + "\n\n" +
                     "Description: " + model.getDescription() + "\n\n" +
-                    "Room: " + model.getRoomNumber() + " (Bed: " + model.getBednumber() + ")\n\n" +
+                    "Room: " + model.getRoom() + "\n\n" +
                     "Student ID: " + (model.getStudentId() == null ? "N/A" : model.getStudentId()) + "\n\n" +
                     "Status: " + (model.getStatus() == null ? "Pending" : model.getStatus());
 

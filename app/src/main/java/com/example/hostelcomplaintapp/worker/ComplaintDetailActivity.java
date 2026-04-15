@@ -71,9 +71,16 @@ public class ComplaintDetailActivity extends AppCompatActivity {
                         model.setStudentId(doc.getString("studentId"));
                         model.setStatus(doc.getString("status"));
                         
-                        if (doc.contains("deadline")) {
-                            Long dl = doc.getLong("deadline");
-                            if (dl != null) model.setDeadline(dl);
+//                        if (doc.contains("deadline")) {
+//                            Long dl = doc.getLong("deadline");
+//                            if (dl != null) model.setDeadline(dl);
+//                        }
+                        if (doc.get("deadline") != null) {
+                            com.google.firebase.Timestamp timestamp = doc.getTimestamp("deadline");
+                            if (timestamp != null) {
+                                long dl = timestamp.toDate().getTime();
+                                model.setDeadline(dl);
+                            }
                         }
 
                         currentComplaint = model;
