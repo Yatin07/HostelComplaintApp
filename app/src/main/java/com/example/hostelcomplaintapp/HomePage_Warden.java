@@ -30,7 +30,7 @@ public class HomePage_Warden extends AppCompatActivity {
 
     TextView tv1WardenName, tv2WardenId;
     ImageView imgProfile1, imgprof, staff_manage, imgnotification;
-    LinearLayout cardAnnouncement, cardpending, cardtotalcomplaint;
+    LinearLayout cardAnnouncement, cardpending, cardtotalcomplaint,cardemergencyissue;
 
     // for auto sliding of announcement card on home page //
     Handler handler = new Handler(Looper.getMainLooper());
@@ -48,6 +48,9 @@ public class HomePage_Warden extends AppCompatActivity {
 
        tv1WardenName = findViewById(R.id.tv1WardenName);
        tv2WardenId = findViewById(R.id.tv2WardenId);
+       cardemergencyissue = findViewById(R.id.cardemergencyissue);
+
+
 
         // temporary data
         String name = "Rahul Patil";
@@ -158,6 +161,15 @@ public class HomePage_Warden extends AppCompatActivity {
         };
 
         handler.postDelayed(runnable, 10000);
+
+        cardemergencyissue.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(),emergency_issue_student.class);
+                intent.putExtra("role", "warden");
+                startActivity(intent);
+            }
+        });
 
         /// 3 DOTS BELOW THE AUTO SLIDING ANNOUNCEMENT CARD
         viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {

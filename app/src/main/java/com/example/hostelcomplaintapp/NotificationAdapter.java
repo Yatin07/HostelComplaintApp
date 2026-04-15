@@ -79,6 +79,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
         holder.txtTime.setText(formattedTime);
 
         /// remove btn clickable ///
+        holder.removeBtn.setVisibility(View.VISIBLE);
         holder.removeBtn.setOnClickListener(v -> {
 
             FirebaseFirestore db = FirebaseFirestore.getInstance();

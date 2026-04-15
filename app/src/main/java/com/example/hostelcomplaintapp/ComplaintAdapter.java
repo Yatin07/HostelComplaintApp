@@ -1,8 +1,12 @@
 package com.example.hostelcomplaintapp;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Button;
 import android.widget.Toast;
@@ -17,15 +21,14 @@ public class ComplaintAdapter extends RecyclerView.Adapter<ComplaintAdapter.View
 
     ArrayList<ComplaintModel> list;
 
-    // 🔥 NEW: role check (default false)
+    // Role check (default false = student/warden, no resolve button)
     boolean isWorker = false;
 
-    // ✅ SAME constructor (no change)
     public ComplaintAdapter(ArrayList<ComplaintModel> list) {
         this.list = list;
     }
 
-    // 🔥 NEW: setter (use this in worker activity)
+    // Use this in worker activity to show resolve button
     public void setWorker(boolean worker) {
         this.isWorker = worker;
     }
@@ -35,6 +38,7 @@ public class ComplaintAdapter extends RecyclerView.Adapter<ComplaintAdapter.View
         TextView tvName, txtRoom, txtPriority, txtStatus;
         Button removeBtn;
         View arrowBtn;
+        ImageView imgComplaint;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -45,15 +49,14 @@ public class ComplaintAdapter extends RecyclerView.Adapter<ComplaintAdapter.View
             txtStatus = itemView.findViewById(R.id.txtStatus);
             removeBtn = itemView.findViewById(R.id.removeBtn);
             arrowBtn = itemView.findViewById(R.id.arrowBtn);
+            imgComplaint = itemView.findViewById(R.id.imgComplaint);
         }
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.totalcomplaint_card, parent, false);
-
         return new ViewHolder(view);
     }
 
@@ -63,18 +66,29 @@ public class ComplaintAdapter extends RecyclerView.Adapter<ComplaintAdapter.View
         ComplaintModel model = list.get(position);
 
         holder.tvName.setText(model.getTitle());
-        holder.txtRoom.setText("Room: " + model.getRoomNumber() + " (Bed: " + model.getBednumber() + ")");
-        holder.txtPriority.setText("SAP ID: " + model.getStudentId());
+        holder.txtRoom.setText("Room: " + (model.getRoom() != null ? model.getRoom() : "N/A"));
+        holder.txtPriority.setText("Category: " + model.getCategory());
 
+        // Load image if available (Base64)
+        String imgData = model.getImageUrl();
+        if (imgData != null && imgData.startsWith("data:image")) {
+            try {
+                String base64Image = imgData.split(",")[1];
+                byte[] decodedString = Base64.decode(base64Image, Base64.DEFAULT);
+                Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+                holder.imgComplaint.setImageBitmap(decodedByte);
+            } catch (Exception e) {
+                holder.imgComplaint.setImageResource(R.drawable.baseline_account_circle_24);
+            }
+        } else {
+            holder.imgComplaint.setImageResource(R.drawable.baseline_account_circle_24);
+        }
 
         String status = model.getStatus();
 
-        // 🔥 STATUS + BUTTON LOGIC
         if (status == null || status.isEmpty() || status.equalsIgnoreCase("pending")) {
-
             holder.txtStatus.setText("Pending");
-            holder.txtStatus.setTextColor(android.graphics.Color.WHITE);
-            holder.txtStatus.setBackgroundResource(R.drawable.status_pending);
+            holder.txtStatus.setTextColor(android.graphics.Color.parseColor("#FFA000"));
 
             if (isWorker) {
                 holder.removeBtn.setVisibility(View.VISIBLE);
@@ -82,56 +96,54 @@ public class ComplaintAdapter extends RecyclerView.Adapter<ComplaintAdapter.View
             } else {
                 holder.removeBtn.setVisibility(View.GONE);
             }
-
         } else {
-
-            holder.txtStatus.setText("Completed");
-            holder.txtStatus.setTextColor(android.graphics.Color.WHITE);
-            holder.txtStatus.setBackgroundResource(R.drawable.status_completed);
-
-            holder.removeBtn.setVisibility(View.GONE);
+            holder.txtStatus.setText(status);
+            if (status.equalsIgnoreCase("Completed")) {
+                holder.txtStatus.setTextColor(android.graphics.Color.GREEN);
+                holder.removeBtn.setVisibility(View.GONE);
+            } else {
+                holder.txtStatus.setTextColor(android.graphics.Color.parseColor("#FFA000"));
+                if (isWorker) {
+                    holder.removeBtn.setVisibility(View.VISIBLE);
+                } else {
+                    holder.removeBtn.setVisibility(View.GONE);
+                }
+            }
         }
 
-        // 🔥 RESOLVE BUTTON CLICK (ONLY WORKER)
+        // Resolve Button Click (only for worker)
         if (isWorker) {
             holder.removeBtn.setOnClickListener(v -> {
-
                 if (model.getDocId() == null) {
-                    Toast.makeText(v.getContext(),
-                            "Error: Document ID missing", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(v.getContext(), "Error: Document ID is null", Toast.LENGTH_SHORT).show();
                     return;
                 }
-
                 FirebaseFirestore.getInstance()
                         .collection("complaints")
                         .document(model.getDocId())
                         .update("status", "Completed")
-                        .addOnSuccessListener(unused ->
-                                Toast.makeText(v.getContext(),
-                                        "Marked as Completed ✅", Toast.LENGTH_SHORT).show()
-                        )
-                        .addOnFailureListener(e ->
-                                Toast.makeText(v.getContext(),
-                                        "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show()
-                        );
+                        .addOnSuccessListener(unused -> {
+                            Toast.makeText(v.getContext(), "Marked as Completed ✅", Toast.LENGTH_SHORT).show();
+                        })
+                        .addOnFailureListener(e -> {
+                            Toast.makeText(v.getContext(), "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        });
             });
         }
 
-        // 🔥 DETAILS POPUP
+        // Details popup on arrow click
         holder.arrowBtn.setOnClickListener(v -> {
-
             android.app.AlertDialog.Builder builder =
                     new android.app.AlertDialog.Builder(v.getContext());
-
             builder.setTitle("Complaint Details");
 
             String message =
+                    "Category: " + model.getCategory() + "\n\n" +
                     "Complaint: " + model.getTitle() + "\n\n" +
-                            "SAP ID: " + model.getStudentId() + "\n\n" +
-                            "Category: " + model.getCategory() + "\n\n" +
-                            "Description: " + model.getDescription() + "\n\n" +
-                            "Room: " + model.getRoomNumber() + " (Bed: " + model.getBednumber() + ")\n\n" +
-                            "Status: " + (model.getStatus() == null ? "Pending" : model.getStatus());
+                    "Description: " + model.getDescription() + "\n\n" +
+                    "Room: " + model.getRoom() + "\n\n" +
+                    "Student ID: " + (model.getStudentId() == null ? "N/A" : model.getStudentId()) + "\n\n" +
+                    "Status: " + (model.getStatus() == null ? "Pending" : model.getStatus());
 
             builder.setMessage(message);
             builder.setPositiveButton("OK", (dialog, which) -> dialog.dismiss());

@@ -12,9 +12,7 @@ import androidx.core.view.WindowInsetsCompat;
 
 public class MainActivity extends AppCompatActivity {
 
-
-    Button btnStudent,btnStaff,btnWarden;
-
+    Button btnStudent, btnStaff, btnWarden;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,8 +41,6 @@ public class MainActivity extends AppCompatActivity {
             intent.putExtra("role", "warden");
             startActivity(intent);
         });
-
-
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());

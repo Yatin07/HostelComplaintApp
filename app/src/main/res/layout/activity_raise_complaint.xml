@@ -1,102 +1,295 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp">
+    android:orientation="vertical"
+    android:background="#F8FAFC">
 
+    <!-- Top Navigation Bar -->
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-
-        <!-- Title -->
-        <TextView
-            android:text="Raise Complaint"
-            android:textSize="22sp"
-            android:textStyle="bold"
-            android:layout_marginBottom="16dp"
-            android:layout_height="wrap_content"
-            android:layout_width="match_parent"/>
-
-        <!-- Category -->
-        <Spinner
-            android:id="@+id/spinnerCategory"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:entries="@array/categories"/>
-
-        <!-- Room -->
-        <EditText
-            android:id="@+id/etRoom"
-            android:hint="Room Number"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"/>
-
-        <!-- Bed Number -->
-        <EditText
-            android:id="@+id/bednumber"
-            android:hint="Bed Number"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"/>
-
-        <!-- Title -->
-        <EditText
-            android:id="@+id/etTitle"
-            android:hint="Complaint Title"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"/>
-
-        <!-- Description -->
-        <EditText
-            android:id="@+id/etDescription"
-            android:hint="Detailed Description"
-            android:minLines="4"
-            android:gravity="top"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"/>
-
-
-        <EditText
-            android:id="@+id/etStudentId"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Enter SAP ID"
-            android:inputType="text"/>
+        android:layout_height="?attr/actionBarSize"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:paddingHorizontal="16dp"
+        android:background="#3B6FD4"
+        android:elevation="4dp">
 
         <ImageView
-            android:id="@+id/imagePreview"
-            android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:scaleType="centerCrop"
-            android:layout_marginTop="10dp"/>
+            android:id="@+id/btnBack"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:src="@drawable/baseline_arrow_back_24"
+            app:tint="#FFFFFF"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:clickable="true"
+            android:focusable="true"/>
 
-        <!-- Image Button -->
-        <Button
-            android:id="@+id/btnUploadImage"
-            android:text="Upload Image"
-            android:layout_width="match_parent"
+        <TextView
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"/>
-
-        <Button
-            android:id="@+id/btnLocation"
-            android:text="Get Location"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"/>
-
-        <!-- Submit -->
-        <Button
-            android:id="@+id/btnSubmit"
-            android:text="Submit Complaint"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"/>
-
+            android:text="Raise a Complaint"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:textColor="#FFFFFF"
+            android:layout_marginStart="24dp"/>
     </LinearLayout>
 
-</ScrollView>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        android:overScrollMode="never"
+        android:scrollbars="none">
+
+        <!-- Form Container -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="20dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Describe your issue in detail so we can resolve it quickly."
+                android:textColor="#64748B"
+                android:textSize="15sp"
+                android:layout_marginBottom="24dp"/>
+
+            <!-- Form Card -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:background="@drawable/menu_card_bg"
+                android:elevation="2dp"
+                android:padding="20dp">
+
+                <!-- Title Section -->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Complaint Title"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:textColor="#334155"
+                    android:layout_marginBottom="8dp"/>
+
+                <EditText
+                    android:id="@+id/etTitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:background="@drawable/input_bg"
+                    android:hint="E.g., Fan not working"
+                    android:textColorHint="#94A3B8"
+                    android:paddingHorizontal="16dp"
+                    android:textColor="#1E293B"
+                    android:textSize="16sp"
+                    android:singleLine="true"/>
+
+                <!-- Category Section -->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Category"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:textColor="#334155"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginBottom="8dp"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:background="@drawable/input_bg"
+                    android:orientation="horizontal"
+                    android:paddingEnd="8dp">
+
+                    <Spinner
+                        android:id="@+id/spinnerCategory"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@null"
+                        android:paddingStart="12dp"
+                        android:popupBackground="@drawable/menu_card_bg"/>
+                </LinearLayout>
+
+                <!-- Room & Bed Row -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="20dp"
+                    android:baselineAligned="false">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:layout_marginEnd="8dp">
+                        
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Room No."
+                            android:textSize="14sp"
+                            android:textStyle="bold"
+                            android:textColor="#334155"
+                            android:layout_marginBottom="8dp"/>
+                            
+                        <EditText
+                            android:id="@+id/etRoom"
+                            android:layout_width="match_parent"
+                            android:layout_height="50dp"
+                            android:background="@drawable/input_bg"
+                            android:hint="E.g., 204"
+                            android:textColorHint="#94A3B8"
+                            android:paddingHorizontal="16dp"
+                            android:textColor="#1E293B"
+                            android:inputType="number"
+                            android:textSize="16sp"/>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:layout_marginStart="8dp">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Bed No."
+                            android:textSize="14sp"
+                            android:textStyle="bold"
+                            android:textColor="#334155"
+                            android:layout_marginBottom="8dp"/>
+
+                        <EditText
+                            android:id="@+id/bednumber"
+                            android:layout_width="match_parent"
+                            android:layout_height="50dp"
+                            android:background="@drawable/input_bg"
+                            android:hint="E.g., B"
+                            android:textColorHint="#94A3B8"
+                            android:paddingHorizontal="16dp"
+                            android:textColor="#1E293B"
+                            android:textSize="16sp"/>
+                    </LinearLayout>
+                </LinearLayout>
+
+                <!-- Description Section -->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Description"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:textColor="#334155"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginBottom="8dp"/>
+
+                <EditText
+                    android:id="@+id/etDescription"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:minLines="4"
+                    android:gravity="top|start"
+                    android:background="@drawable/input_bg"
+                    android:hint="Provide any additional details..."
+                    android:textColorHint="#94A3B8"
+                    android:padding="16dp"
+                    android:textColor="#1E293B"
+                    android:textSize="16sp"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="24dp"
+                android:baselineAligned="false">
+
+                <!-- Location Button -->
+                <Button
+                    android:id="@+id/btnLocation"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="55dp"
+                    android:text="Attach Location"
+                    android:backgroundTint="#EFF6FF"
+                    android:textColor="#1D4ED8"
+                    app:icon="@drawable/ic_location_on"
+                    app:iconTint="#1D4ED8"
+                    app:iconGravity="textStart"
+                    android:textAllCaps="false"
+                    android:textSize="14sp"
+                    app:cornerRadius="12dp"
+                    android:elevation="0dp"
+                    android:layout_marginEnd="8dp"/>
+
+                <!-- Upload Image Button -->
+                <Button
+                    android:id="@+id/btnUploadImage"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="55dp"
+                    android:text="Upload Image"
+                    android:backgroundTint="#EFF6FF"
+                    android:textColor="#1D4ED8"
+                    app:icon="@drawable/ic_image_add"
+                    app:iconTint="#1D4ED8"
+                    app:iconGravity="textStart"
+                    android:textAllCaps="false"
+                    android:textSize="14sp"
+                    app:cornerRadius="12dp"
+                    android:elevation="0dp"
+                    android:layout_marginStart="8dp"/>
+
+            </LinearLayout>
+
+            <!-- Image Preview Box (Hidden initially until chosen) -->
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/input_bg"
+                android:clipToOutline="true">
+
+                <ImageView
+                    android:id="@+id/imagePreview"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:minHeight="150dp"
+                    android:scaleType="centerCrop"
+                    android:adjustViewBounds="true"
+                    android:background="@android:color/transparent"/>
+            </FrameLayout>
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="24dp"/>
+
+            <!-- Submit -->
+            <Button
+                android:id="@+id/btnSubmit"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:text="Submit Complaint"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textAllCaps="false"
+                android:backgroundTint="#2563EB"
+                android:textColor="#FFFFFF"
+                app:cornerRadius="14dp"
+                android:layout_marginBottom="40dp"
+                android:elevation="4dp"/>
+
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

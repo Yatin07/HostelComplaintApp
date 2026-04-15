@@ -16,6 +16,14 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.HostelComplaintApp">
+
+        <activity android:name=".worker.Worker_notification_clk" />
+        <activity
+            android:name=".worker_guide_clk"
+            android:exported="false" />
+        <activity
+            android:name=".emergency_issue_student"
+            android:exported="false" />
         <activity
             android:name=".LoginForm"
             android:exported="false" />
@@ -75,6 +83,10 @@
             android:parentActivityName=".worker.WorkerDashboardActivity" />
         <activity
             android:name=".worker.WorkerTaskDetailsActivity"
+            android:exported="false"
+            android:parentActivityName=".worker.WorkerTaskListActivity" />
+        <activity
+            android:name=".worker.ComplaintDetailActivity"
             android:exported="false"
             android:parentActivityName=".worker.WorkerTaskListActivity" />
         <activity

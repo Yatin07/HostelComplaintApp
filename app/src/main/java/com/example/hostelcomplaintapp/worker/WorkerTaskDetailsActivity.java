@@ -1,7 +1,6 @@
 package com.example.hostelcomplaintapp.worker;
 
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -28,7 +27,7 @@ public class WorkerTaskDetailsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_worker_task_details);
 
         tvDetailTitle = findViewById(R.id.tvDetailTitle);
-        
+
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setTitle("Task Details");
@@ -38,7 +37,7 @@ public class WorkerTaskDetailsActivity extends AppCompatActivity {
         tvDetailDesc = findViewById(R.id.tvDetailDesc);
         tvDetailStatus = findViewById(R.id.tvDetailStatus);
         tvProofDesc = findViewById(R.id.tvProofDesc);
-        
+
         btnAcceptTask = findViewById(R.id.btnAcceptTask);
         btnCompleteTask = findViewById(R.id.btnCompleteTask);
         ivProofImage = findViewById(R.id.ivProofImage);
@@ -56,11 +55,11 @@ public class WorkerTaskDetailsActivity extends AppCompatActivity {
                   if (e != null || doc == null || !doc.exists()) return;
                   currentTask = new Task();
                   currentTask.setTaskId(doc.getId());
-                  currentTask.setRoomNumber(doc.getString("room"));
+                  currentTask.setRoomNumber(doc.getString("roomNumber"));
                   currentTask.setStudentName(doc.getString("studentId"));
-                  currentTask.setDescription(doc.getString("text"));
-                  currentTask.setTitle("Complaint: Room " + doc.getString("room"));
-                  
+                  currentTask.setDescription(doc.getString("description"));
+                  currentTask.setTitle(doc.getString("title") != null ? doc.getString("title") : "Complaint: Room " + doc.getString("roomNumber"));
+
                   String status = doc.getString("status");
                   currentTask.setStatus(status != null ? status : "Pending");
 
@@ -80,7 +79,6 @@ public class WorkerTaskDetailsActivity extends AppCompatActivity {
         btnCompleteTask.setOnClickListener(v -> {
             showProofUploadDialog();
         });
-
     }
 
     private void populateData() {

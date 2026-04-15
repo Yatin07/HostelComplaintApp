@@ -15,6 +15,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import android.content.SharedPreferences;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -24,9 +25,10 @@ import java.util.Map;
 public class RaiseComplaintActivity extends AppCompatActivity {
 
     Spinner spinnerCategory;
-    EditText etRoom, etTitle, etDescription, etStudentId, bednumber;
+    EditText etRoom, etTitle, etDescription, etStudentId;
     Button btnSubmit, btnUploadImage;
     ImageView imagePreview;
+    private String base64ImageUrl = "";
 
     static final int CAMERA_REQUEST = 100;
     static final int GALLERY_REQUEST = 200;
@@ -45,11 +47,18 @@ public class RaiseComplaintActivity extends AppCompatActivity {
         btnUploadImage = findViewById(R.id.btnUploadImage);
         imagePreview = findViewById(R.id.imagePreview);
         Button btnLocation = findViewById(R.id.btnLocation);
-        etStudentId = findViewById(R.id.etStudentId);
-        bednumber = findViewById(R.id.bednumber);
 
+        // Spinner Data
+        String[] categories = {
+                "Electrical", "Plumbing", "Cleaning",
+                "Wi-Fi", "Furniture", "Mess", "Others"
+        };
 
-
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(
+                this,
+                android.R.layout.simple_spinner_dropdown_item,
+                categories);
+        spinnerCategory.setAdapter(adapter);
 
         // Submit Button Logic
         btnSubmit.setOnClickListener(v -> {
@@ -65,68 +74,71 @@ public class RaiseComplaintActivity extends AppCompatActivity {
                 return;
             }
 
-            // Save to Database
-            Map<String, Object> complaint = new HashMap<>();
+            // 🔥 FIRESTORE CODE
+            FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-            String studentId = etStudentId.getText().toString();
-            String bed = bednumber.getText().toString();
+            Map<String, Object> data = new HashMap<>();
+            data.put("title", title);
+            data.put("description", description);
+            data.put("room", room);
+            data.put("category", category);
+            SharedPreferences prefs = getSharedPreferences("MyPrefs", MODE_PRIVATE);
+            String studentId = prefs.getString("sapid", "Unknown");
+            data.put("studentId", studentId);
+            data.put("timestamp", FieldValue.serverTimestamp());
+            data.put("status", "Pending");
+            data.put("imageUrl", base64ImageUrl);
 
-            complaint.put("category", category);
-            complaint.put("title", title);
-            complaint.put("description", description);
-            complaint.put("roomNumber", room);
-            complaint.put("bednumber", bed);
-            complaint.put("studentId", studentId);
-            complaint.put("timestamp", System.currentTimeMillis());
-            complaint.put("status", "pending"); // always start as pending
-            complaint.put("assignedWorkerId", ""); // not assigned yet
+            db.collection("complaints")
+                    .add(data)
+                    .addOnSuccessListener(doc -> {
 
+                        String docId = doc.getId();
 
-            com.google.firebase.firestore.FirebaseFirestore db = com.google.firebase.firestore.FirebaseFirestore.getInstance();
-            db.collection("complaints").add(complaint)
-                    .addOnSuccessListener(documentReference -> {
-                        Toast.makeText(this, "Complaint Submitted Successfully!", Toast.LENGTH_LONG).show();
+                        // save docId inside document
+                        db.collection("complaints")
+                                .document(docId)
+                                .update("docId", docId);
+
+                        Toast.makeText(this, "Complaint Submitted ", Toast.LENGTH_LONG).show();
+
                         // Clear form
                         etTitle.setText("");
                         etDescription.setText("");
                         etRoom.setText("");
+                        imagePreview.setImageDrawable(null);
+                        base64ImageUrl = "";
+
+                        // Redirect to home page
+                        Intent intent = new Intent(RaiseComplaintActivity.this, HomePage_Student.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        startActivity(intent);
+                        finish();
+
                     })
                     .addOnFailureListener(e -> {
-                        Toast.makeText(this, "Submission failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, "Error ❌: " + e.getMessage(), Toast.LENGTH_LONG).show();
                     });
         });
 
-
-
-
-        // Image Button Logic
+        // Image Button Logic (Camera Only)
         btnUploadImage.setOnClickListener(v -> {
-            String[] options = {"Camera", "Gallery"};
-
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setTitle("Select Image")
-                    .setItems(options, (dialog, which) -> {
-                        if (which == 0) {
-                            Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                            startActivityForResult(cameraIntent, CAMERA_REQUEST);
-                        } else {
-                            Intent galleryIntent = new Intent(Intent.ACTION_PICK);
-                            galleryIntent.setType("image/*");
-                            startActivityForResult(galleryIntent, GALLERY_REQUEST);
-                        }
-                    }).show();
+            Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            startActivityForResult(cameraIntent, CAMERA_REQUEST);
         });
 
         // Location Logic
         btnLocation.setOnClickListener(v -> {
-            if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+            if (ContextCompat.checkSelfPermission(this,
+                    Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this, new String[] { Manifest.permission.ACCESS_FINE_LOCATION }, 1);
             } else {
                 Location location = new Location("dummy");
                 location.setLatitude(19.9975);
                 location.setLongitude(75.7764);
 
-                Toast.makeText(this, "Location: " + location.getLatitude() + ", " + location.getLongitude(), Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "Location: " + location.getLatitude() + ", " + location.getLongitude(),
+                        Toast.LENGTH_LONG).show();
             }
         });
     }
@@ -137,11 +149,41 @@ public class RaiseComplaintActivity extends AppCompatActivity {
 
         if (resultCode == Activity.RESULT_OK && data != null) {
             if (requestCode == CAMERA_REQUEST && data.getExtras() != null) {
-                Bitmap photo = (Bitmap) data.getExtras().get("data");
-                imagePreview.setImageBitmap(photo);
-            } else if (requestCode == GALLERY_REQUEST && data.getData() != null) {
-                imagePreview.setImageURI(data.getData());
+                Bitmap raw = (Bitmap) data.getExtras().get("data");
+                if (raw != null) {
+                    Bitmap compressed = compressBitmap(raw);
+                    base64ImageUrl = bitmapToBase64DataUrl(compressed);
+                    imagePreview.setImageBitmap(compressed);
+                }
             }
         }
+    }
+
+    // ────────────────────────────────────────────────────────
+    //  IMAGE COMPRESSION & BASE64 ENCODING
+    // ────────────────────────────────────────────────────────
+    private Bitmap compressBitmap(Bitmap original) {
+        int maxDim = 1024;
+        int w = original.getWidth();
+        int h = original.getHeight();
+
+        if (w > maxDim || h > maxDim) {
+            float ratio = Math.min((float) maxDim / w, (float) maxDim / h);
+            w = Math.round(w * ratio);
+            h = Math.round(h * ratio);
+            original = Bitmap.createScaledBitmap(original, w, h, true);
+        }
+
+        java.io.ByteArrayOutputStream baos = new java.io.ByteArrayOutputStream();
+        original.compress(Bitmap.CompressFormat.JPEG, 85, baos);
+        byte[] compressedBytes = baos.toByteArray();
+        return android.graphics.BitmapFactory.decodeByteArray(compressedBytes, 0, compressedBytes.length);
+    }
+
+    private String bitmapToBase64DataUrl(Bitmap bitmap) {
+        java.io.ByteArrayOutputStream baos = new java.io.ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 85, baos);
+        byte[] bytes = baos.toByteArray();
+        return "data:image/jpeg;base64," + android.util.Base64.encodeToString(bytes, android.util.Base64.NO_WRAP);
     }
 }
