@@ -1,6 +1,7 @@
 package com.example.hostelcomplaintapp;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.*;
 
@@ -44,19 +45,21 @@ public class LoginForm extends AppCompatActivity {
             String email = Email.getText().toString().trim();
             String password = Password.getText().toString().trim();
 
-            // ✅ Debug (remove later if you want)
-            Toast.makeText(this, "Role: " + role, Toast.LENGTH_SHORT).show();
-
             // ✅ Validation
             if (email.isEmpty() || password.isEmpty()) {
                 Toast.makeText(LoginForm.this, "Please fill all fields", Toast.LENGTH_SHORT).show();
                 return;
             }
 
+            SharedPreferences prefs = getSharedPreferences("MyPrefs", MODE_PRIVATE);
+            SharedPreferences.Editor editor = prefs.edit();
+
             // 🔵 WARDEN LOGIN
             if (role.equalsIgnoreCase("Warden")) {
 
                 if (email.equalsIgnoreCase("w") && password.equals("123")) {
+                    editor.putString("sapid", "warden_id");
+                    editor.apply();
                     startActivity(new Intent(LoginForm.this, HomePage_Warden.class));
                     finish();
                 } else {
@@ -69,6 +72,8 @@ public class LoginForm extends AppCompatActivity {
             else if (role.equalsIgnoreCase("Staff")) {
 
                 if (email.equalsIgnoreCase("s") && password.equals("123")) {
+                    editor.putString("sapid", "staff_id");
+                    editor.apply();
                     startActivity(new Intent(LoginForm.this, WorkerDashboardActivity.class));
                     finish();
                 } else {
@@ -81,6 +86,10 @@ public class LoginForm extends AppCompatActivity {
             else {
 
                 if (email.equalsIgnoreCase("st") && password.equals("123")) {
+                    // ✅ SAVE SAPID FOR STUDENT
+                    editor.putString("sapid", email);
+                    editor.apply();
+
                     startActivity(new Intent(LoginForm.this, HomePage_Student.class));
                     finish();
                 } else {

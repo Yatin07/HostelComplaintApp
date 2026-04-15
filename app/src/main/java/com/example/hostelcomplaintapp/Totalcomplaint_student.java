@@ -17,10 +17,13 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class Totalcomplaint_student extends AppCompatActivity {
 
@@ -56,123 +59,111 @@ public class Totalcomplaint_student extends AppCompatActivity {
         recyclerViewComplaints.setAdapter(adapter);
 
         // Back Button
-        btnBack.setOnClickListener(v -> finish());
+        if (btnBack != null) {
+            btnBack.setOnClickListener(v -> finish());
+        }
 
         // Fetch Data
         fetchStudentComplaints();
     }
 
     private void fetchStudentComplaints() {
-        progressBar.setVisibility(View.VISIBLE);
-        recyclerViewComplaints.setVisibility(View.GONE);
-        tvEmptyState.setVisibility(View.GONE);
+        if (progressBar != null) progressBar.setVisibility(View.VISIBLE);
+        if (recyclerViewComplaints != null) recyclerViewComplaints.setVisibility(View.GONE);
+        if (tvEmptyState != null) tvEmptyState.setVisibility(View.GONE);
 
-        // Retrieve logged-in student's ID from SharedPreferences
         SharedPreferences prefs = getSharedPreferences("MyPrefs", MODE_PRIVATE);
-        String studentId = prefs.getString("sapid", null);
+        String studentId = prefs.getString("sapid", "");
 
-        Log.d("DEBUG", "StudentId used for query: " + studentId);
-
-        // Guard: if studentId is null or empty, abort
-        if (studentId == null || studentId.trim().isEmpty()) {
-            progressBar.setVisibility(View.GONE);
-            tvEmptyState.setText("No student ID found. Please submit a complaint first.");
-            tvEmptyState.setVisibility(View.VISIBLE);
-            Log.e("DEBUG", "studentId is null or empty — aborting fetch");
+        if (studentId.isEmpty()) {
+            if (progressBar != null) progressBar.setVisibility(View.GONE);
+            if (tvEmptyState != null) {
+                tvEmptyState.setText("Session expired. Please login again.");
+                tvEmptyState.setVisibility(View.VISIBLE);
+            }
             return;
         }
 
-        final String finalStudentIdStr = studentId.trim();
-
-        // Also parse as int — Firestore may store studentId as number or string
-        int parsed;
-        try {
-            parsed = Integer.parseInt(finalStudentIdStr);
-        } catch (NumberFormatException e) {
-            parsed = -1; // non-numeric: only String comparison will be used
-        }
-        final int finalStudentIdInt = parsed;
-
-        Log.d("DEBUG", "studentId str: " + finalStudentIdStr + " | int: " + finalStudentIdInt);
-
-        // SINGLE QUERY — fetch all complaints, filter client-side.
-        // Using dual async queries caused a race condition: two callbacks each called
-        // list.clear(), so whichever finished last wiped out the other's results.
-        // One query → one callback → one clear() → all adds → one notifyDataSetChanged().
+        final String finalStudentId = studentId.trim();
         FirebaseFirestore db = FirebaseFirestore.getInstance();
+        
+        // Fetch all complaints and filter locally to ensure reliability
+        // (Avoids issues with Firestore composite indexes and type mismatch for studentId)
         db.collection("complaints")
-                .get()
-                .addOnSuccessListener(queryDocumentSnapshots -> {
-                    progressBar.setVisibility(View.GONE);
+                .addSnapshotListener((value, error) -> {
+                    if (progressBar != null) progressBar.setVisibility(View.GONE);
+                    
+                    if (error != null) {
+                        Log.e("FIRESTORE_ERROR", "Fetch failed: " + error.getMessage());
+                        if (tvEmptyState != null) {
+                            tvEmptyState.setText("Error loading complaints.");
+                            tvEmptyState.setVisibility(View.VISIBLE);
+                        }
+                        return;
+                    }
 
-                    // Clear ONCE before the loop — never inside it
-                    complaintList.clear();
-
-                    Log.d("DEBUG", "Total docs in collection: " + queryDocumentSnapshots.size());
-
-                    for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
-                        try {
-                            // Match studentId regardless of Firestore storage type (String or integer)
-                            Object firestoreStudentId = document.get("studentId");
-                            boolean isMatch = false;
-
-                            if (firestoreStudentId instanceof String) {
-                                // Firestore stored as String: compare directly
-                                isMatch = finalStudentIdStr.equals(firestoreStudentId);
-                            } else if (firestoreStudentId instanceof Long) {
-                                // Firestore stored as integer (Long): compare int values
-                                isMatch = finalStudentIdInt != -1
-                                        && finalStudentIdInt == ((Long) firestoreStudentId).intValue();
-                            } else if (firestoreStudentId instanceof Number) {
-                                // Any other numeric type
-                                isMatch = finalStudentIdInt != -1
-                                        && finalStudentIdInt == ((Number) firestoreStudentId).intValue();
+                    if (value != null) {
+                        complaintList.clear();
+                        for (QueryDocumentSnapshot document : value) {
+                            try {
+                                Object docSidObj = document.get("studentId");
+                                String docSid = docSidObj != null ? String.valueOf(docSidObj).trim() : "";
+                                
+                                if (docSid.equals(finalStudentId)) {
+                                    complaintList.add(parseDocument(document));
+                                }
+                            } catch (Exception e) {
+                                Log.e("PARSE_ERROR", "Error parsing doc: " + document.getId(), e);
                             }
+                        }
 
-                            if (!isMatch) continue; // skip complaints from other students
+                        // Local sorting by timestamp descending (newest first)
+                        Collections.sort(complaintList, (c1, c2) -> Long.compare(c2.getTimestamp(), c1.getTimestamp()));
 
-                            // Build model manually to handle mixed field types safely
-                            ComplaintModel model = new ComplaintModel();
-                            model.setDocId(document.getId());
-                            model.setTitle(document.getString("title"));
-                            model.setDescription(document.getString("description"));
-                            model.setStatus(document.getString("status"));
-                            model.setCategory(document.getString("category"));
-
-                            // roomNumber: handle both String and integer storage
-                            Object roomObj = document.get("roomNumber");
-                            if (roomObj instanceof Long) {
-                                model.setRoomNumber(String.valueOf(roomObj));
-                            } else if (roomObj instanceof String) {
-                                model.setRoomNumber((String) roomObj);
+                        if (complaintList.isEmpty()) {
+                            if (tvEmptyState != null) {
+                                tvEmptyState.setText("No complaints found.");
+                                tvEmptyState.setVisibility(View.VISIBLE);
                             }
-
-                            Long ts = document.getLong("timestamp");
-                            if (ts != null) model.setTimestamp(ts);
-
-                            complaintList.add(model); // add ALL matching complaints
-                        } catch (Exception e) {
-                            Log.e("FIRESTORE_PARSE", "Error parsing doc: " + document.getId(), e);
+                            if (recyclerViewComplaints != null) recyclerViewComplaints.setVisibility(View.GONE);
+                        } else {
+                            if (tvEmptyState != null) tvEmptyState.setVisibility(View.GONE);
+                            if (recyclerViewComplaints != null) recyclerViewComplaints.setVisibility(View.VISIBLE);
+                            adapter.notifyDataSetChanged();
                         }
                     }
-
-                    Log.d("DEBUG", "Total complaints for student: " + complaintList.size());
-
-                    if (complaintList.isEmpty()) {
-                        tvEmptyState.setVisibility(View.VISIBLE);
-                        recyclerViewComplaints.setVisibility(View.GONE);
-                    } else {
-                        tvEmptyState.setVisibility(View.GONE);
-                        recyclerViewComplaints.setVisibility(View.VISIBLE);
-                        adapter.notifyDataSetChanged(); // called ONCE after all items are added
-                    }
-                })
-                .addOnFailureListener(e -> {
-                    progressBar.setVisibility(View.GONE);
-                    Log.e("ERROR", "Failed to fetch complaints: " + e.getMessage());
-                    Toast.makeText(this, "Failed to load complaints: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                    tvEmptyState.setText("Error loading data.");
-                    tvEmptyState.setVisibility(View.VISIBLE);
                 });
+    }
+
+    private ComplaintModel parseDocument(QueryDocumentSnapshot document) {
+        ComplaintModel model = new ComplaintModel();
+        model.setDocId(document.getId());
+        model.setTitle(document.getString("title"));
+        model.setDescription(document.getString("description"));
+        model.setStatus(document.getString("status"));
+        model.setCategory(document.getString("category"));
+        model.setImageUrl(document.getString("imageUrl"));
+        
+        Object sid = document.get("studentId");
+        model.setStudentId(sid != null ? String.valueOf(sid) : "");
+
+        // Handle Room
+        Object roomObj = document.get("room");
+        if (roomObj == null) roomObj = document.get("roomNumber");
+        if (roomObj != null) {
+            String r = String.valueOf(roomObj);
+            model.setRoomNumber(r);
+            model.setRoom(r);
+        }
+
+        // Handle Timestamp
+        Object tsObj = document.get("timestamp");
+        if (tsObj instanceof Timestamp) {
+            model.setTimestamp(((Timestamp) tsObj).toDate().getTime());
+        } else if (tsObj instanceof Long) {
+            model.setTimestamp((Long) tsObj);
+        }
+
+        return model;
     }
 }
