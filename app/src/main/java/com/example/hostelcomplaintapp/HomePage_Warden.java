@@ -1,6 +1,7 @@
 package com.example.hostelcomplaintapp;
 
 import android.annotation.SuppressLint;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.widget.ImageView;
@@ -28,8 +29,8 @@ import com.google.firebase.firestore.Query;
 
 public class HomePage_Warden extends AppCompatActivity {
 
-    TextView tv1WardenName, tv2WardenId;
-    ImageView imgProfile1, imgprof, staff_manage, imgnotification;
+
+    ImageView imgProfile1, imgprof, staff_manage, imgnotification, home;
     LinearLayout cardAnnouncement, cardpending, cardtotalcomplaint,cardemergencyissue;
 
     // for auto sliding of announcement card on home page //
@@ -46,18 +47,20 @@ public class HomePage_Warden extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_home_page_warden);
 
-       tv1WardenName = findViewById(R.id.tv1WardenName);
-       tv2WardenId = findViewById(R.id.tv2WardenId);
-       cardemergencyissue = findViewById(R.id.cardemergencyissue);
+        TextView tvName = findViewById(R.id.tv1WardenName);
+        TextView tvId = findViewById(R.id.tv2WardenId);
+
+        SharedPreferences prefs = getSharedPreferences("user", MODE_PRIVATE);
+
+        String name = prefs.getString("name", "Warden");
+        String id = prefs.getString("id", "ID");
+
+// ✅ set data safely
+        if (tvName != null) tvName.setText(name);
+        if (tvId != null) tvId.setText(id);
 
 
 
-        // temporary data
-        String name = "Rahul Patil";
-        String id = "W123";
-
-        tv1WardenName.setText("Warden: " + name);
-        tv2WardenId.setText("ID: " + id);
 
 
         imgProfile1 = findViewById(R.id.imgProfile1);
@@ -162,6 +165,7 @@ public class HomePage_Warden extends AppCompatActivity {
 
         handler.postDelayed(runnable, 10000);
 
+        cardemergencyissue=findViewById(R.id.cardemergencyissue);
         cardemergencyissue.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -224,6 +228,17 @@ public class HomePage_Warden extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+
+        home = findViewById(R.id.home);
+        home.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(HomePage_Warden.this, HomePage_Warden.class);
+                startActivity(intent);
+            }
+        });
+
 
 
 

@@ -269,6 +269,7 @@
 
 
             <ImageView
+                android:id="@+id/home"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:src="@drawable/baseline_home_24"/>

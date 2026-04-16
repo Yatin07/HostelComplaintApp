@@ -1,6 +1,7 @@
 package com.example.hostelcomplaintapp;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
@@ -44,6 +45,20 @@ public class HomePage_Student extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_home_page_student);
+
+
+        TextView tvName = findViewById(R.id.tv1StudentName);
+        TextView tvId = findViewById(R.id.tv2StudentId);
+
+        SharedPreferences prefs = getSharedPreferences("user", MODE_PRIVATE);
+        String name = prefs.getString("name", "Student");
+        String id = prefs.getString("id", "ID");
+
+// ✅ IMPORTANT: null safety
+        if (tvName != null) tvName.setText(name);
+        if (tvId != null) tvId.setText(id);
+
+
 
         cardtotalcomplaint = findViewById(R.id.cardtotalcomplaint);
         cardpending = findViewById(R.id.cardpending);
@@ -198,7 +213,7 @@ public class HomePage_Student extends AppCompatActivity {
         howtouseapp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(HomePage_Student.this, RaiseComplaintActivity.class);
+                Intent intent = new Intent(HomePage_Student.this, Guide_pg_student.class);
                 startActivity(intent);
             }
         });

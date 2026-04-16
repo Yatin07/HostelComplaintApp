@@ -31,6 +31,19 @@ public class imgProfile_click extends AppCompatActivity {
         setContentView(R.layout.imgprofile_click);
 
 
+        TextView tvName = findViewById(R.id.tvName1);
+        TextView tvEmail = findViewById(R.id.tvEmail);
+
+        SharedPreferences prefss = getSharedPreferences("user", MODE_PRIVATE);
+
+        String name = prefss.getString("name", "Warden");
+        String email = prefss.getString("email", "email@gmail.com");
+
+// ✅ SET DATA
+        if (tvName != null) tvName.setText(name);
+        if (tvEmail != null) tvEmail.setText(email);
+
+
 
         /// back button click --> to previous page code start here////
         btnBack=findViewById(R.id.btnBack);
@@ -103,6 +116,7 @@ public class imgProfile_click extends AppCompatActivity {
 
         Button btnLogout = findViewById(R.id.btnLogout);
         btnLogout.setOnClickListener(v -> {
+
             SharedPreferences prefs = getSharedPreferences("MyPrefs", MODE_PRIVATE);
             prefs.edit().clear().apply();
 

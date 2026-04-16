@@ -27,7 +27,7 @@ public class RaiseComplaintActivity extends AppCompatActivity {
     Spinner spinnerCategory;
     EditText etRoom, etTitle, etDescription, etStudentId;
     Button btnSubmit, btnUploadImage;
-    ImageView imagePreview;
+    ImageView imagePreview, btnBack;
     private String base64ImageUrl = "";
 
     static final int CAMERA_REQUEST = 100;
@@ -47,6 +47,25 @@ public class RaiseComplaintActivity extends AppCompatActivity {
         btnUploadImage = findViewById(R.id.btnUploadImage);
         imagePreview = findViewById(R.id.imagePreview);
         Button btnLocation = findViewById(R.id.btnLocation);
+        btnBack = findViewById(R.id.btnBack);
+
+
+        btnBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(RaiseComplaintActivity.this, HomePage_Student.class);
+                startActivity(intent);
+            }
+        });
+
+
+
+
+
+
+
+
+
 
         // Spinner Data
         String[] categories = {

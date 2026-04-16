@@ -33,6 +33,21 @@ public class student_profile_pg extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_student_profile_pg);
 
+        TextView tvName = findViewById(R.id.tvName1);
+        TextView tvEmail = findViewById(R.id.tvEmail);
+        TextView tvRoomno = findViewById(R.id.tvRoomno);
+
+        SharedPreferences preffs = getSharedPreferences("user", MODE_PRIVATE);
+
+        String name = preffs.getString("name", "Student");
+        String email = preffs.getString("email", "student@gmail.com");
+        String id = preffs.getString("id", "70012300049");
+
+// ✅ SET DATA
+        if (tvName != null) tvName.setText(name);
+        if (tvEmail != null) tvEmail.setText(email);
+        if (tvRoomno != null) tvRoomno.setText(id);
+
 
         //toggle button start//
         switchTheme = findViewById(R.id.switchTheme);
@@ -64,12 +79,10 @@ public class student_profile_pg extends AppCompatActivity {
 
         /// to change the name / edit profile info code starts  here////
 
-        tvName = findViewById(R.id.tvName1);
+
         EditProfileinformation = findViewById(R.id.EditProfileinformation);
 
-        SharedPreferences prefs1 = getSharedPreferences("MyPrefs", MODE_PRIVATE);
-        String savedName = prefs1.getString("username", "Default Name");
-        tvName.setText(savedName);
+
 
 
 
@@ -156,7 +169,7 @@ public class student_profile_pg extends AppCompatActivity {
         imgprof.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(student_profile_pg.this, HomePage_Student.class);
+                Intent intent = new Intent(student_profile_pg.this, student_profile_pg.class);
                 startActivity(intent);
 
             }
@@ -166,7 +179,7 @@ public class student_profile_pg extends AppCompatActivity {
         btnNotification.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent1 = new Intent(student_profile_pg.this, HomePage_Student.class);
+                Intent intent1 = new Intent(student_profile_pg.this, Notification_student.class);
                 startActivity(intent1);
             }
         });
@@ -176,7 +189,7 @@ public class student_profile_pg extends AppCompatActivity {
         staff_manage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent1 = new Intent(student_profile_pg.this, HomePage_Student.class);
+                Intent intent1 = new Intent(student_profile_pg.this, Guide_pg_student.class);
                 startActivity(intent1);
             }
         });
