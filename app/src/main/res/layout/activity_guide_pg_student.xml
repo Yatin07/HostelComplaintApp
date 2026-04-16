@@ -24,7 +24,7 @@
             <ImageView
                 android:id="@+id/btnBack"
                 android:layout_width="24dp"
-                android:layout_height="24dp"
+                android:layout_height="30dp"
                 android:src="@drawable/baseline_arrow_back_24"
                 app:tint="@color/white"
                 android:layout_marginEnd="10dp" />
@@ -33,12 +33,11 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Rules"
+                android:text="Guide"
                 android:textColor="@color/white"
-                android:textSize="22sp"
+                android:textSize="28sp"
                 android:textStyle="bold"
                 android:gravity="center"/>
-
 
         </LinearLayout>
 
@@ -53,92 +52,72 @@
         android:orientation="vertical"
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp">
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Rules"
-        android:layout_marginTop="10dp"
-        android:textColor="@color/red"
-        android:textSize="35dp"/>
 
+        <!-- Title -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="How to Use App"
+            android:textSize="30sp"
+            android:textStyle="bold"
+            android:textColor="#4A6CF7"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="16dp"/>
 
+        <!-- Step 1 -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="1. Select your role (Student / Staff / Warden)"
+            android:textSize="16sp"
+            android:textColor="#333"
+            android:layout_marginBottom="10dp"/>
 
+        <!-- Step 2 -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="2. Login with your credentials"
+            android:textSize="16sp"
+            android:textColor="#333"
+            android:layout_marginBottom="10dp"/>
 
+        <!-- Step 3 -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="3. Go to Raise Complaint page"
+            android:textSize="16sp"
+            android:textColor="#333"
+            android:layout_marginBottom="10dp"/>
 
-    <TextView
-        android:layout_marginTop="5dp"
-        android:textSize="18dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="1. Uphold professionalism and treat everyone with respect." />
+        <!-- Step 4 -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="4. Fill details like Room, Bed, Title, Description"
+            android:textSize="16sp"
+            android:textColor="#333"
+            android:layout_marginBottom="10dp"/>
 
-    <TextView
-        android:layout_marginTop="5dp"
-        android:textSize="18dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="2. Maintain punctuality and honor assigned duties." />
+        <!-- Step 5 -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="5. Submit complaint and track status"
+            android:textSize="16sp"
+            android:textColor="#333"
+            android:layout_marginBottom="10dp"/>
 
-    <TextView
-        android:layout_marginTop="5dp"
-        android:textSize="18dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="3. Ensure cleanliness and hygiene at all times." />
-
-    <TextView
-        android:textSize="18dp"
-        android:layout_marginTop="5dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="4. Prioritize safety and security of all residents." />
-
-    <TextView
-        android:textSize="18dp"
-        android:layout_marginTop="5dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="5. Prevent unauthorized access to the premises." />
-
-    <TextView
-        android:layout_marginTop="5dp"
-        android:textSize="18dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="6. Perform all responsibilities with dedication and care." />
-
-    <TextView
-        android:layout_marginTop="5dp"
-        android:textSize="18dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="7. Use mobile devices only when necessary during duty." />
-
-    <TextView
-        android:layout_marginTop="5dp"
-        android:textSize="18dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="8. Report concerns and incidents without delay." />
-
-
-    <TextView
-        android:textSize="18dp"
-        android:layout_marginTop="5dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="9. Remain disciplined and avoid prohibited substances." />
-
-    <TextView
-        android:textSize="18dp"
-        android:layout_marginTop="5dp"
-
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="10. Follow management guidelines with integrity and accountability." />
+        <!-- Step 6 -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="6. Warden/Staff will resolve your issue"
+            android:textSize="16sp"
+            android:textColor="#333"/>
 
     </LinearLayout>
-
 
     <!-- Bottom navbar stars there -->
 
@@ -166,6 +145,8 @@
                 android:src="@drawable/baseline_home_24"/>
 
             <TextView
+                android:textStyle="bold"
+
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Home"
@@ -187,6 +168,8 @@
                 android:src="@drawable/baseline_notifications_24"/>
 
             <TextView
+                android:textStyle="bold"
+
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Notification"
@@ -207,9 +190,11 @@
                 android:src="@drawable/baseline_person_add_alt_24"/>
 
             <TextView
+                android:textStyle="bold"
+
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Rules"
+                android:text="Guide"
                 android:textSize="17dp"/>
         </LinearLayout>
 
@@ -227,6 +212,7 @@
                 android:src="@drawable/baseline_account_circle_24"/>
 
             <TextView
+                android:textStyle="bold"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Profile"

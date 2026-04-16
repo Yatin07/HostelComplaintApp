@@ -1,12 +1,10 @@
 package com.example.hostelcomplaintapp;
 
-import android.content.SharedPreferences;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -23,141 +21,165 @@ import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.ArrayList;
-import java.util.Collections;
 
 public class Totalcomplaint_student extends AppCompatActivity {
 
-    private RecyclerView recyclerViewComplaints;
-    private ComplaintAdapter_student adapter;
-    private ArrayList<ComplaintModel> complaintList;
-    private ProgressBar progressBar;
-    private TextView tvEmptyState;
-    private ImageView btnBack;
+    ImageView btnBack, gotohomepg, btnNotification, staff_manage, imgprof;
+
+    private ArrayList<ComplaintModel> list;
+    private ComplaintAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_totalcomplaint_student);
+        setContentView(R.layout.activity_totalcomplaint);
+
+        /// make card design start ///
+        RecyclerView recyclerView = findViewById(R.id.recyclerView);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        list = new ArrayList<>();
+        adapter = new ComplaintAdapter(list);
+        adapter.setWorker(false); // Warden view
+        recyclerView.setAdapter(adapter);
+        /// make card design end ///
+
+        /// Load Data from Firestore ///
+        loadComplaints();
+
+        /// back button code start ///
+        btnBack = findViewById(R.id.btnBack);
+        btnBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+        /// back button code end ///
+
+        /// home button code start ///
+        gotohomepg = findViewById(R.id.gotohomepg);
+        gotohomepg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+        /// home button code end ///
+
+        /// notification button code start ///
+        btnNotification = findViewById(R.id.btnNotification);
+        btnNotification.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Totalcomplaint_student.this, Notification.class);
+                startActivity(intent);
+            }
+        });
+        /// notification button code end ///
+
+        /// staff_manage button code start ///
+        staff_manage = findViewById(R.id.staff_manage);
+        staff_manage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Totalcomplaint_student.this, staff_manage.class);
+                startActivity(intent);
+            }
+        });
+        /// staff manage button code end ///
+
+        /// profile button code start ///
+        imgprof = findViewById(R.id.imgprof);
+        imgprof.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Totalcomplaint_student.this, imgProfile_click.class);
+                startActivity(intent);
+            }
+        });
+        /// profile button code end ///
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-
-        // Initialize Views
-        recyclerViewComplaints = findViewById(R.id.recyclerViewComplaints);
-        progressBar = findViewById(R.id.loadingBar);
-        tvEmptyState = findViewById(R.id.tvEmptyState);
-        btnBack = findViewById(R.id.btnBackLayout);
-
-        // Setup RecyclerView
-        recyclerViewComplaints.setLayoutManager(new LinearLayoutManager(this));
-        complaintList = new ArrayList<>();
-        adapter = new ComplaintAdapter_student(this, complaintList);
-        recyclerViewComplaints.setAdapter(adapter);
-
-        // Back Button
-        if (btnBack != null) {
-            btnBack.setOnClickListener(v -> finish());
-        }
-
-        // Fetch Data
-        fetchStudentComplaints();
     }
 
-    private void fetchStudentComplaints() {
-        if (progressBar != null) progressBar.setVisibility(View.VISIBLE);
-        if (recyclerViewComplaints != null) recyclerViewComplaints.setVisibility(View.GONE);
-        if (tvEmptyState != null) tvEmptyState.setVisibility(View.GONE);
-
-        SharedPreferences prefs = getSharedPreferences("MyPrefs", MODE_PRIVATE);
-        String studentId = prefs.getString("sapid", "");
-
-        if (studentId.isEmpty()) {
-            if (progressBar != null) progressBar.setVisibility(View.GONE);
-            if (tvEmptyState != null) {
-                tvEmptyState.setText("Session expired. Please login again.");
-                tvEmptyState.setVisibility(View.VISIBLE);
-            }
-            return;
-        }
-
-        final String finalStudentId = studentId.trim();
+    private void loadComplaints() {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        
-        // Fetch all complaints and filter locally to ensure reliability
-        // (Avoids issues with Firestore composite indexes and type mismatch for studentId)
+
+        // Use a simpler query that doesn't require composite indexes if possible,
+        // or just fetch all and handle parsing.
         db.collection("complaints")
+                .orderBy("timestamp", Query.Direction.DESCENDING)
                 .addSnapshotListener((value, error) -> {
-                    if (progressBar != null) progressBar.setVisibility(View.GONE);
-                    
                     if (error != null) {
-                        Log.e("FIRESTORE_ERROR", "Fetch failed: " + error.getMessage());
-                        if (tvEmptyState != null) {
-                            tvEmptyState.setText("Error loading complaints.");
-                            tvEmptyState.setVisibility(View.VISIBLE);
-                        }
+                        Log.e("WARDEN_COMPLAINTS", "Listen failed.", error);
+                        // Fallback to one-time fetch if snapshot listener fails (likely due to missing index)
+                        fetchOnce();
                         return;
                     }
 
                     if (value != null) {
-                        complaintList.clear();
-                        for (QueryDocumentSnapshot document : value) {
+                        list.clear();
+                        for (QueryDocumentSnapshot doc : value) {
                             try {
-                                Object docSidObj = document.get("studentId");
-                                String docSid = docSidObj != null ? String.valueOf(docSidObj).trim() : "";
-                                
-                                if (docSid.equals(finalStudentId)) {
-                                    complaintList.add(parseDocument(document));
-                                }
+                                ComplaintModel model = parseDocument(doc);
+                                list.add(model);
                             } catch (Exception e) {
-                                Log.e("PARSE_ERROR", "Error parsing doc: " + document.getId(), e);
+                                Log.e("WARDEN_COMPLAINTS", "Error parsing doc: " + doc.getId(), e);
                             }
                         }
-
-                        // Local sorting by timestamp descending (newest first)
-                        Collections.sort(complaintList, (c1, c2) -> Long.compare(c2.getTimestamp(), c1.getTimestamp()));
-
-                        if (complaintList.isEmpty()) {
-                            if (tvEmptyState != null) {
-                                tvEmptyState.setText("No complaints found.");
-                                tvEmptyState.setVisibility(View.VISIBLE);
-                            }
-                            if (recyclerViewComplaints != null) recyclerViewComplaints.setVisibility(View.GONE);
-                        } else {
-                            if (tvEmptyState != null) tvEmptyState.setVisibility(View.GONE);
-                            if (recyclerViewComplaints != null) recyclerViewComplaints.setVisibility(View.VISIBLE);
-                            adapter.notifyDataSetChanged();
-                        }
+                        adapter.notifyDataSetChanged();
                     }
                 });
     }
 
-    private ComplaintModel parseDocument(QueryDocumentSnapshot document) {
+    private void fetchOnce() {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("complaints")
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    list.clear();
+                    for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
+                        try {
+                            ComplaintModel model = parseDocument(doc);
+                            list.add(model);
+                        } catch (Exception e) {
+                            Log.e("WARDEN_COMPLAINTS", "Error parsing doc: " + doc.getId(), e);
+                        }
+                    }
+                    adapter.notifyDataSetChanged();
+                })
+                .addOnFailureListener(e -> {
+                    Log.e("WARDEN_COMPLAINTS", "Failed to load: " + e.getMessage());
+                    Toast.makeText(this, "Failed to load complaints", Toast.LENGTH_SHORT).show();
+                });
+    }
+
+    private ComplaintModel parseDocument(QueryDocumentSnapshot doc) {
         ComplaintModel model = new ComplaintModel();
-        model.setDocId(document.getId());
-        model.setTitle(document.getString("title"));
-        model.setDescription(document.getString("description"));
-        model.setStatus(document.getString("status"));
-        model.setCategory(document.getString("category"));
-        model.setImageUrl(document.getString("imageUrl"));
-        
-        Object sid = document.get("studentId");
-        model.setStudentId(sid != null ? String.valueOf(sid) : "");
+        model.setDocId(doc.getId());
+        model.setTitle(doc.getString("title"));
+        model.setDescription(doc.getString("description"));
+        model.setStatus(doc.getString("status"));
+        model.setCategory(doc.getString("category"));
+        model.setImageUrl(doc.getString("imageUrl"));
+        model.setStudentId(doc.getString("studentId"));
 
         // Handle Room
-        Object roomObj = document.get("room");
-        if (roomObj == null) roomObj = document.get("roomNumber");
+        Object roomObj = doc.get("room");
+        if (roomObj == null) roomObj = doc.get("roomNumber");
         if (roomObj != null) {
-            String r = String.valueOf(roomObj);
-            model.setRoomNumber(r);
-            model.setRoom(r);
+            model.setRoom(String.valueOf(roomObj));
+            model.setRoomNumber(String.valueOf(roomObj));
         }
 
         // Handle Timestamp
-        Object tsObj = document.get("timestamp");
+        Object tsObj = doc.get("timestamp");
         if (tsObj instanceof Timestamp) {
             model.setTimestamp(((Timestamp) tsObj).toDate().getTime());
         } else if (tsObj instanceof Long) {

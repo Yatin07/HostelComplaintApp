@@ -27,7 +27,9 @@ public class WorkerDashboardActivity extends AppCompatActivity {
     private TextView tvTotalCount, tvPendingCount, tvInProgressCount, tvCompletedCount, tvOverdueCount;
     private TextView tvAverageRating, tvRecentFeedback;
     private ListenerRegistration dashboardListener;
-    private ImageView gotohomepg, imgprof, btnNotification, staff_manage;
+    ImageView gotohomepg, imgproff, btnNotification, staff_manage;
+
+    TextView tv1WardenName, tv2WardenId;
 
 
     @Override
@@ -35,13 +37,22 @@ public class WorkerDashboardActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_worker_dashboard);
 
+        tv1WardenName = findViewById(R.id.tv1WardenName);
+        tv2WardenId = findViewById(R.id.tv2WardenId);
 
-        TextView txtName = findViewById(R.id.txtName);
-
+//  GET SAVED DATA
         SharedPreferences prefs = getSharedPreferences("user", MODE_PRIVATE);
-        String name = prefs.getString("name", "User");
+        String name = prefs.getString("name", "Worker");
+        String id = prefs.getString("id", "123");
 
-        txtName.setText(name);
+//  SET DATA
+        tv1WardenName.setText(name);
+        tv2WardenId.setText(id);
+
+
+
+
+
 
 
 
@@ -65,9 +76,9 @@ public class WorkerDashboardActivity extends AppCompatActivity {
         });
 
 
-        imgprof = findViewById(R.id.imgprof);
+        imgproff = findViewById(R.id.imgproff);
 
-        imgprof.setOnClickListener(new View.OnClickListener() {
+        imgproff.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(WorkerDashboardActivity.this, WorkerProfileActivity.class);
@@ -113,11 +124,7 @@ public class WorkerDashboardActivity extends AppCompatActivity {
         tvRecentFeedback = findViewById(R.id.tvRecentFeedback);
 
 
-        Button btnBack = findViewById(R.id.btnBack);
 
-        if (btnBack != null) {
-            btnBack.setOnClickListener(v -> finish());
-        }
 
         // Setup mock feedback
         tvAverageRating.setText("Avg Rating: 4.5 / 5.0 ⭐");
@@ -209,28 +216,6 @@ public class WorkerDashboardActivity extends AppCompatActivity {
         });
 
 
-        imgprof = findViewById(R.id.imgprof);
-
-        imgprof.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(WorkerDashboardActivity.this, imgProfile_click.class);
-                startActivity(intent);
-
-            }
-        });
-
-
-
-
-        staff_manage = findViewById(R.id.staff_manage);
-        staff_manage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent1 = new Intent(WorkerDashboardActivity.this, staff_manage.class);
-                startActivity(intent1);
-            }
-        });
 
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {

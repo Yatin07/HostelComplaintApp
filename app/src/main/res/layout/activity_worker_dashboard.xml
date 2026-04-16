@@ -33,7 +33,7 @@
                     android:layout_height="wrap_content"
                     android:text="Worker "
                     android:textColor="@color/white"
-                    android:textSize="20sp"
+                    android:textSize="25sp"
                     android:textStyle="bold"/>
 
                 <TextView
@@ -42,7 +42,7 @@
                     android:layout_height="wrap_content"
                     android:text="123"
                     android:textColor="@color/white"
-                    android:textSize="14sp"/>
+                    android:textSize="18sp"/>
             </LinearLayout>
 
             <ImageView
@@ -245,6 +245,8 @@
                         android:id="@+id/tvAverageRating"/>
 
                     <TextView
+                        android:textStyle="bold"
+
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:id="@+id/tvRecentFeedback"/>
@@ -278,6 +280,8 @@
                 android:src="@drawable/baseline_home_24"/>
 
             <TextView
+                android:textStyle="bold"
+
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Home"
@@ -299,6 +303,8 @@
                 android:src="@drawable/baseline_notifications_24"/>
 
             <TextView
+                android:textStyle="bold"
+
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Notification"
@@ -319,6 +325,7 @@
                 android:src="@drawable/baseline_person_add_alt_24"/>
 
             <TextView
+                android:textStyle="bold"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Guide"
@@ -334,11 +341,13 @@
 
             <ImageView
                 android:layout_width="24dp"
-                android:id="@+id/imgprof"
+                android:id="@+id/imgproff"
                 android:layout_height="24dp"
                 android:src="@drawable/baseline_account_circle_24"/>
 
             <TextView
+                android:textStyle="bold"
+
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Profile"

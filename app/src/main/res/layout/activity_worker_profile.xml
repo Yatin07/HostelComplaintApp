@@ -8,11 +8,15 @@
     android:background="#F5F5F5">
 
     <!-- TOP NAVBAR -->
+    <!-- 🔝 TOP NAVBAR -->
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="80dp"
-        android:background="@drawable/toolbar_bg">
+        android:background="@drawable/toolbar_bg"
+        app:contentInsetStart="0dp"
+        app:contentInsetStartWithNavigation="0dp"
+        app:contentInsetEnd="0dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -22,36 +26,41 @@
             android:paddingStart="12dp"
             android:paddingEnd="16dp">
 
+            <ImageView
+                android:id="@+id/btnBack"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/baseline_arrow_back_24"
+                app:tint="@color/white"
+                android:layout_marginEnd="10dp" />
+
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:gravity="center">
 
                 <TextView
                     android:id="@+id/tv1WardenName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Rahul Patil"
+                    android:text="Profile"
                     android:textColor="@color/white"
-                    android:textSize="25sp"
+                    android:textSize="25dp"
                     android:textStyle="bold"/>
 
-                <TextView
-                    android:id="@+id/tv2WardenId"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="123"
-                    android:textColor="@color/white"
-                    android:textSize="16sp"/>
+
             </LinearLayout>
 
+            <!-- RIGHT SIDE PROFILE ICON -->
             <ImageView
-                android:id="@+id/imgProfile1"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
+                android:id="@+id/imgnmlogo"
                 android:src="@drawable/nmm"/>
         </LinearLayout>
+
     </androidx.appcompat.widget.Toolbar>
 
     <!-- SCROLLABLE CONTENT -->
