@@ -13,3 +13,7 @@
 .externalNativeBuild
 .cxx
 local.properties
+
+# Ignore Firebase Service Account Keys
+serviceAccountKey.json
+*.json

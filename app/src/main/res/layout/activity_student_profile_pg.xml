@@ -95,19 +95,26 @@
                     android:gravity="center">
 
                     <FrameLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content">
+                        android:layout_width="110dp"
+                        android:layout_height="110dp"
+                        android:background="@drawable/profile_avatar_ring"
+                        android:elevation="4dp">
 
-                        <ImageView
-                            android:id="@+id/profileImage"
-                            android:layout_width="110dp"
-                            android:layout_height="110dp"
-                            android:src="@drawable/baseline_person_add_alt_24"
-                            android:background="@drawable/profile_avatar_ring"
-                            android:clipToOutline="true"
-                            android:scaleType="centerCrop"
-                            android:padding="12dp"
-                            android:elevation="4dp"/>
+                        <androidx.cardview.widget.CardView
+                            android:layout_width="104dp"
+                            android:layout_height="104dp"
+                            android:layout_gravity="center"
+                            app:cardCornerRadius="52dp"
+                            app:cardElevation="0dp"
+                            app:cardBackgroundColor="@android:color/transparent">
+
+                            <ImageView
+                                android:id="@+id/profileImage"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:src="@drawable/baseline_person_add_alt_24"
+                                android:scaleType="centerCrop"/>
+                        </androidx.cardview.widget.CardView>
                     </FrameLayout>
 
                     <TextView

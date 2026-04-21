@@ -10,6 +10,15 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.provider.MediaStore;
+import android.util.Base64;
+import android.widget.Toast;
+import android.app.Activity;
+
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.DocumentSnapshot;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -26,6 +35,10 @@ public class student_profile_pg extends AppCompatActivity {
     Button btnSave;
     TextView tvName;
     View EditProfileinformation, security;
+    ImageView profileImage;
+
+    static final int CAMERA_REQUEST = 100;
+    private String base64ImageUrl = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +61,25 @@ public class student_profile_pg extends AppCompatActivity {
         if (tvEmail != null) tvEmail.setText(email);
         if (tvRoomno != null) tvRoomno.setText(id);
 
+        profileImage = findViewById(R.id.profileImage);
+
+        // Fetch Base64 Profile Image from Firestore
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("IT_Students_data").document(id).get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    if (documentSnapshot.exists() && documentSnapshot.contains("profileImage")) {
+                        String b64 = documentSnapshot.getString("profileImage");
+                        if (b64 != null && !b64.isEmpty()) {
+                            Bitmap bitmap = base64ToBitmap(b64);
+                            if (bitmap != null) {
+                                profileImage.setImageBitmap(bitmap);
+                            }
+                        }
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    Toast.makeText(this, "Failed to load profile image", Toast.LENGTH_SHORT).show();
+                });
 
         //toggle button start//
         switchTheme = findViewById(R.id.switchTheme);
@@ -214,5 +246,16 @@ public class student_profile_pg extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+    }
+
+    // ────────────────────────────────────────────────────────
+    //  BASE64 DECODING
+    // ────────────────────────────────────────────────────────
+    private Bitmap base64ToBitmap(String b64) {
+        if (b64 != null && b64.startsWith("data:image")) {
+            b64 = b64.substring(b64.indexOf(",") + 1);
+        }
+        byte[] imageAsBytes = android.util.Base64.decode(b64, android.util.Base64.DEFAULT);
+        return android.graphics.BitmapFactory.decodeByteArray(imageAsBytes, 0, imageAsBytes.length);
     }
 }
