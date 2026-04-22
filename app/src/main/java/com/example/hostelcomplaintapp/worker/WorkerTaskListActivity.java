@@ -90,11 +90,18 @@ public class WorkerTaskListActivity extends AppCompatActivity {
                         model.setDocId(document.getId());
                         model.setTitle(document.getString("title"));
                         model.setDescription(document.getString("description"));
-                        model.setRoomNumber(document.getString("roomNumber"));
+
+                        // ✅ Consistency: Handle both room and roomNumber fields
+                        Object roomObj = document.get("room");
+                        if (roomObj == null) roomObj = document.get("roomNumber");
+                        String roomStr = roomObj != null ? String.valueOf(roomObj) : "N/A";
+                        model.setRoomNumber(roomStr);
+                        model.setRoom(roomStr);
+
                         model.setStatus(document.getString("status"));
                         model.setCategory(document.getString("category"));
                         model.setStudentId(document.getString("studentId"));
-                        model.setImageUrl(document.getString("imageUrl")); // Base64 image from raise complaint
+                        model.setImageUrl(document.getString("imageUrl")); 
 
                         allComplaints.add(model);
                     } catch (Exception e) {

@@ -26,7 +26,7 @@ import java.util.ArrayList;
 
 public class Totalcomplaint_student extends AppCompatActivity {
 
-    ImageView btnBack, gotohomepg, btnNotification, howtouseapp, imgprof, addcomplnt;
+    ImageView btnBack, gotohomepg, btnNotification, howtouseapp, imgprof;
     private View loadingBar;
     private TextView tvEmptyState;
     private String currentStudentId;
@@ -78,19 +78,6 @@ public class Totalcomplaint_student extends AppCompatActivity {
             }
         });
         /// home button code end ///
-
-        /// add complaint button code start ///
-        addcomplnt = findViewById(R.id.addcomplnt);
-        if (addcomplnt != null) {
-            addcomplnt.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(Totalcomplaint_student.this, RaiseComplaintActivity.class);
-                    startActivity(intent);
-                }
-            });
-        }
-        /// add complaint button code end ///
 
         /// notification button code start ///
         btnNotification = findViewById(R.id.btnNotification);

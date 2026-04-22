@@ -4,16 +4,16 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#F6F8FB"
     android:orientation="vertical">
 
-    <!-- Top Navbar Starts here -->
-
-
+    <!-- 🔵 TOP TOOLBAR -->
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="80dp"
-        android:background="@drawable/toolbar_bg">
+        android:background="@drawable/toolbar_bg"
+        android:elevation="4dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -23,240 +23,252 @@
             android:paddingStart="12dp"
             android:paddingEnd="16dp">
 
-            <!-- LEFT SIDE TEXT -->
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:orientation="vertical">
 
-                <!-- NAME -->
                 <TextView
                     android:id="@+id/tv1WardenName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Rahul Patil"
+                    android:text="Warden Name"
                     android:textColor="@color/white"
-                    android:textSize="25dp"
+                    android:textSize="22sp"
                     android:textStyle="bold"/>
 
-                <!-- ID -->
                 <TextView
                     android:id="@+id/tv2WardenId"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="123"
+                    android:text="ID: 12345"
                     android:textColor="@color/white"
-                    android:textSize="17sp"/>
-
+                    android:textSize="14sp"/>
             </LinearLayout>
 
-            <!-- RIGHT SIDE PROFILE ICON -->
             <ImageView
+                android:id="@+id/imgProfile1"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
-                android:id="@+id/imgProfile1"
-                android:src="@drawable/nmm"/>
+                android:src="@drawable/nmm"
+                android:padding="4dp"/>
 
         </LinearLayout>
-
     </androidx.appcompat.widget.Toolbar>
 
-    <!-- TOP NAVBAR ENDS HERE-->
-
-    <!-- 2. ANNOUNCEMENTS Card On Homepage AND 3 DOTS BELOW IT -->
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Announcements"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"/>
-
-    <androidx.viewpager2.widget.ViewPager2
-        android:id="@+id/viewPagerAnnouncements"
-        android:layout_width="match_parent"
-        android:layout_height="130dp"
-        android:layout_marginTop="10dp"/>
-
-    <LinearLayout
-        android:id="@+id/dotsLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:layout_marginTop="6dp"
-        android:orientation="horizontal">
-
-        <View
-            android:id="@+id/dot1"
-            android:layout_width="20dp"
-            android:layout_height="6dp"
-            android:background="#FF3B30"
-            android:layout_margin="4dp"/>
-
-        <View
-            android:id="@+id/dot2"
-            android:layout_width="6dp"
-            android:layout_height="6dp"
-            android:background="#CCCCCC"
-            android:layout_margin="4dp"/>
-
-        <View
-            android:id="@+id/dot3"
-            android:layout_width="6dp"
-            android:layout_height="6dp"
-            android:background="#CCCCCC"
-            android:layout_margin="4dp"/>
-
-    </LinearLayout>
-
-
-
-
-
-
-
-    <!-- Cards Navbar -->
-    <LinearLayout
+    <!-- SCROLL CONTENT -->
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:orientation="vertical"
-        android:padding="11dp"
-        android:textAlignment="center">
+        android:fillViewport="true">
 
-
-        <!-- Row 1 -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:weightSum="2">
+            android:orientation="vertical">
+
+            <!-- 📢 ANNOUNCEMENTS SECTION -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Announcements"
+                android:textSize="18sp"
+                android:textColor="#0F172A"
+                android:textStyle="bold"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="12dp"/>
+
+            <androidx.viewpager2.widget.ViewPager2
+                android:id="@+id/viewPagerAnnouncements"
+                android:layout_width="match_parent"
+                android:layout_height="140dp"
+                android:layout_marginBottom="8dp"/>
 
             <LinearLayout
-                android:id="@+id/cardtotalcomplaint"
-                android:layout_width="0dp"
-                android:layout_height="120dp"
-                android:layout_margin="8dp"
-                android:layout_weight="1"
-                android:background="@drawable/rounded_bg"
+                android:id="@+id/dotsLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:gravity="center"
-                android:orientation="vertical">
-
-                <ImageView
-                    android:layout_width="55dp"
-                    android:layout_height="55dp"
-                    android:contentDescription="icon"
-                    android:src="@drawable/baseline_assignment_turned_in_24" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="15dp"
-                    android:text="Total Complaint"
-                    android:textStyle="bold" />
+                android:layout_marginBottom="16dp"
+                android:orientation="horizontal">
+                <!-- Dots added programmatically -->
             </LinearLayout>
 
-            <LinearLayout
-                android:id="@+id/cardpending"
-                android:layout_width="0dp"
-                android:layout_height="120dp"
-                android:layout_margin="8dp"
-                android:layout_weight="1"
-                android:background="@drawable/rounded_bg"
-                android:gravity="center"
-                android:orientation="vertical">
+            <!-- 🗂️ GRID CARDS -->
+            <GridLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:columnCount="2"
+                android:layout_margin="12dp">
 
-                <ImageView
-                    android:layout_width="55dp"
-                    android:layout_height="55dp"
-                    android:contentDescription="icon"
-                    android:src="@drawable/baseline_pending_actions_24" />
+                <!-- Total Complaint -->
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/cardtotalcomplaint"
+                    android:layout_width="0dp"
+                    android:layout_height="130dp"
+                    android:layout_columnWeight="1"
+                    android:layout_margin="8dp"
+                    app:cardElevation="2dp"
+                    app:cardCornerRadius="16dp"
+                    app:cardBackgroundColor="#FFFFFF"
+                    app:strokeWidth="1dp"
+                    app:strokeColor="#E2E8F0">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="15dp"
-                    android:text="Pending"
-                    android:textStyle="bold" />
-            </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        android:padding="16dp">
 
+                        <ImageView
+                            android:layout_width="48dp"
+                            android:layout_height="48dp"
+                            android:src="@drawable/baseline_assignment_turned_in_24"
+                            app:tint="#2F6FED"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="12dp"
+                            android:text="Total Complaints"
+                            android:textColor="#334155"
+                            android:textSize="14sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <!-- Pending -->
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/cardpending"
+                    android:layout_width="0dp"
+                    android:layout_height="130dp"
+                    android:layout_columnWeight="1"
+                    android:layout_margin="8dp"
+                    app:cardElevation="2dp"
+                    app:cardCornerRadius="16dp"
+                    app:cardBackgroundColor="#FFFFFF"
+                    app:strokeWidth="1dp"
+                    app:strokeColor="#E2E8F0">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        android:padding="16dp">
+
+                        <ImageView
+                            android:layout_width="48dp"
+                            android:layout_height="48dp"
+                            android:src="@drawable/baseline_pending_actions_24"
+                            app:tint="#F59E0B"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="12dp"
+                            android:text="Pending"
+                            android:textColor="#334155"
+                            android:textSize="14sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <!-- Emergency Issue -->
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/cardemergencyissue"
+                    android:layout_width="0dp"
+                    android:layout_height="130dp"
+                    android:layout_columnWeight="1"
+                    android:layout_margin="8dp"
+                    app:cardElevation="2dp"
+                    app:cardCornerRadius="16dp"
+                    app:cardBackgroundColor="#FFFFFF"
+                    app:strokeWidth="1dp"
+                    app:strokeColor="#E2E8F0">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        android:padding="16dp">
+
+                        <ImageView
+                            android:layout_width="48dp"
+                            android:layout_height="48dp"
+                            android:src="@android:drawable/ic_dialog_alert"
+                            app:tint="#EF4444"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="12dp"
+                            android:text="Emergency"
+                            android:textColor="#334155"
+                            android:textSize="14sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <!-- Announcements Add -->
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/cardAnnouncement"
+                    android:layout_width="0dp"
+                    android:layout_height="130dp"
+                    android:layout_columnWeight="1"
+                    android:layout_margin="8dp"
+                    app:cardElevation="2dp"
+                    app:cardCornerRadius="16dp"
+                    app:cardBackgroundColor="#FFFFFF"
+                    app:strokeWidth="1dp"
+                    app:strokeColor="#E2E8F0"
+                    android:clickable="true"
+                    android:focusable="true">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        android:padding="16dp">
+
+                        <ImageView
+                            android:layout_width="48dp"
+                            android:layout_height="48dp"
+                            android:src="@drawable/baseline_add_24"
+                            app:tint="#10B981"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="12dp"
+                            android:text="Post News"
+                            android:textColor="#334155"
+                            android:textSize="14sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+            </GridLayout>
         </LinearLayout>
+    </ScrollView>
 
-        <!-- Row 2 -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:weightSum="2">
-
-            <LinearLayout
-                android:id="@+id/cardemergencyissue"
-                android:layout_width="0dp"
-                android:layout_height="120dp"
-                android:layout_margin="8dp"
-                android:layout_weight="1"
-                android:background="@drawable/rounded_bg"
-                android:gravity="center"
-                android:orientation="vertical">
-
-                <ImageView
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:contentDescription="icon"
-                    android:src="@android:drawable/ic_dialog_alert" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:text="Emergency Issue"
-                    android:textSize="15dp"
-                    android:textStyle="bold" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/cardAnnouncement"
-                android:layout_width="0dp"
-                android:layout_height="120dp"
-                android:layout_margin="8dp"
-                android:layout_weight="1"
-                android:background="@drawable/rounded_bg"
-                android:clickable="true"
-                android:focusable="true"
-                android:gravity="center"
-                android:orientation="vertical">
-
-                <ImageView
-                    android:layout_width="55dp"
-                    android:layout_height="55dp"
-                    android:contentDescription="icon"
-                    android:src="@drawable/baseline_add_24" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:text="Announcements"
-                    android:textSize="15dp"
-                    android:textStyle="bold" />
-            </LinearLayout>
-
-        </LinearLayout>
-
-    </LinearLayout>
-
-
-    <!-- Bottom navbar stars there -->
-
+    <!-- 🔻 BOTTOM NAVIGATION -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#E2E8F0" />
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="60dp"
+        android:layout_height="65dp"
+        android:background="#FFFFFF"
         android:orientation="horizontal"
-        android:background="@drawable/bottom_nav_bg"
         android:weightSum="4">
 
         <!-- Home -->
@@ -267,21 +279,24 @@
             android:gravity="center"
             android:orientation="vertical">
 
-
             <ImageView
                 android:id="@+id/home"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:src="@drawable/baseline_home_24"/>
+                android:layout_width="26dp"
+                android:layout_height="26dp"
+                android:src="@drawable/baseline_home_24"
+                app:tint="#2F6FED"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Home"
-                android:textSize="17dp"/>
+                android:textColor="#2F6FED"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                android:layout_marginTop="4dp"/>
         </LinearLayout>
 
-
+        <!-- Notification -->
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
@@ -291,17 +306,21 @@
 
             <ImageView
                 android:id="@+id/imgnotification"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:src="@drawable/baseline_notifications_24"/>
+                android:layout_width="26dp"
+                android:layout_height="26dp"
+                android:src="@drawable/baseline_notifications_24"
+                app:tint="#94A3B8"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Notification"
-                android:textSize="17dp"/>
+                android:text="Alerts"
+                android:textColor="#94A3B8"
+                android:textSize="12sp"
+                android:layout_marginTop="4dp"/>
         </LinearLayout>
 
+        <!-- Staff -->
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
@@ -310,18 +329,22 @@
             android:orientation="vertical">
 
             <ImageView
-                android:layout_width="24dp"
-                android:layout_height="24dp"
                 android:id="@+id/staff_manage"
-                android:src="@drawable/baseline_person_add_alt_24"/>
+                android:layout_width="26dp"
+                android:layout_height="26dp"
+                android:src="@drawable/baseline_person_add_alt_24"
+                app:tint="#94A3B8"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Staff"
-                android:textSize="17dp"/>
+                android:textColor="#94A3B8"
+                android:textSize="12sp"
+                android:layout_marginTop="4dp"/>
         </LinearLayout>
 
+        <!-- Profile -->
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
@@ -330,26 +353,21 @@
             android:orientation="vertical">
 
             <ImageView
-                android:layout_width="24dp"
                 android:id="@+id/imgprof"
-                android:layout_height="24dp"
-                android:src="@drawable/baseline_account_circle_24"/>
+                android:layout_width="26dp"
+                android:layout_height="26dp"
+                android:src="@drawable/baseline_account_circle_24"
+                app:tint="#94A3B8"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Profile"
-                android:textSize="17dp"/>
+                android:textColor="#94A3B8"
+                android:textSize="12sp"
+                android:layout_marginTop="4dp"/>
         </LinearLayout>
 
-
-        <!-- (others same as your code, no change needed) -->
-
-
-
     </LinearLayout>
-
-
-
 
 </LinearLayout>

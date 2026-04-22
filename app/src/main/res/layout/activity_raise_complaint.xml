@@ -7,35 +7,46 @@
     android:background="#F8FAFC">
 
     <!-- Top Navigation Bar -->
-    <LinearLayout
+    <androidx.appcompat.widget.Toolbar
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:orientation="horizontal"
-        android:gravity="center_vertical"
-        android:paddingHorizontal="16dp"
-        android:background="#3B6FD4"
-        android:elevation="4dp">
+        android:layout_height="80dp"
+        android:background="@drawable/toolbar_bg">
 
-        <ImageView
-            android:id="@+id/btnBack"
-            android:layout_width="28dp"
-            android:layout_height="28dp"
-            android:src="@drawable/baseline_arrow_back_24"
-            app:tint="#FFFFFF"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:clickable="true"
-            android:focusable="true"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:paddingStart="12dp"
+            android:paddingEnd="16dp">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Raise a Complaint"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            android:textColor="#FFFFFF"
+            <ImageView
+                android:id="@+id/btnBack"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/baseline_arrow_back_24"
+                app:tint="#FFFFFF"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:clickable="true"
+                android:focusable="true"/>
 
-            android:layout_marginStart="78dp"/>
-    </LinearLayout>
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Raise a Complaint"
+                android:textSize="22sp"
+                android:textStyle="bold"
+                android:textColor="#FFFFFF"
+                android:layout_marginStart="12dp"/>
+
+            <ImageView
+                android:id="@+id/imgProfile1"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:src="@drawable/nmm"/>
+        </LinearLayout>
+    </androidx.appcompat.widget.Toolbar>
 
     <ScrollView
         android:layout_width="match_parent"

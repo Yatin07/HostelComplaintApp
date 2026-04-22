@@ -55,10 +55,16 @@ public class WorkerTaskDetailsActivity extends AppCompatActivity {
                   if (e != null || doc == null || !doc.exists()) return;
                   currentTask = new Task();
                   currentTask.setTaskId(doc.getId());
-                  currentTask.setRoomNumber(doc.getString("roomNumber"));
+                  
+                  // ✅ Consistency: Handle both room and roomNumber fields
+                  Object roomObj = doc.get("room");
+                  if (roomObj == null) roomObj = doc.get("roomNumber");
+                  String roomStr = roomObj != null ? String.valueOf(roomObj) : "N/A";
+                  currentTask.setRoomNumber(roomStr);
+                  
                   currentTask.setStudentName(doc.getString("studentId"));
                   currentTask.setDescription(doc.getString("description"));
-                  currentTask.setTitle(doc.getString("title") != null ? doc.getString("title") : "Complaint: Room " + doc.getString("roomNumber"));
+                  currentTask.setTitle(doc.getString("title") != null ? doc.getString("title") : "Complaint: Room " + roomStr);
 
                   String status = doc.getString("status");
                   currentTask.setStatus(status != null ? status : "Pending");

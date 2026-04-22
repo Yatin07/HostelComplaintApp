@@ -29,7 +29,7 @@ public class emergency_issue_student extends AppCompatActivity {
     private EditText etWarden3Name, etWarden3Phone;
     private EditText etDoctorPhone;
     private Button   btnSave;
-    private ImageView btnEdit, btnBack, gotohomepg, btnNotification, howtouseapp, imgprof;
+    private ImageView btnBack, gotohomepg, btnNotification, howtouseapp, imgprof;
 
     // ── State ──
     private boolean isEditMode = false;
@@ -61,7 +61,6 @@ public class emergency_issue_student extends AppCompatActivity {
         etWarden3Phone = findViewById(R.id.etWarden3Phone);
         etDoctorPhone  = findViewById(R.id.etDoctorPhone);
         btnSave        = findViewById(R.id.btnSaveContacts);
-        btnEdit        = findViewById(R.id.btnEdit);
         btnBack        = findViewById(R.id.btnBack);
 
         // ✅ BOTTOM NAV NAVIGATION
@@ -90,8 +89,7 @@ public class emergency_issue_student extends AppCompatActivity {
         isWarden = "warden".equalsIgnoreCase(role);
 
         if (!isWarden) {
-            // Student: always view-only — hide edit icon completely
-            btnEdit.setVisibility(View.GONE);
+            // Student: always view-only — hide save icon
             btnSave.setVisibility(View.GONE);
             setEditableAll(false);
         }
@@ -101,18 +99,6 @@ public class emergency_issue_student extends AppCompatActivity {
 
         // ── Back button ──
         btnBack.setOnClickListener(v -> finish());
-
-        // ── Edit / Done toggle (Warden only — icon is GONE for students) ──
-        btnEdit.setOnClickListener(v -> {
-            if (!isWarden) return; // safety guard
-            if (!isEditMode) {
-                enableEditing();
-            } else {
-                // Tapping icon while in edit mode = cancel
-                disableEditing();
-                loadContacts();
-            }
-        });
 
         // ── Save button (Warden only) ──
         btnSave.setOnClickListener(v -> {
@@ -180,7 +166,6 @@ public class emergency_issue_student extends AppCompatActivity {
         setEditableAll(true);
         btnSave.setVisibility(View.VISIBLE);
         // Switch icon to a "close/cancel" icon to signal tapping again = cancel
-        btnEdit.setImageResource(android.R.drawable.ic_menu_close_clear_cancel);
         etWarden1Name.requestFocus();
     }
 
@@ -188,7 +173,7 @@ public class emergency_issue_student extends AppCompatActivity {
         isEditMode = false;
         setEditableAll(false);
         btnSave.setVisibility(View.GONE);
-        btnEdit.setImageResource(android.R.drawable.ic_menu_edit);
+        btnSave.setVisibility(View.GONE);
     }
 
 

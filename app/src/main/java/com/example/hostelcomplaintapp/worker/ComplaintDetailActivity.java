@@ -76,10 +76,11 @@ public class ComplaintDetailActivity extends AppCompatActivity {
 //                            if (dl != null) model.setDeadline(dl);
 //                        }
                         if (doc.get("deadline") != null) {
-                            com.google.firebase.Timestamp timestamp = doc.getTimestamp("deadline");
-                            if (timestamp != null) {
-                                long dl = timestamp.toDate().getTime();
-                                model.setDeadline(dl);
+                            Object dlObj = doc.get("deadline");
+                            if (dlObj instanceof com.google.firebase.Timestamp) {
+                                model.setDeadline(((com.google.firebase.Timestamp) dlObj).toDate().getTime());
+                            } else if (dlObj instanceof Long) {
+                                model.setDeadline((Long) dlObj);
                             }
                         }
 
@@ -140,11 +141,12 @@ public class ComplaintDetailActivity extends AppCompatActivity {
             btnAction.setOnClickListener(v -> actionCompleteWork());
             tvStatus.setTextColor(Color.parseColor("#FFC107"));
         } else if (status.equals("overdue")) {
-            // Disable Start Work button literally matching constraint and show text in RED
+            // ✅ FIX: Allow starting work even if overdue
             btnAction.setVisibility(View.VISIBLE);
-            btnAction.setEnabled(false);
-            btnAction.setText("Start Work");
-            btnAction.setBackgroundColor(Color.parseColor("#9E9E9E"));
+            btnAction.setEnabled(true);
+            btnAction.setText("Start Work (Late)");
+            btnAction.setBackgroundColor(Color.parseColor("#FF9800"));
+            btnAction.setOnClickListener(v -> actionStartWork());
             tvStatus.setTextColor(Color.parseColor("#D32F2F")); // RED
         } else if (status.equals("completed")) {
             tvStatus.setTextColor(Color.parseColor("#4CAF50"));
@@ -153,9 +155,10 @@ public class ComplaintDetailActivity extends AppCompatActivity {
 
     private void actionStartWork() {
         long deadlineMillis = System.currentTimeMillis() + (3L * 24L * 60L * 60L * 1000L);
+        com.google.firebase.Timestamp timestamp = new com.google.firebase.Timestamp(new java.util.Date(deadlineMillis));
 
         db.collection("complaints").document(docId)
-                .update("status", "in progress", "deadline", deadlineMillis)
+                .update("status", "in progress", "deadline", timestamp)
                 .addOnSuccessListener(aVoid -> fetchComplaintDetails())
                 .addOnFailureListener(e -> Toast.makeText(this, "Failed", Toast.LENGTH_SHORT).show());
     }
