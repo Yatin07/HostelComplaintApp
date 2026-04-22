@@ -30,7 +30,7 @@ import androidx.core.view.WindowInsetsCompat;
 public class student_profile_pg extends AppCompatActivity {
 
     Switch switchTheme;
-    ImageView btnBack, gotohomepg, imgprof, btnNotification, staff_manage, backBtn;
+    ImageView btnBack, gotohomepg, imgprof, btnNotification, howtouseapp, backBtn;
     EditText etName;
     Button btnSave;
     TextView tvName;
@@ -217,8 +217,8 @@ public class student_profile_pg extends AppCompatActivity {
         });
 
 
-        staff_manage = findViewById(R.id.staff_manage);
-        staff_manage.setOnClickListener(new View.OnClickListener() {
+        howtouseapp = findViewById(R.id.howtouseapp);
+        howtouseapp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent1 = new Intent(student_profile_pg.this, Guide_pg_student.class);
@@ -230,7 +230,7 @@ public class student_profile_pg extends AppCompatActivity {
         Button btnLogout = findViewById(R.id.btnLogout);
         btnLogout.setOnClickListener(v -> {
             // Clear any user preferences if necessary
-            SharedPreferences prefs = getSharedPreferences("MyPrefs", MODE_PRIVATE);
+            SharedPreferences prefs = getSharedPreferences("user", MODE_PRIVATE);
             prefs.edit().clear().apply();
 
             // Redirect back to role selection and clear backstack

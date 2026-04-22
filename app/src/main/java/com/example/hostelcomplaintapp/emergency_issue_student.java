@@ -1,5 +1,6 @@
 package com.example.hostelcomplaintapp;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -28,7 +29,7 @@ public class emergency_issue_student extends AppCompatActivity {
     private EditText etWarden3Name, etWarden3Phone;
     private EditText etDoctorPhone;
     private Button   btnSave;
-    private ImageView btnEdit, btnBack;
+    private ImageView btnEdit, btnBack, gotohomepg, btnNotification, howtouseapp, imgprof;
 
     // ── State ──
     private boolean isEditMode = false;
@@ -62,6 +63,25 @@ public class emergency_issue_student extends AppCompatActivity {
         btnSave        = findViewById(R.id.btnSaveContacts);
         btnEdit        = findViewById(R.id.btnEdit);
         btnBack        = findViewById(R.id.btnBack);
+
+        // ✅ BOTTOM NAV NAVIGATION
+        gotohomepg = findViewById(R.id.gotohomepg);
+        gotohomepg.setOnClickListener(v -> finish());
+
+        btnNotification = findViewById(R.id.btnNotification);
+        btnNotification.setOnClickListener(v -> {
+            startActivity(new Intent(emergency_issue_student.this, Notification_student.class));
+        });
+
+        howtouseapp = findViewById(R.id.howtouseapp);
+        howtouseapp.setOnClickListener(v -> {
+            startActivity(new Intent(emergency_issue_student.this, Guide_pg_student.class));
+        });
+
+        imgprof = findViewById(R.id.imgprof);
+        imgprof.setOnClickListener(v -> {
+            startActivity(new Intent(emergency_issue_student.this, student_profile_pg.class));
+        });
 
         db = FirebaseFirestore.getInstance();
 
@@ -170,6 +190,7 @@ public class emergency_issue_student extends AppCompatActivity {
         btnSave.setVisibility(View.GONE);
         btnEdit.setImageResource(android.R.drawable.ic_menu_edit);
     }
+
 
     private void setEditableAll(boolean enabled) {
         etWarden1Name.setEnabled(enabled);

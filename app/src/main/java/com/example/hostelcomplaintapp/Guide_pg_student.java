@@ -13,7 +13,7 @@ import androidx.core.view.WindowInsetsCompat;
 
 public class Guide_pg_student extends AppCompatActivity {
 
-    ImageView notify, staff_manage, imgprof, home, btnBack;
+    ImageView btnNotification, howtouseapp, imgprof, gotohomepg, btnBack;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,12 +22,12 @@ public class Guide_pg_student extends AppCompatActivity {
         setContentView(R.layout.activity_guide_pg_student);
 
 
-        notify = findViewById(R.id.notify);
-        staff_manage = findViewById(R.id.staff_manage);
+        btnNotification = findViewById(R.id.btnNotification);
+        howtouseapp = findViewById(R.id.howtouseapp);
         imgprof = findViewById(R.id.imgprof);
-        home = findViewById(R.id.home);
+        gotohomepg = findViewById(R.id.gotohomepg);
 
-notify.setOnClickListener(new View.OnClickListener() {
+btnNotification.setOnClickListener(new View.OnClickListener() {
     @Override
     public void onClick(View v) {
         Intent intent = new Intent(Guide_pg_student.this, Notification_student.class);
@@ -46,7 +46,7 @@ btnBack.setOnClickListener(new View.OnClickListener() {
 });
 
 
-        staff_manage.setOnClickListener(new View.OnClickListener() {
+        howtouseapp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(Guide_pg_student.this, Guide_pg_student.class);
@@ -64,7 +64,7 @@ btnBack.setOnClickListener(new View.OnClickListener() {
         });
 
 
-        home.setOnClickListener(new View.OnClickListener() {
+        gotohomepg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(Guide_pg_student.this, HomePage_Student.class);

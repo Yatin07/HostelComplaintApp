@@ -20,11 +20,16 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
+import android.content.SharedPreferences;
+import android.widget.TextView;
 import java.util.ArrayList;
 
 public class Totalcomplaint_student extends AppCompatActivity {
 
-    ImageView btnBack, gotohomepg, btnNotification, staff_manage, imgprof;
+    ImageView btnBack, gotohomepg, btnNotification, howtouseapp, imgprof, addcomplnt;
+    private View loadingBar;
+    private TextView tvEmptyState;
+    private String currentStudentId;
 
     private ArrayList<ComplaintModel> list;
     private ComplaintAdapter adapter;
@@ -33,7 +38,7 @@ public class Totalcomplaint_student extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_totalcomplaint);
+        setContentView(R.layout.activity_totalcomplaint_student);
 
         /// make card design start ///
         RecyclerView recyclerView = findViewById(R.id.recyclerView);
@@ -44,6 +49,12 @@ public class Totalcomplaint_student extends AppCompatActivity {
         adapter.setWorker(false); // Warden view
         recyclerView.setAdapter(adapter);
         /// make card design end ///
+
+        loadingBar = findViewById(R.id.loadingBar);
+        tvEmptyState = findViewById(R.id.tvEmptyState);
+
+        SharedPreferences prefs = getSharedPreferences("user", MODE_PRIVATE);
+        currentStudentId = prefs.getString("id", "");
 
         /// Load Data from Firestore ///
         loadComplaints();
@@ -68,34 +79,47 @@ public class Totalcomplaint_student extends AppCompatActivity {
         });
         /// home button code end ///
 
+        /// add complaint button code start ///
+        addcomplnt = findViewById(R.id.addcomplnt);
+        if (addcomplnt != null) {
+            addcomplnt.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(Totalcomplaint_student.this, RaiseComplaintActivity.class);
+                    startActivity(intent);
+                }
+            });
+        }
+        /// add complaint button code end ///
+
         /// notification button code start ///
         btnNotification = findViewById(R.id.btnNotification);
         btnNotification.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(Totalcomplaint_student.this, Notification.class);
+                Intent intent = new Intent(Totalcomplaint_student.this, Notification_student.class);
                 startActivity(intent);
             }
         });
         /// notification button code end ///
 
-        /// staff_manage button code start ///
-        staff_manage = findViewById(R.id.staff_manage);
-        staff_manage.setOnClickListener(new View.OnClickListener() {
+        /// howtouseapp button code start ///
+        howtouseapp = findViewById(R.id.howtouseapp);
+        howtouseapp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(Totalcomplaint_student.this, staff_manage.class);
+                Intent intent = new Intent(Totalcomplaint_student.this, Guide_pg_student.class);
                 startActivity(intent);
             }
         });
-        /// staff manage button code end ///
+        /// howtouseapp button code end ///
 
         /// profile button code start ///
         imgprof = findViewById(R.id.imgprof);
         imgprof.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(Totalcomplaint_student.this, imgProfile_click.class);
+                Intent intent = new Intent(Totalcomplaint_student.this, student_profile_pg.class);
                 startActivity(intent);
             }
         });
@@ -109,17 +133,19 @@ public class Totalcomplaint_student extends AppCompatActivity {
     }
 
     private void loadComplaints() {
+        if (loadingBar != null) loadingBar.setVisibility(View.VISIBLE);
+        if (tvEmptyState != null) tvEmptyState.setVisibility(View.GONE);
+
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-        // Use a simpler query that doesn't require composite indexes if possible,
-        // or just fetch all and handle parsing.
         db.collection("complaints")
+                .whereEqualTo("studentId", currentStudentId)
                 .orderBy("timestamp", Query.Direction.DESCENDING)
                 .addSnapshotListener((value, error) -> {
+                    if (loadingBar != null) loadingBar.setVisibility(View.GONE);
+
                     if (error != null) {
-                        Log.e("WARDEN_COMPLAINTS", "Listen failed.", error);
-                        // Fallback to one-time fetch if snapshot listener fails (likely due to missing index)
-                        fetchOnce();
+                        Log.e("STUDENT_COMPLAINTS", "Listen failed.", error);
                         return;
                     }
 
@@ -130,10 +156,14 @@ public class Totalcomplaint_student extends AppCompatActivity {
                                 ComplaintModel model = parseDocument(doc);
                                 list.add(model);
                             } catch (Exception e) {
-                                Log.e("WARDEN_COMPLAINTS", "Error parsing doc: " + doc.getId(), e);
+                                Log.e("STUDENT_COMPLAINTS", "Error parsing doc: " + doc.getId(), e);
                             }
                         }
                         adapter.notifyDataSetChanged();
+
+                        if (tvEmptyState != null) {
+                            tvEmptyState.setVisibility(list.isEmpty() ? View.VISIBLE : View.GONE);
+                        }
                     }
                 });
     }

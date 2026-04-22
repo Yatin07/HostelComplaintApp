@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -16,15 +17,16 @@
             android:layout_height="match_parent"
             android:orientation="horizontal"
             android:gravity="center_vertical"
-            android:padding="15dp">
+            android:paddingStart="12dp"
+            android:paddingEnd="16dp">
 
             <ImageView
                 android:id="@+id/btnBack"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:src="@drawable/baseline_arrow_back_24"
-                android:layout_marginEnd="10dp"
-                android:tint="@color/white"/>
+                app:tint="@color/white"
+                android:layout_marginEnd="12dp"/>
 
             <TextView
                 android:layout_width="0dp"
@@ -32,9 +34,14 @@
                 android:layout_weight="1"
                 android:text="Notification"
                 android:textColor="@color/white"
-                android:textSize="25sp"
-                android:textStyle="bold"
-                android:gravity="center"/>
+                android:textSize="22sp"
+                android:textStyle="bold"/>
+
+            <ImageView
+                android:id="@+id/imgProfile1"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:src="@drawable/nmm"/>
 
         </LinearLayout>
 
@@ -48,15 +55,19 @@
         android:layout_height="0dp"
         android:layout_weight="1"/>
 
-    <!-- Bottom Navbar -->
+    <!-- 🔻 BOTTOM NAVBAR -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#E2E8F0" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:orientation="horizontal"
-        android:background="@drawable/bottom_nav_bg"
+        android:background="#FFFFFF"
         android:weightSum="4">
 
-        <!-- Home -->
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
@@ -68,16 +79,19 @@
                 android:id="@+id/gotohomepg"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
+                app:tint="#94A3B8"
                 android:src="@drawable/baseline_home_24"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Home"
-                android:textSize="17sp"/>
+                android:textColor="#94A3B8"
+                android:textStyle="bold"
+                android:textSize="14sp"
+                android:layout_marginTop="4dp"/>
         </LinearLayout>
 
-        <!-- Notification -->
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
@@ -89,16 +103,19 @@
                 android:id="@+id/btnNotification"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
+                app:tint="#2F6FED"
                 android:src="@drawable/baseline_notifications_24"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Notification"
-                android:textSize="17sp"/>
+                android:textColor="#2F6FED"
+                android:textStyle="bold"
+                android:textSize="14sp"
+                android:layout_marginTop="4dp"/>
         </LinearLayout>
 
-        <!-- Staff -->
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
@@ -107,19 +124,22 @@
             android:orientation="vertical">
 
             <ImageView
-                android:id="@+id/staff_manage"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
+                android:id="@+id/staff_manage"
+                app:tint="#94A3B8"
                 android:src="@drawable/baseline_person_add_alt_24"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Staff"
-                android:textSize="17sp"/>
+                android:text="Guide"
+                android:textColor="#94A3B8"
+                android:textStyle="bold"
+                android:textSize="14sp"
+                android:layout_marginTop="4dp"/>
         </LinearLayout>
 
-        <!-- Profile -->
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
@@ -128,18 +148,21 @@
             android:orientation="vertical">
 
             <ImageView
-                android:id="@+id/imgprof"
                 android:layout_width="24dp"
+                android:id="@+id/imgproff"
                 android:layout_height="24dp"
+                app:tint="#94A3B8"
                 android:src="@drawable/baseline_account_circle_24"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Profile"
-                android:textSize="17sp"/>
+                android:textColor="#94A3B8"
+                android:textStyle="bold"
+                android:textSize="14sp"
+                android:layout_marginTop="4dp"/>
         </LinearLayout>
-
     </LinearLayout>
 
 </LinearLayout>

@@ -27,7 +27,7 @@ public class RaiseComplaintActivity extends AppCompatActivity {
     Spinner spinnerCategory;
     EditText etRoom, etTitle, etDescription, etStudentId;
     Button btnSubmit, btnUploadImage;
-    ImageView imagePreview, btnBack;
+    ImageView imagePreview, btnBack, gotohomepg, btnNotification, howtouseapp, imgprof;
     private String base64ImageUrl = "";
 
     static final int CAMERA_REQUEST = 100;
@@ -53,9 +53,27 @@ public class RaiseComplaintActivity extends AppCompatActivity {
         btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(RaiseComplaintActivity.this, HomePage_Student.class);
-                startActivity(intent);
+                finish();
             }
+        });
+
+        // ✅ BOTTOM NAV NAVIGATION
+        gotohomepg = findViewById(R.id.gotohomepg);
+        gotohomepg.setOnClickListener(v -> finish());
+
+        btnNotification = findViewById(R.id.btnNotification);
+        btnNotification.setOnClickListener(v -> {
+            startActivity(new Intent(RaiseComplaintActivity.this, Notification_student.class));
+        });
+
+        howtouseapp = findViewById(R.id.howtouseapp);
+        howtouseapp.setOnClickListener(v -> {
+            startActivity(new Intent(RaiseComplaintActivity.this, Guide_pg_student.class));
+        });
+
+        imgprof = findViewById(R.id.imgprof);
+        imgprof.setOnClickListener(v -> {
+            startActivity(new Intent(RaiseComplaintActivity.this, student_profile_pg.class));
         });
 
 
@@ -88,8 +106,8 @@ public class RaiseComplaintActivity extends AppCompatActivity {
             String description = etDescription.getText().toString();
 
             // Validation
-            if (title.isEmpty() || description.isEmpty()) {
-                Toast.makeText(this, "Please fill all required fields", Toast.LENGTH_SHORT).show();
+            if (title.isEmpty() || description.isEmpty() || room.isEmpty()) {
+                Toast.makeText(this, "Please fill all required fields (Title, Room, Description)", Toast.LENGTH_SHORT).show();
                 return;
             }
 
@@ -101,8 +119,8 @@ public class RaiseComplaintActivity extends AppCompatActivity {
             data.put("description", description);
             data.put("room", room);
             data.put("category", category);
-            SharedPreferences prefs = getSharedPreferences("MyPrefs", MODE_PRIVATE);
-            String studentId = prefs.getString("sapid", "Unknown");
+            SharedPreferences prefs = getSharedPreferences("user", MODE_PRIVATE);
+            String studentId = prefs.getString("id", "Unknown");
             data.put("studentId", studentId);
             data.put("timestamp", FieldValue.serverTimestamp());
             data.put("status", "Pending");

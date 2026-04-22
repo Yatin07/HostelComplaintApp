@@ -51,7 +51,7 @@ public class WorkerTaskListActivity extends AppCompatActivity {
             getSupportActionBar().setTitle("Student Complaints");
         }
 
-        android.widget.Button btnBack = findViewById(R.id.btnBack);
+        android.widget.ImageView btnBack = findViewById(R.id.btnBack);
         if (btnBack != null) {
             btnBack.setOnClickListener(v -> finish());
         }

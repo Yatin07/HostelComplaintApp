@@ -1,4 +1,4 @@
-package com.example.hostelcomplaintapp.worker;
+package com.example.hostelcomplaintapp;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,13 +12,14 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.hostelcomplaintapp.NotificationAdapter_student;
+import com.example.hostelcomplaintapp.NotificationAdapter;
 import com.example.hostelcomplaintapp.Notificationpgdatastore;
 import com.example.hostelcomplaintapp.R;
 import com.example.hostelcomplaintapp.worker_guide_clk;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
+import com.example.hostelcomplaintapp.worker.WorkerNavigationHelper;
 
 import java.util.ArrayList;
 
@@ -26,7 +27,7 @@ public class Worker_notification_clk extends AppCompatActivity {
 
     RecyclerView recyclerView;
     ArrayList<Notificationpgdatastore> list;
-    NotificationAdapter_student adapter; // you can reuse same adapter
+    NotificationAdapter adapter; // Staff version with remove button
     FirebaseFirestore db;
 
     ImageView btnBack, gotohomepg, imgprof, btnNotification, staff_manage;
@@ -46,7 +47,7 @@ public class Worker_notification_clk extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         list = new ArrayList<>();
-        adapter = new NotificationAdapter_student(this, list);
+        adapter = new NotificationAdapter(this, list);
         recyclerView.setAdapter(adapter);
 
         // 🔥 Firestore
@@ -72,32 +73,8 @@ public class Worker_notification_clk extends AppCompatActivity {
                     }
                 });
 
-        // 👤 Profile
-        imgprof = findViewById(R.id.imgprof);
-        imgprof.setOnClickListener(v -> {
-            Intent intent = new Intent(Worker_notification_clk.this, WorkerProfileActivity.class);
-            startActivity(intent);
-        });
-
-        // 👷 Staff / Complaint / Task
-        staff_manage = findViewById(R.id.staff_manage);
-        staff_manage.setOnClickListener(v -> {
-            Intent intent = new Intent(Worker_notification_clk.this, worker_guide_clk.class);
-            startActivity(intent);
-        });
-
-        // 🔔 Notification (current page)
-        btnNotification = findViewById(R.id.btnNotification);
-        btnNotification.setOnClickListener(v -> {
-            // already here, optional reload
-        });
-
-        // 🏠 Home
-        gotohomepg = findViewById(R.id.gotohomepg);
-        gotohomepg.setOnClickListener(v -> {
-            Intent intent = new Intent(Worker_notification_clk.this, WorkerDashboardActivity.class);
-            startActivity(intent);
-        });
+        // Setup Bottom Navigation via Helper
+        WorkerNavigationHelper.setupNavigation(this);
 
         // 🔥 Insets (status bar fix)
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {

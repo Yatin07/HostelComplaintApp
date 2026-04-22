@@ -4,8 +4,10 @@ xmlns:app="http://schemas.android.com/apk/res-auto"
 android:layout_width="match_parent"
 android:layout_height="wrap_content"
 android:layout_margin="15dp"
+android:layout_marginBottom="16dp"
+app:cardBackgroundColor="#FFFFFF"
 app:cardCornerRadius="12dp"
-app:cardElevation="4dp">
+app:cardElevation="2dp">
 
 <LinearLayout
     android:layout_width="match_parent"
@@ -19,7 +21,7 @@ app:cardElevation="4dp">
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:src="@drawable/baseline_account_circle_24"
-        android:tint="#2F5D9F"
+        app:tint="#2F6FED"
         android:layout_marginEnd="12dp"/>
 
     <!-- TEXT -->
@@ -33,6 +35,7 @@ app:cardElevation="4dp">
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/txtText"
+            android:textColor="#0F172A"
             android:textStyle="bold"
             android:textSize="16sp"/>
 
@@ -41,14 +44,14 @@ app:cardElevation="4dp">
             android:layout_height="wrap_content"
             android:id="@+id/txtWarden"
             android:textSize="14sp"
-            android:textColor="#666666"/>
+            android:textColor="#64748B"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/txtTime"
             android:textSize="14sp"
-            android:textColor="#2E7D32"
+            android:textColor="#64748B"
             android:textStyle="bold"/>
     </LinearLayout>
 
@@ -64,7 +67,7 @@ app:cardElevation="4dp">
             android:layout_width="20dp"
             android:layout_height="20dp"
             android:src="@drawable/outline_arrow_forward_ios_24"
-            android:tint="@color/purple"/>
+            app:tint="#94A3B8"/>
 
         <Button
             android:id="@+id/removeBtn"

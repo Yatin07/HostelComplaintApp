@@ -26,7 +26,7 @@
         <activity
             android:name=".Guide_pg_student"
             android:exported="false" />
-        <activity android:name=".worker.Worker_notification_clk" />
+        <activity android:name=".Worker_notification_clk" />
         <activity
             android:name=".worker_guide_clk"
             android:exported="false" />

@@ -17,7 +17,7 @@ import com.example.hostelcomplaintapp.Notification_student;
 import com.example.hostelcomplaintapp.R;
 import com.example.hostelcomplaintapp.imgProfile_click;
 import com.example.hostelcomplaintapp.staff_manage;
-import com.example.hostelcomplaintapp.worker.Worker_notification_clk;
+import com.example.hostelcomplaintapp.Worker_notification_clk;
 import com.example.hostelcomplaintapp.worker_guide_clk;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.ListenerRegistration;
@@ -56,48 +56,8 @@ public class WorkerDashboardActivity extends AppCompatActivity {
 
 
 
-        btnNotification = findViewById(R.id.btnNotification);
-        btnNotification.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent1 = new Intent(WorkerDashboardActivity.this, Worker_notification_clk.class);
-                startActivity(intent1);
-            }
-        });
-
-
-        gotohomepg = findViewById(R.id.gotohomepg);
-        gotohomepg.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent1 = new Intent(WorkerDashboardActivity.this, WorkerDashboardActivity.class);
-                startActivity(intent1);
-            }
-        });
-
-
-        imgproff = findViewById(R.id.imgproff);
-
-        imgproff.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(WorkerDashboardActivity.this, WorkerProfileActivity.class);
-                startActivity(intent);
-
-            }
-        });
-
-
-
-
-        staff_manage = findViewById(R.id.staff_manage);
-        staff_manage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent1 = new Intent(WorkerDashboardActivity.this, worker_guide_clk.class);
-                startActivity(intent1);
-            }
-        });
+        // Setup Bottom Navigation via Helper
+        WorkerNavigationHelper.setupNavigation(this);
 
 
 
@@ -137,7 +97,7 @@ public class WorkerDashboardActivity extends AppCompatActivity {
         findViewById(R.id.cardCompleted).setOnClickListener(v -> openTaskList("COMPLETED"));
         findViewById(R.id.cardOverdue).setOnClickListener(v -> openTaskList("OVERDUE"));
 
-        WorkerNavigationHelper.setupNavigation(this);
+        // Navigation setup handled above via setupNavigation(this)
 
         setupRealTimeUpdates();
     }
@@ -204,24 +164,5 @@ public class WorkerDashboardActivity extends AppCompatActivity {
             dashboardListener.remove();
             dashboardListener = null;
         }
-
-
-        gotohomepg = findViewById(R.id.gotohomepg);
-        gotohomepg.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent1 = new Intent(WorkerDashboardActivity.this, HomePage_Warden.class);
-                startActivity(intent1);
-            }
-        });
-
-
-
-
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
     }
 }

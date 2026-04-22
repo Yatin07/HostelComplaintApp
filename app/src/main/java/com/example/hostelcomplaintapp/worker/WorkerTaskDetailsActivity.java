@@ -42,7 +42,7 @@ public class WorkerTaskDetailsActivity extends AppCompatActivity {
         btnCompleteTask = findViewById(R.id.btnCompleteTask);
         ivProofImage = findViewById(R.id.ivProofImage);
 
-        Button btnBack = findViewById(R.id.btnBack);
+        ImageView btnBack = findViewById(R.id.btnBack);
         if (btnBack != null) {
             btnBack.setOnClickListener(v -> finish());
         }

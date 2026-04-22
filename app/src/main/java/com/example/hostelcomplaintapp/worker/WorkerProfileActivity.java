@@ -17,7 +17,7 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.hostelcomplaintapp.MainActivity;
 import com.example.hostelcomplaintapp.R;
-import com.example.hostelcomplaintapp.worker.Worker_notification_clk;
+import com.example.hostelcomplaintapp.Worker_notification_clk;
 import com.example.hostelcomplaintapp.worker_guide_clk;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -31,7 +31,7 @@ public class WorkerProfileActivity extends AppCompatActivity {
     private Button btnLogout, btnEditProfile;
 
     // ✅ FIX: btnBack only ImageView (removed Button duplicate)
-    ImageView prof, rules, notify, home, btnBack;
+    ImageView btnBack;
 
     private boolean isEditing = false;
     private FirebaseFirestore db;
@@ -41,31 +41,10 @@ public class WorkerProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_worker_profile);
 
-        prof = findViewById(R.id.prof);
-        rules = findViewById(R.id.rules);
-        notify = findViewById(R.id.notify);
-        home = findViewById(R.id.home);
         btnBack = findViewById(R.id.btnBack);
 
-        prof.setOnClickListener(v -> {
-            Intent intent = new Intent(WorkerProfileActivity.this, WorkerProfileActivity.class);
-            startActivity(intent);
-        });
-
-        rules.setOnClickListener(v -> {
-            Intent intent = new Intent(WorkerProfileActivity.this, worker_guide_clk.class);
-            startActivity(intent);
-        });
-
-        notify.setOnClickListener(v -> {
-            Intent intent = new Intent(WorkerProfileActivity.this, Worker_notification_clk.class);
-            startActivity(intent);
-        });
-
-        home.setOnClickListener(v -> {
-            Intent intent = new Intent(WorkerProfileActivity.this, WorkerDashboardActivity.class);
-            startActivity(intent);
-        });
+        // Setup Bottom Navigation via Helper
+        WorkerNavigationHelper.setupNavigation(this);
 
         // ✅ FIX: added missing semicolon
         btnBack.setOnClickListener(v -> finish());
@@ -134,8 +113,11 @@ public class WorkerProfileActivity extends AppCompatActivity {
             updates.put("Role", updatedRole);
             updates.put("Work_id", updatedId);
 
+            SharedPreferences prefs = getSharedPreferences("user", MODE_PRIVATE);
+            String docId = prefs.getString("docId", "");
+
             db.collection("workers")
-                    .document("W-12345")
+                    .document(docId)
                     .update(updates)
                     .addOnSuccessListener(aVoid -> {
                         Toast.makeText(this, "Profile Updated", Toast.LENGTH_SHORT).show();
@@ -165,38 +147,47 @@ public class WorkerProfileActivity extends AppCompatActivity {
     }
 
     private void loadWorkerData() {
-        db.collection("workers").document("W-12345")
+        // Use the Firestore document ID saved at login time (not a hardcoded ID)
+        SharedPreferences prefs = getSharedPreferences("user", MODE_PRIVATE);
+        String docId = prefs.getString("docId", "");
+
+        if (docId.isEmpty()) {
+            Toast.makeText(this, "Session expired. Please login again.", Toast.LENGTH_SHORT).show();
+            performLogout();
+            return;
+        }
+
+        db.collection("workers").document(docId)
                 .get()
                 .addOnSuccessListener(document -> {
                     if (document != null && document.exists()) {
-                        String name = document.getString("Name");
-                        String email = document.getString("Email");
-                        String role = document.getString("Role");
+                        String name   = document.getString("Name");
+                        String email  = document.getString("Email");
+                        String role   = document.getString("Role");
                         String workId = document.getString("Work_id");
 
-                        tvWorkerName.setText(name != null ? name : "");
+                        tvWorkerName.setText(name   != null ? name   : "");
                         tvWorkerEmail.setText(email != null ? email : "");
-                        tvWorkerRole.setText(role != null ? role : "");
-                        tvWorkerId.setText(workId != null ? workId : "");
+                        tvWorkerRole.setText(role   != null ? role   : "");
+                        tvWorkerId.setText(workId   != null ? workId : "");
 
-                        etWorkerName.setText(name != null ? name : "");
+                        etWorkerName.setText(name   != null ? name   : "");
                         etWorkerEmail.setText(email != null ? email : "");
-                        etWorkerRole.setText(role != null ? role : "");
-                        etWorkerId.setText(workId != null ? workId : "");
+                        etWorkerRole.setText(role   != null ? role   : "");
+                        etWorkerId.setText(workId   != null ? workId : "");
                     } else {
                         Toast.makeText(this, "Worker document not found.", Toast.LENGTH_SHORT).show();
                     }
                 })
                 .addOnFailureListener(e -> {
-                    Toast.makeText(this, "Failed to load data.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "Failed to load data: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                 });
     }
 
     private void performLogout() {
-        SharedPreferences sharedPreferences = getSharedPreferences("WorkerPrefs", Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.clear();
-        editor.apply();
+        // Clear the same SharedPreferences key used during login
+        SharedPreferences sharedPreferences = getSharedPreferences("user", Context.MODE_PRIVATE);
+        sharedPreferences.edit().clear().apply();
 
         Intent intent = new Intent(WorkerProfileActivity.this, MainActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);

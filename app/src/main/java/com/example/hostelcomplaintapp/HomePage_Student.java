@@ -30,7 +30,7 @@ import java.util.List;
 
 public class HomePage_Student extends AppCompatActivity {
     TextView tv1StudentName, tv2StudentId;
-    ImageView imgProfile1, imgprof, howtouseapp, imgnotification;
+    ImageView imgProfile1, imgprof, howtouseapp, btnNotification, gotohomepg;
     LinearLayout cardraisecomplaint, cardpending, cardtotalcomplaint,cardemergencyissue;
 
     // for auto sliding of announcement card on home page //
@@ -97,7 +97,7 @@ public class HomePage_Student extends AppCompatActivity {
         cardpending.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(HomePage_Student.this, pendingcomplaint.class);
+                Intent intent = new Intent(HomePage_Student.this, pendingcomplaint_student.class);
                 startActivity(intent);
             }
         });
@@ -218,8 +218,15 @@ public class HomePage_Student extends AppCompatActivity {
             }
         });
 
-        imgnotification = findViewById(R.id.imgnotification);
-        imgnotification.setOnClickListener(new View.OnClickListener() {
+        gotohomepg = findViewById(R.id.gotohomepg);
+        gotohomepg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+            }
+        });
+
+        btnNotification = findViewById(R.id.btnNotification);
+        btnNotification.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(HomePage_Student.this, Notification_student.class);

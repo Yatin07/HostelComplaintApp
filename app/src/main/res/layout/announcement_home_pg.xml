@@ -11,30 +11,45 @@
         android:layout_marginEnd="40dp"
         android:layout_marginTop="12dp"
         android:layout_marginBottom="12dp"
-        app:cardCornerRadius="16dp"
-        android:backgroundTint="#E3EAF2">
+        app:cardCornerRadius="12dp"
+        app:cardElevation="2dp"
+        app:cardBackgroundColor="#FFFFFF">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="horizontal"
-            android:padding="12dp"
             android:gravity="center_vertical">
 
-            <TextView
-                android:id="@+id/txtAnnouncement"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Announcement text"
-                android:textSize="14sp"
-                android:textColor="#000"/>
+            <View
+                android:layout_width="4dp"
+                android:layout_height="match_parent"
+                android:background="#EF4444"/>
 
-            <ImageView
-                android:id="@+id/announc"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:src="@drawable/baseline_arrow_back_24"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="12dp"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:id="@+id/txtAnnouncement"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Announcement text"
+                    android:textSize="14sp"
+                    android:fontFamily="sans-serif-medium"
+                    android:textColor="#0F172A"/>
+
+                <ImageView
+                    android:id="@+id/announc"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    app:tint="#0F172A"
+                    android:src="@drawable/baseline_arrow_back_24"/>
+            </LinearLayout>
         </LinearLayout>
 
     </androidx.cardview.widget.CardView>

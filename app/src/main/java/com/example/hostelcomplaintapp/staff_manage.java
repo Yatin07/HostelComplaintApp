@@ -8,6 +8,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Button;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AlertDialog;
@@ -17,11 +18,24 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.DocumentSnapshot;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Staff Management Screen (used by Warden).
+ *
+ * DATABASE: All staff/worker records are stored in a SINGLE collection: "workers"
+ * The old "Staff" collection in Firestore is no longer used and can be deleted.
+ *
+ * Unified "workers" document schema:
+ *   Name      (String)  – display name
+ *   Email     (String)  – login email
+ *   password  (String)  – login password
+ *   Work_id   (String)  – their staff/worker ID  (e.g. "W-001")
+ *   Role      (String)  – department / job role  (e.g. "Electrician", "Plumber")
+ *   phone     (String)  – contact number
+ */
 public class staff_manage extends AppCompatActivity {
 
     ImageView btnBack, gotohomepg, btnNotification, imgprof, staff_manage;
@@ -39,11 +53,12 @@ public class staff_manage extends AppCompatActivity {
 
         btnBack.setOnClickListener(v -> finish());
 
-        // 🔥 Initialize Firestore ONCE
         db = FirebaseFirestore.getInstance();
 
-        // 🔥 LOAD DATA FROM FIRESTORE
-        db.collection("Staff").addSnapshotListener((snapshot, error) -> {
+        // ──────────────────────────────────────────────────────────────
+        // LOAD all staff/workers from the unified "workers" collection
+        // ──────────────────────────────────────────────────────────────
+        db.collection("workers").addSnapshotListener((snapshot, error) -> {
             if (error != null || snapshot == null) {
                 return;
             }
@@ -52,135 +67,124 @@ public class staff_manage extends AppCompatActivity {
 
             for (DocumentSnapshot data : snapshot.getDocuments()) {
 
-                String key = data.getId();
-                String name = data.getString("name");
-                String id = data.getString("id");
-                String dept = data.getString("dept");
-                String email = data.getString("email");
-                String phone = data.getString("phone");
+                String key    = data.getId();
+                String name   = data.getString("Name");    // capital N
+                String workId = data.getString("Work_id");
+                String role   = data.getString("Role");    // department / job role
+                String email  = data.getString("Email");   // capital E
+                String phone  = data.getString("phone");
 
                 View cardView = getLayoutInflater().inflate(R.layout.newstaff_card, staffContainer, false);
 
-                TextView nameTv = cardView.findViewById(R.id.tvName);
-                TextView idTv = cardView.findViewById(R.id.tvId);
-                TextView deptTv = cardView.findViewById(R.id.tvDept);
+                TextView nameTv  = cardView.findViewById(R.id.tvName);
+                TextView idTv    = cardView.findViewById(R.id.tvId);
+                TextView deptTv  = cardView.findViewById(R.id.tvDept);
                 ImageView arrowBtn = cardView.findViewById(R.id.arrowBtn);
                 Button removeBtn = cardView.findViewById(R.id.removeBtn);
 
-                nameTv.setText(name != null ? name : "");
-                idTv.setText("Staff ID: " + (id != null ? id : ""));
-                deptTv.setText("Department: " + (dept != null ? dept : ""));
+                nameTv.setText(name   != null ? name   : "");
+                idTv.setText("Work ID: " + (workId != null ? workId : ""));
+                deptTv.setText("Role: " + (role   != null ? role   : ""));
 
-                // 🔹 DETAILS POPUP
-                arrowBtn.setOnClickListener(v -> {
-                    new AlertDialog.Builder(staff_manage.this)
-                            .setTitle("Staff Details")
-                            .setMessage(
-                                    "Name: " + name + "\n\n" +
-                                            "Staff ID: " + id + "\n\n" +
-                                            "Department: " + dept + "\n\n" +
-                                            "Email: " + email + "\n\n" +
-                                            "Phone: " + phone
-                            )
-                            .show();
-                });
+                // Details popup
+                arrowBtn.setOnClickListener(v ->
+                        new AlertDialog.Builder(staff_manage.this)
+                                .setTitle("Staff Details")
+                                .setMessage(
+                                        "Name: "    + name    + "\n\n" +
+                                        "Work ID: " + workId  + "\n\n" +
+                                        "Role: "    + role    + "\n\n" +
+                                        "Email: "   + email   + "\n\n" +
+                                        "Phone: "   + phone
+                                )
+                                .show()
+                );
 
-                // 🔥 REMOVE BUTTON
-                removeBtn.setOnClickListener(v -> {
-                    db.collection("Staff").document(key).delete();
-                });
+                // Delete from "workers"
+                removeBtn.setOnClickListener(v ->
+                        new AlertDialog.Builder(staff_manage.this)
+                                .setTitle("Remove Staff")
+                                .setMessage("Are you sure you want to remove " + name + "?")
+                                .setPositiveButton("Remove", (dialog, which) ->
+                                        db.collection("workers").document(key).delete()
+                                                .addOnSuccessListener(a ->
+                                                        Toast.makeText(this, name + " removed", Toast.LENGTH_SHORT).show())
+                                                .addOnFailureListener(e ->
+                                                        Toast.makeText(this, "Failed: " + e.getMessage(), Toast.LENGTH_SHORT).show())
+                                )
+                                .setNegativeButton("Cancel", null)
+                                .show()
+                );
 
                 staffContainer.addView(cardView);
             }
         });
 
-        // 🔹 ADD STAFF BUTTON
+        // ──────────────────────────────────────────────────────────────
+        // ADD new staff/worker → writes to unified "workers" collection
+        // ──────────────────────────────────────────────────────────────
         ImageView addBtn = findViewById(R.id.addStaffBtn);
 
         addBtn.setOnClickListener(v -> {
 
             View view = getLayoutInflater().inflate(R.layout.staff_info_popup, null);
 
-            EditText name = view.findViewById(R.id.etName);
-            EditText id = view.findViewById(R.id.etId);
-            EditText dept = view.findViewById(R.id.etDept);
-            EditText email = view.findViewById(R.id.etEmail);
-            EditText phone = view.findViewById(R.id.etPhone);
+            EditText etName     = view.findViewById(R.id.etName);
+            EditText etId       = view.findViewById(R.id.etId);
+            EditText etDept     = view.findViewById(R.id.etDept);
+            EditText etEmail    = view.findViewById(R.id.etEmail);
+            EditText etPhone    = view.findViewById(R.id.etPhone);
+            EditText etPassword = view.findViewById(R.id.etPassword);
 
             new AlertDialog.Builder(this)
-                    .setTitle("Add Staff")
+                    .setTitle("Add Staff / Worker")
                     .setView(view)
                     .setPositiveButton("Save", (dialog, which) -> {
 
-                        String nameStr = name.getText().toString();
-                        String idStr = id.getText().toString();
-                        String deptStr = dept.getText().toString();
-                        String emailStr = email.getText().toString();
-                        String phoneStr = phone.getText().toString();
+                        String nameStr     = etName.getText().toString().trim();
+                        String idStr       = etId.getText().toString().trim();
+                        String roleStr     = etDept.getText().toString().trim();   // "dept" field = Role
+                        String emailStr    = etEmail.getText().toString().trim();
+                        String phoneStr    = etPhone.getText().toString().trim();
+                        String passwordStr = etPassword.getText().toString().trim();
 
-                        Map<String, Object> staffData = new HashMap<>();
-                        staffData.put("name", nameStr);
-                        staffData.put("id", idStr);
-                        staffData.put("dept", deptStr);
-                        staffData.put("email", emailStr);
-                        staffData.put("phone", phoneStr);
+                        if (nameStr.isEmpty() || idStr.isEmpty() || emailStr.isEmpty() || passwordStr.isEmpty()) {
+                            Toast.makeText(this, "Name, ID, Email and Password are required", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
 
-                        db.collection("Staff")
-                                .add(staffData)
-                                .addOnSuccessListener(documentReference -> {
-                                    // success
-                                })
-                                .addOnFailureListener(e -> {
-                                    e.printStackTrace();
-                                });
+                        // Match the exact field names used by WorkerProfileActivity & LoginForm
+                        Map<String, Object> workerData = new HashMap<>();
+                        workerData.put("Name",     nameStr);     // capital N — matches WorkerProfileActivity
+                        workerData.put("Work_id",  idStr);       // matches LoginForm & WorkerProfileActivity
+                        workerData.put("Role",     roleStr);     // matches WorkerProfileActivity
+                        workerData.put("Email",    emailStr);    // capital E — matches LoginForm
+                        workerData.put("phone",    phoneStr);
+                        workerData.put("password", passwordStr); // matches LoginForm
+
+                        db.collection("workers")
+                                .add(workerData)
+                                .addOnSuccessListener(ref ->
+                                        Toast.makeText(this, "Staff added successfully", Toast.LENGTH_SHORT).show())
+                                .addOnFailureListener(e ->
+                                        Toast.makeText(this, "Failed: " + e.getMessage(), Toast.LENGTH_SHORT).show());
                     })
                     .setNegativeButton("Cancel", null)
                     .show();
         });
 
 
-
         gotohomepg = findViewById(R.id.gotohomepg);
-        gotohomepg.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent1 = new Intent(staff_manage.this, HomePage_Warden.class);
-                startActivity(intent1);
-            }
-        });
-
+        gotohomepg.setOnClickListener(v -> startActivity(new Intent(staff_manage.this, HomePage_Warden.class)));
 
         imgprof = findViewById(R.id.imgprof);
-
-        imgprof.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(staff_manage.this, imgProfile_click.class);
-                startActivity(intent);
-
-            }
-        });
+        imgprof.setOnClickListener(v -> startActivity(new Intent(staff_manage.this, imgProfile_click.class)));
 
         btnNotification = findViewById(R.id.btnNotification);
-        btnNotification.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent1 = new Intent(staff_manage.this, Notification.class);
-                startActivity(intent1);
-            }
-        });
-
+        btnNotification.setOnClickListener(v -> startActivity(new Intent(staff_manage.this, Notification.class)));
 
         staff_manage = findViewById(R.id.staff_manage);
-        staff_manage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent1 = new Intent(staff_manage.this, staff_manage.class);
-                startActivity(intent1);
-            }
-        });
-
-
+        staff_manage.setOnClickListener(v -> startActivity(new Intent(staff_manage.this, staff_manage.class)));
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());

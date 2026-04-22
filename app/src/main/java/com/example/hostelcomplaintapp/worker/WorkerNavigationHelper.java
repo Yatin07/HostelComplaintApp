@@ -8,13 +8,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.hostelcomplaintapp.R;
+import com.example.hostelcomplaintapp.Worker_notification_clk;
+import com.example.hostelcomplaintapp.worker_guide_clk;
 
 public class WorkerNavigationHelper {
 
     public static void setupNavigation(Activity activity) {
         // Setup Bottom Navigation
-        if (activity.findViewById(R.id.nav_home) != null) {
-            activity.findViewById(R.id.nav_home).setOnClickListener(v -> {
+        if (activity.findViewById(R.id.gotohomepg) != null) {
+            activity.findViewById(R.id.gotohomepg).setOnClickListener(v -> {
                 if (!(activity instanceof WorkerDashboardActivity)) {
                     Intent intent = new Intent(activity, WorkerDashboardActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
@@ -22,21 +24,30 @@ public class WorkerNavigationHelper {
                     activity.finish();
                 }
             });
+        }
 
-            activity.findViewById(R.id.nav_notification).setOnClickListener(v -> {
-                Toast.makeText(activity, "Notifications feature coming soon", Toast.LENGTH_SHORT).show();
-            });
-
-            activity.findViewById(R.id.nav_tasks).setOnClickListener(v -> {
-                if (!(activity instanceof WorkerTaskListActivity)) {
-                    Intent intent = new Intent(activity, WorkerTaskListActivity.class);
-                    intent.putExtra("FILTER_TYPE", "ALL");
+        if (activity.findViewById(R.id.btnNotification) != null) {
+            activity.findViewById(R.id.btnNotification).setOnClickListener(v -> {
+                if (!(activity instanceof Worker_notification_clk)) {
+                    Intent intent = new Intent(activity, Worker_notification_clk.class);
                     activity.startActivity(intent);
                     if (!(activity instanceof WorkerDashboardActivity)) activity.finish();
                 }
             });
+        }
 
-            activity.findViewById(R.id.nav_profile).setOnClickListener(v -> {
+        if (activity.findViewById(R.id.staff_manage) != null) {
+            activity.findViewById(R.id.staff_manage).setOnClickListener(v -> {
+                if (!(activity instanceof worker_guide_clk)) {
+                    Intent intent = new Intent(activity, worker_guide_clk.class);
+                    activity.startActivity(intent);
+                    if (!(activity instanceof WorkerDashboardActivity)) activity.finish();
+                }
+            });
+        }
+
+        if (activity.findViewById(R.id.imgproff) != null) {
+            activity.findViewById(R.id.imgproff).setOnClickListener(v -> {
                 if (!(activity instanceof WorkerProfileActivity)) {
                     Intent intent = new Intent(activity, WorkerProfileActivity.class);
                     activity.startActivity(intent);
@@ -50,9 +61,9 @@ public class WorkerNavigationHelper {
         TextView tvWorkerTopId = activity.findViewById(R.id.tvWorkerTopId);
 
         if (tvWorkerTopName != null && tvWorkerTopId != null) {
-            SharedPreferences prefs = activity.getSharedPreferences("WorkerPrefs", Context.MODE_PRIVATE);
-            tvWorkerTopName.setText("Worker: " + prefs.getString("name", "John Doe"));
-            tvWorkerTopId.setText("ID: " + prefs.getString("worker_id", "W-12345"));
+            SharedPreferences prefs = activity.getSharedPreferences("user", Context.MODE_PRIVATE);
+            tvWorkerTopName.setText("Worker: " + prefs.getString("name", "Worker"));
+            tvWorkerTopId.setText("ID: " + prefs.getString("id", "ID"));
         }
     }
 }

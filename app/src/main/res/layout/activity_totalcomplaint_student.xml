@@ -25,7 +25,7 @@
             android:padding="12dp">
 
             <ImageView
-                android:id="@+id/btnBackLayout"
+                android:id="@+id/btnBack"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:src="@drawable/baseline_arrow_back_24"
@@ -57,7 +57,8 @@
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
+        app:layout_constraintTop_toBottomOf="@id/topBar"
+        app:layout_constraintBottom_toTopOf="@id/bottomNavBorder"
         android:clipToPadding="false"/>
     <!-- ⏳ LOADING -->
     <ProgressBar
@@ -85,16 +86,22 @@
         app:layout_constraintEnd_toEndOf="parent" />
 
     <!-- 🔻 NEW BOTTOM NAVBAR -->
+    <View
+        android:id="@+id/bottomNavBorder"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#E2E8F0"
+        app:layout_constraintBottom_toTopOf="@id/bottomNav"/>
+
     <LinearLayout
         android:id="@+id/bottomNav"
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:orientation="horizontal"
-        android:background="@drawable/bottom_nav_bg"
+        android:background="#FFFFFF"
         android:weightSum="4"
         app:layout_constraintBottom_toBottomOf="parent">
 
-        <!-- Home -->
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
@@ -105,17 +112,19 @@
             <ImageView
                 android:layout_width="24dp"
                 android:layout_height="24dp"
+                android:id="@+id/gotohomepg"
+                app:tint="#2F6FED"
                 android:src="@drawable/baseline_home_24"/>
 
             <TextView
-                android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:text="Home"
+                android:textColor="#2F6FED"
                 android:textStyle="bold"
                 android:textSize="14sp"/>
         </LinearLayout>
 
-        <!-- Notification -->
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
@@ -124,19 +133,21 @@
             android:orientation="vertical">
 
             <ImageView
+                android:id="@+id/btnNotification"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
+                app:tint="#94A3B8"
                 android:src="@drawable/baseline_notifications_24"/>
 
             <TextView
-                android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:text="Notification"
+                android:textColor="#94A3B8"
                 android:textStyle="bold"
                 android:textSize="14sp"/>
         </LinearLayout>
 
-        <!-- Staff -->
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
@@ -145,20 +156,21 @@
             android:orientation="vertical">
 
             <ImageView
-                android:id="@+id/staff_manage"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
+                android:id="@+id/howtouseapp"
+                app:tint="#94A3B8"
                 android:src="@drawable/baseline_person_add_alt_24"/>
 
             <TextView
-                android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
-                android:text="Staff"
+                android:layout_height="wrap_content"
+                android:text="Guide"
+                android:textColor="#94A3B8"
                 android:textStyle="bold"
                 android:textSize="14sp"/>
         </LinearLayout>
 
-        <!-- Profile -->
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
@@ -167,16 +179,18 @@
             android:orientation="vertical">
 
             <ImageView
-                android:id="@+id/imgprof"
                 android:layout_width="24dp"
+                android:id="@+id/imgprof"
                 android:layout_height="24dp"
+                app:tint="#94A3B8"
                 android:src="@drawable/baseline_account_circle_24"/>
 
             <TextView
-                android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
-                android:textStyle="bold"
+                android:layout_height="wrap_content"
                 android:text="Profile"
+                android:textColor="#94A3B8"
+                android:textStyle="bold"
                 android:textSize="14sp"/>
         </LinearLayout>
 

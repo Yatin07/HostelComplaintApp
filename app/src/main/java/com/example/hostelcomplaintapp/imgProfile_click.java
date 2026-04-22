@@ -117,7 +117,7 @@ public class imgProfile_click extends AppCompatActivity {
         Button btnLogout = findViewById(R.id.btnLogout);
         btnLogout.setOnClickListener(v -> {
 
-            SharedPreferences prefs = getSharedPreferences("MyPrefs", MODE_PRIVATE);
+            SharedPreferences prefs = getSharedPreferences("user", MODE_PRIVATE);
             prefs.edit().clear().apply();
 
             Intent intent = new Intent(imgProfile_click.this, MainActivity.class);

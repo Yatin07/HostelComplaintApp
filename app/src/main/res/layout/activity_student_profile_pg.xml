@@ -69,7 +69,7 @@
         android:layout_height="0dp"
         android:layout_weight="1"
         android:orientation="vertical"
-        android:background="#F8FAFC">
+        android:background="#F6F8FB">
 
         <ScrollView
             android:layout_width="match_parent"
@@ -189,6 +189,7 @@
                             android:layout_width="40dp"
                             android:layout_height="40dp"
                             android:src="@drawable/ic_edit_profile"
+                            app:tint="#2F6FED"
                             android:background="@drawable/menu_icon_bg"
                             android:padding="8dp"/>
 
@@ -232,6 +233,7 @@
                             android:layout_width="40dp"
                             android:layout_height="40dp"
                             android:src="@drawable/ic_security_shield"
+                            app:tint="#2F6FED"
                             android:background="@drawable/menu_icon_bg"
                             android:padding="8dp"/>
 
@@ -271,6 +273,7 @@
                             android:layout_width="40dp"
                             android:layout_height="40dp"
                             android:src="@drawable/ic_theme_mode"
+                            app:tint="#2F6FED"
                             android:background="@drawable/menu_icon_bg"
                             android:padding="8dp"/>
 
@@ -289,7 +292,7 @@
                             android:id="@+id/switchTheme"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:thumbTint="#1E3A8A"
+                            android:thumbTint="#2F6FED"
                             android:trackTint="#CBD5E1"/>
                     </LinearLayout>
 
@@ -317,6 +320,7 @@
                             android:layout_width="40dp"
                             android:layout_height="40dp"
                             android:src="@drawable/ic_help_support"
+                            app:tint="#2F6FED"
                             android:background="@drawable/menu_icon_bg"
                             android:padding="8dp"/>
 
@@ -358,11 +362,16 @@
 
 
     <!-- 🔻 BOTTOM NAVBAR -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#E2E8F0"/>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:orientation="horizontal"
-        android:background="@drawable/bottom_nav_bg"
+        android:background="#FFFFFF"
         android:weightSum="4">
 
         <LinearLayout
@@ -376,9 +385,13 @@
                 android:id="@+id/gotohomepg"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
+                app:tint="#94A3B8"
                 android:src="@drawable/baseline_home_24"/>
 
             <TextView android:text="Home"
+                android:textColor="#94A3B8"
+                android:textStyle="bold"
+                android:textSize="14sp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
         </LinearLayout>
@@ -394,9 +407,13 @@
                 android:id="@+id/btnNotification"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
+                app:tint="#94A3B8"
                 android:src="@drawable/baseline_notifications_24"/>
 
             <TextView android:text="Notification"
+                android:textColor="#94A3B8"
+                android:textStyle="bold"
+                android:textSize="14sp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
         </LinearLayout>
@@ -409,12 +426,16 @@
             android:layout_height="match_parent">
 
             <ImageView
-                android:id="@+id/staff_manage"
+                android:id="@+id/howtouseapp"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
+                app:tint="#94A3B8"
                 android:src="@drawable/baseline_person_add_alt_24"/>
 
-            <TextView android:text="Staff"
+            <TextView android:text="Guide"
+                android:textColor="#94A3B8"
+                android:textStyle="bold"
+                android:textSize="14sp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
         </LinearLayout>
@@ -430,9 +451,13 @@
                 android:id="@+id/imgprof"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
+                app:tint="#2F6FED"
                 android:src="@drawable/baseline_account_circle_24"/>
 
             <TextView android:text="Profile"
+                android:textColor="#2F6FED"
+                android:textStyle="bold"
+                android:textSize="14sp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
         </LinearLayout>
