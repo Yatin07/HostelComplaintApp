@@ -46,7 +46,7 @@ public class student_profile_pg extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_student_profile_pg);
 
-        TextView tvName = findViewById(R.id.tvName1);
+        tvName = findViewById(R.id.tvName1);
         TextView tvEmail = findViewById(R.id.tvEmail);
         TextView tvRoomno = findViewById(R.id.tvRoomno);
 

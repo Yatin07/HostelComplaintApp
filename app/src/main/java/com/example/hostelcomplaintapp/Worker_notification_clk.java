@@ -2,6 +2,7 @@ package com.example.hostelcomplaintapp;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.ImageView;
 
 import androidx.activity.EdgeToEdge;
@@ -53,12 +54,21 @@ public class Worker_notification_clk extends AppCompatActivity {
         // 🔥 Firestore
         db = FirebaseFirestore.getInstance();
 
-        db.collection("announcements") // you can change collection if needed
+        Log.d("WorkerNotification", "Fetching from staff_announcements and announcements collections");
+
+        // Fetch from staff_announcements
+        db.collection("staff_announcements")
                 .orderBy("timestamp", Query.Direction.DESCENDING)
                 .addSnapshotListener((value, error) -> {
 
+                    if (error != null) {
+                        Log.e("WorkerNotification", "Firestore error (staff_announcements)", error);
+                        return;
+                    }
+
                     if (value != null) {
                         list.clear();
+                        Log.d("WorkerNotification", "Staff documents fetched: " + value.size());
 
                         for (DocumentSnapshot doc : value.getDocuments()) {
                             Notificationpgdatastore model = doc.toObject(Notificationpgdatastore.class);
@@ -69,7 +79,27 @@ public class Worker_notification_clk extends AppCompatActivity {
                             }
                         }
 
-                        adapter.notifyDataSetChanged();
+                        // Also fetch from announcements (for "All" target)
+                        db.collection("announcements")
+                                .orderBy("timestamp", Query.Direction.DESCENDING)
+                                .get()
+                                .addOnSuccessListener(allValue -> {
+                                    Log.d("WorkerNotification", "All announcements fetched: " + allValue.size());
+                                    for (DocumentSnapshot doc : allValue.getDocuments()) {
+                                        Notificationpgdatastore model = doc.toObject(Notificationpgdatastore.class);
+                                        if (model != null) {
+                                            model.setId(doc.getId());
+                                            list.add(model);
+                                        }
+                                    }
+                                    // Sort by timestamp
+                                    list.sort((a, b) -> Long.compare(b.getTimestamp(), a.getTimestamp()));
+                                    adapter.notifyDataSetChanged();
+                                })
+                                .addOnFailureListener(e -> {
+                                    Log.e("WorkerNotification", "Error fetching announcements", e);
+                                    adapter.notifyDataSetChanged();
+                                });
                     }
                 });
 

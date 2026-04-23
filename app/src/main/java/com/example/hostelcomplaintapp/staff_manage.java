@@ -45,7 +45,6 @@ public class staff_manage extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_staff_manage);
 
         btnBack = findViewById(R.id.btnBack);
@@ -174,17 +173,21 @@ public class staff_manage extends AppCompatActivity {
         });
 
 
-        gotohomepg = findViewById(R.id.gotohomepg);
-        gotohomepg.setOnClickListener(v -> startActivity(new Intent(staff_manage.this, HomePage_Warden.class)));
+        // Bottom Navigation - use LinearLayout parents for better touch response
+        LinearLayout llHome = findViewById(R.id.llHome);
+        LinearLayout llNotification = findViewById(R.id.llNotification);
+        LinearLayout llStaff = findViewById(R.id.llStaff);
+        LinearLayout llProfile = findViewById(R.id.llProfile);
 
-        imgprof = findViewById(R.id.imgprof);
-        imgprof.setOnClickListener(v -> startActivity(new Intent(staff_manage.this, imgProfile_click.class)));
+        llHome.setOnClickListener(v -> startActivity(new Intent(staff_manage.this, HomePage_Warden.class)));
 
-        btnNotification = findViewById(R.id.btnNotification);
-        btnNotification.setOnClickListener(v -> startActivity(new Intent(staff_manage.this, Notification.class)));
+        llNotification.setOnClickListener(v -> startActivity(new Intent(staff_manage.this, Notification.class)));
 
-        staff_manage = findViewById(R.id.staff_manage);
-        staff_manage.setOnClickListener(v -> startActivity(new Intent(staff_manage.this, staff_manage.class)));
+        llStaff.setOnClickListener(v -> {
+            // Already on Staff page
+        });
+
+        llProfile.setOnClickListener(v -> startActivity(new Intent(staff_manage.this, imgProfile_click.class)));
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());

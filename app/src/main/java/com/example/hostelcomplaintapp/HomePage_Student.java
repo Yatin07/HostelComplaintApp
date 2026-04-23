@@ -43,7 +43,6 @@ public class HomePage_Student extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_home_page_student);
 
 
@@ -154,11 +153,12 @@ public class HomePage_Student extends AppCompatActivity {
         Runnable runnable = new Runnable() {
             @Override
             public void run() {
-                if (currentPage == announcements.size()) {
-                    currentPage = 0;
+                if (announcements.size() > 0) {
+                    if (currentPage >= announcements.size()) {
+                        currentPage = 0;
+                    }
+                    viewPager.setCurrentItem(currentPage++, true);
                 }
-
-                viewPager.setCurrentItem(currentPage++, true);
                 handler.postDelayed(this, 10000);
             }
         };
@@ -178,19 +178,17 @@ public class HomePage_Student extends AppCompatActivity {
         viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
             public void onPageSelected(int position) {
-                super.onPageSelected(position);
-
                 // reset all dots
-                dot1.setBackgroundColor(Color.GRAY);
-                dot2.setBackgroundColor(Color.GRAY);
-                dot3.setBackgroundColor(Color.GRAY);
+                if (dot1 != null) dot1.setBackgroundColor(Color.GRAY);
+                if (dot2 != null) dot2.setBackgroundColor(Color.GRAY);
+                if (dot3 != null) dot3.setBackgroundColor(Color.GRAY);
 
                 // highlight active dot
-                if (position == 0) {
+                if (position == 0 && dot1 != null) {
                     dot1.setBackgroundColor(Color.RED);
-                } else if (position == 1) {
+                } else if (position == 1 && dot2 != null) {
                     dot2.setBackgroundColor(Color.RED);
-                } else if (position == 2) {
+                } else if (position == 2 && dot3 != null) {
                     dot3.setBackgroundColor(Color.RED);
                 }
             }

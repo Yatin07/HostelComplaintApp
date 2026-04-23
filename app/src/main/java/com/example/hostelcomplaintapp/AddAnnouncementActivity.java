@@ -8,6 +8,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.EditText;
 import android.widget.Toast;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -26,7 +28,10 @@ public class AddAnnouncementActivity extends AppCompatActivity {
     TextView tv1WardenName;
     EditText addannouncement;
     Button submitBtn;
+    RadioGroup radioGroupTarget;
+    RadioButton radioAll, radioStaff, radioStudent;
     FirebaseFirestore db;
+    private String targetRole = "all";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,10 +44,27 @@ public class AddAnnouncementActivity extends AppCompatActivity {
         btnBack.setOnClickListener(v -> finish());
 
         // 🔗 Connect views
-        addannouncement = findViewById(R.id.addannouncement); // ✅ correct ID
+        addannouncement = findViewById(R.id.addannouncement);
         submitBtn = findViewById(R.id.submitBtn);
+        radioGroupTarget = findViewById(R.id.radioGroupTarget);
+        radioAll = findViewById(R.id.radioAll);
+        radioStaff = findViewById(R.id.radioStaff);
+        radioStudent = findViewById(R.id.radioStudent);
 
         db = FirebaseFirestore.getInstance();
+
+        // Radio group listener
+        if (radioGroupTarget != null) {
+            radioGroupTarget.setOnCheckedChangeListener((group, checkedId) -> {
+                if (checkedId == R.id.radioAll) {
+                    targetRole = "all";
+                } else if (checkedId == R.id.radioStaff) {
+                    targetRole = "staff";
+                } else if (checkedId == R.id.radioStudent) {
+                    targetRole = "student";
+                }
+            });
+        }
 
         // ✅ Submit button
         submitBtn.setOnClickListener(v -> {
@@ -118,19 +140,40 @@ public class AddAnnouncementActivity extends AppCompatActivity {
     // ✅ FIXED FUNCTION
     private void saveAnnouncement(String text) {
 
-        Map<String, Object> data = new HashMap<>(); // ✅ CREATE FIRST
+        Map<String, Object> data = new HashMap<>();
+
+        // Get warden name from SharedPreferences
+        android.content.SharedPreferences prefs = getSharedPreferences("user", MODE_PRIVATE);
+        String wardenName = prefs.getString("name", "Warden");
+        String wardenId = prefs.getString("id", "warden123");
 
         data.put("text", text);
         data.put("timestamp", System.currentTimeMillis());
-        data.put("wardenId", "warden123"); // ✅ simple value
+        data.put("wardenId", wardenId);
+        data.put("wardenName", wardenName);
+        data.put("targetRole", targetRole);
 
-        db.collection("announcements")
+        // Save to appropriate collection based on target role
+        String collectionName;
+        if (targetRole.equals("staff")) {
+            collectionName = "staff_announcements";
+        } else if (targetRole.equals("student")) {
+            collectionName = "student_announcements";
+        } else {
+            collectionName = "announcements";
+        }
+
+        android.util.Log.d("AddAnnouncement", "Saving to collection: " + collectionName + " with targetRole: " + targetRole + " by warden: " + wardenName);
+
+        db.collection(collectionName)
                 .add(data)
                 .addOnSuccessListener(documentReference -> {
-                    Toast.makeText(AddAnnouncementActivity.this, "Saved!", Toast.LENGTH_SHORT).show();
+                    android.util.Log.d("AddAnnouncement", "Successfully saved to " + collectionName + " with ID: " + documentReference.getId());
+                    Toast.makeText(AddAnnouncementActivity.this, "Saved to " + collectionName + "!", Toast.LENGTH_SHORT).show();
                     addannouncement.setText("");
                 })
                 .addOnFailureListener(e -> {
+                    android.util.Log.e("AddAnnouncement", "Error saving to " + collectionName, e);
                     Toast.makeText(AddAnnouncementActivity.this, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                 });
     }

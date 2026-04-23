@@ -43,7 +43,6 @@ public class emergency_issue_student extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_emergency_issue_student);
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
@@ -79,7 +78,11 @@ public class emergency_issue_student extends AppCompatActivity {
 
         imgprof = findViewById(R.id.imgprof);
         imgprof.setOnClickListener(v -> {
-            startActivity(new Intent(emergency_issue_student.this, student_profile_pg.class));
+            if (isWarden) {
+                startActivity(new Intent(emergency_issue_student.this, imgProfile_click.class));
+            } else {
+                startActivity(new Intent(emergency_issue_student.this, student_profile_pg.class));
+            }
         });
 
         db = FirebaseFirestore.getInstance();

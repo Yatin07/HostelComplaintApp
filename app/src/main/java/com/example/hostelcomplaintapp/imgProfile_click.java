@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 
@@ -74,44 +75,29 @@ public class imgProfile_click extends AppCompatActivity {
 
         /// after clicking help and support popup show code ends here////
 
-        gotohomepg = findViewById(R.id.gotohomepg);
-        gotohomepg.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent1 = new Intent(imgProfile_click.this, HomePage_Warden.class);
-                startActivity(intent1);
-            }
+        // Bottom Navigation - use LinearLayout parents for better touch response
+        LinearLayout llHome = findViewById(R.id.llHome);
+        LinearLayout llNotification = findViewById(R.id.llNotification);
+        LinearLayout llStaff = findViewById(R.id.llStaff);
+        LinearLayout llProfile = findViewById(R.id.llProfile);
+
+        llHome.setOnClickListener(v -> {
+            Intent intent1 = new Intent(imgProfile_click.this, HomePage_Warden.class);
+            startActivity(intent1);
         });
 
-
-        imgprof = findViewById(R.id.imgprof);
-
-        imgprof.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(imgProfile_click.this, imgProfile_click.class);
-                startActivity(intent);
-
-            }
+        llNotification.setOnClickListener(v -> {
+            Intent intent1 = new Intent(imgProfile_click.this, Notification.class);
+            startActivity(intent1);
         });
 
-        btnNotification = findViewById(R.id.btnNotification);
-        btnNotification.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent1 = new Intent(imgProfile_click.this, Notification.class);
-                startActivity(intent1);
-            }
+        llStaff.setOnClickListener(v -> {
+            Intent intent1 = new Intent(imgProfile_click.this, staff_manage.class);
+            startActivity(intent1);
         });
 
-
-        staff_manage = findViewById(R.id.staff_manage);
-        staff_manage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent1 = new Intent(imgProfile_click.this, staff_manage.class);
-                startActivity(intent1);
-            }
+        llProfile.setOnClickListener(v -> {
+            // Already on Profile page
         });
 
         Button btnLogout = findViewById(R.id.btnLogout);
@@ -127,16 +113,15 @@ public class imgProfile_click extends AppCompatActivity {
         });
 
         /// battery level,wifi,time visible ///
-        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+        androidx.core.view.WindowInsetsControllerCompat controller = 
+            new androidx.core.view.WindowInsetsControllerCompat(getWindow(), getWindow().getDecorView());
+        controller.setAppearanceLightStatusBars(true);
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-
-
-
 
 
     }

@@ -15,6 +15,8 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import android.widget.Button;
+import android.widget.Toast;
+
 import com.google.firebase.firestore.FirebaseFirestore;
 
 public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapter.ViewHolder> {
@@ -65,8 +67,8 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
                 model.getText() != null ? model.getText() : "No message"
         );
 
-        holder.txtWarden.setText("Warden: " +
-                (model.getWardenId() != null ? model.getWardenId() : "Unknown")
+        holder.txtWarden.setText("Posted by: " +
+                (model.getWardenName() != null ? model.getWardenName() : "Warden")
         );
 
         // Safe time formatting
@@ -85,20 +87,27 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
             FirebaseFirestore db = FirebaseFirestore.getInstance();
 
             String docId = model.getId();
+            if (docId == null || docId.isEmpty()) {
+                Toast.makeText(context, "Invalid document ID", Toast.LENGTH_SHORT).show();
+                return;
+            }
 
-            db.collection("announcements")
-                    .document(docId)
-                    .delete()
+            // Try to delete from all three collections since we don't know which one it came from
+            db.collection("announcements").document(docId).delete();
+            db.collection("staff_announcements").document(docId).delete();
+            db.collection("student_announcements").document(docId).delete()
                     .addOnSuccessListener(unused -> {
-
                         // remove from screen
                         list.remove(position);
                         notifyItemRemoved(position);
-
+                        Toast.makeText(context, "Announcement removed", Toast.LENGTH_SHORT).show();
+                    })
+                    .addOnFailureListener(e -> {
+                        Toast.makeText(context, "Failed to remove: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                     });
         });
 
-        // 🔥 CLICK LISTENER FOR POPUP
+        // CLICK LISTENER FOR POPUP
         holder.arrowBtn.setOnClickListener(v -> {
 
             AlertDialog.Builder builder = new AlertDialog.Builder(context);

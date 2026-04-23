@@ -2,32 +2,37 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:id="@+id/main">
+    android:background="#F6F8FB"
+    android:orientation="vertical">
 
-    <!-- TOOLBAR -->
+    <!-- 🔵 TOP TOOLBAR -->
     <androidx.appcompat.widget.Toolbar
         android:layout_width="match_parent"
         android:layout_height="80dp"
-        android:background="@drawable/toolbar_bg">
+        android:background="@drawable/toolbar_bg"
+        android:elevation="4dp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="horizontal"
             android:gravity="center_vertical"
-            android:padding="12dp">
+            android:paddingStart="12dp"
+            android:paddingEnd="16dp">
 
+            <!-- BACK -->
             <ImageView
                 android:id="@+id/btnBack"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:src="@drawable/baseline_arrow_back_24"
                 app:tint="@color/white"
-                android:layout_marginEnd="10dp" />
+                android:layout_marginEnd="10dp"/>
 
+            <!-- TITLE -->
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -38,32 +43,40 @@
                 android:textStyle="bold"
                 android:gravity="center"/>
 
-            <!-- RIGHT SIDE PROFILE ICON -->
+            <!-- RIGHT SIDE LOGO -->
             <ImageView
                 android:layout_width="60dp"
                 android:layout_height="60dp"
                 android:id="@+id/imgnmlogo"
-                android:src="@drawable/nmm"/>
+                android:src="@drawable/nmm"
+                android:padding="4dp"/>
         </LinearLayout>
 
     </androidx.appcompat.widget.Toolbar>
 
-    <!-- Complaint RecyclerView -->
+    <!-- 📄 CONTENT (RecyclerView) -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:padding="8dp"/>
+        android:padding="8dp"
+        android:clipToPadding="false"/>
 
-    <!-- BOTTOM NAVBAR -->
+    <!-- 🔻 BOTTOM NAVIGATION -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#E2E8F0" />
+
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="60dp"
+        android:layout_height="65dp"
+        android:background="#FFFFFF"
         android:orientation="horizontal"
-        android:background="@drawable/bottom_nav_bg"
         android:weightSum="4">
 
+        <!-- HOME -->
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
@@ -73,18 +86,21 @@
 
             <ImageView
                 android:id="@+id/gotohomepg"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:src="@drawable/baseline_home_24"/>
+                android:layout_width="26dp"
+                android:layout_height="26dp"
+                android:src="@drawable/baseline_home_24"
+                app:tint="#94A3B8"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Home"
-                android:textSize="17dp"/>
-
+                android:textColor="#94A3B8"
+                android:textSize="12sp"
+                android:layout_marginTop="4dp"/>
         </LinearLayout>
 
+        <!-- NOTIFICATION -->
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
@@ -94,17 +110,21 @@
 
             <ImageView
                 android:id="@+id/btnNotification"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:src="@drawable/baseline_notifications_24"/>
+                android:layout_width="26dp"
+                android:layout_height="26dp"
+                android:src="@drawable/baseline_notifications_24"
+                app:tint="#94A3B8"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Notification"
-                android:textSize="17dp"/>
+                android:text="Alerts"
+                android:textColor="#94A3B8"
+                android:textSize="12sp"
+                android:layout_marginTop="4dp"/>
         </LinearLayout>
 
+        <!-- STAFF -->
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
@@ -114,17 +134,21 @@
 
             <ImageView
                 android:id="@+id/staff_manage"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:src="@drawable/baseline_person_add_alt_24"/>
+                android:layout_width="26dp"
+                android:layout_height="26dp"
+                android:src="@drawable/baseline_person_add_alt_24"
+                app:tint="#94A3B8"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Staff"
-                android:textSize="17dp"/>
+                android:textColor="#94A3B8"
+                android:textSize="12sp"
+                android:layout_marginTop="4dp"/>
         </LinearLayout>
 
+        <!-- PROFILE -->
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
@@ -134,15 +158,18 @@
 
             <ImageView
                 android:id="@+id/imgProfile"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:src="@drawable/baseline_account_circle_24"/>
+                android:layout_width="26dp"
+                android:layout_height="26dp"
+                android:src="@drawable/baseline_account_circle_24"
+                app:tint="#94A3B8"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Profile"
-                android:textSize="17dp"/>
+                android:textColor="#94A3B8"
+                android:textSize="12sp"
+                android:layout_marginTop="4dp"/>
         </LinearLayout>
 
     </LinearLayout>

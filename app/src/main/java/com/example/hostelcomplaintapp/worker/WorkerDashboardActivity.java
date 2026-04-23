@@ -25,7 +25,6 @@ import com.google.firebase.firestore.ListenerRegistration;
 public class WorkerDashboardActivity extends AppCompatActivity {
 
     private TextView tvTotalCount, tvPendingCount, tvInProgressCount, tvCompletedCount, tvOverdueCount;
-    private TextView tvAverageRating, tvRecentFeedback;
     private ListenerRegistration dashboardListener;
     ImageView gotohomepg, imgproff, btnNotification, staff_manage;
 
@@ -79,16 +78,6 @@ public class WorkerDashboardActivity extends AppCompatActivity {
         tvInProgressCount = findViewById(R.id.tvInProgressCount);
         tvCompletedCount = findViewById(R.id.tvCompletedCount);
         tvOverdueCount = findViewById(R.id.tvOverdueCount);
-
-        tvAverageRating = findViewById(R.id.tvAverageRating);
-        tvRecentFeedback = findViewById(R.id.tvRecentFeedback);
-
-
-
-
-        // Setup mock feedback
-        tvAverageRating.setText("Avg Rating: 4.5 / 5.0 ⭐");
-        tvRecentFeedback.setText("\"Great job fixing the fan!\" - Room 101\n\"Quick response\" - Room 304");
 
         // Card navigation enabled
         findViewById(R.id.cardTotal).setOnClickListener(v -> openTaskList("ALL"));

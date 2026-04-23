@@ -4,22 +4,23 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#F6F8FB"
     android:orientation="vertical">
 
-    <!-- Top Navbar Starts here -->
-
-
+    <!-- 🔵 TOP TOOLBAR -->
     <androidx.appcompat.widget.Toolbar
         android:layout_width="match_parent"
         android:layout_height="80dp"
-        android:background="@drawable/toolbar_bg">
+        android:background="@drawable/toolbar_bg"
+        android:elevation="4dp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="horizontal"
             android:gravity="center_vertical"
-            android:padding="12dp">
+            android:paddingStart="12dp"
+            android:paddingEnd="16dp">
 
             <ImageView
                 android:id="@+id/btnBack"
@@ -33,149 +34,167 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Staff"
+                android:text="Staff Management"
                 android:textColor="@color/white"
                 android:textSize="22sp"
                 android:textStyle="bold"
                 android:gravity="center"/>
 
             <ImageView
-            android:id="@+id/addStaffBtn"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:src="@drawable/baseline_add_24"
-            android:background="@color/white"/>
+                android:id="@+id/addStaffBtn"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:src="@drawable/baseline_add_24"
+                android:background="@drawable/circular_bg_white"
+                android:padding="4dp"
+                app:tint="#2F6FED"
+                android:elevation="2dp"/>
         </LinearLayout>
-
     </androidx.appcompat.widget.Toolbar>
 
-    <!-- TOP NAVBAR ENDS HERE-->
-
-    <!-- 🔥 THIS IS MAIN FIX -->
+    <!-- CONTENT -->
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1">
+        android:layout_weight="1"
+        android:padding="12dp"
+        android:clipToPadding="false">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:id="@+id/staffContainer">
-
-
-
-            <!-- Pending card 2 start -->
-
-
-
+            <!-- Dynamic staff cards -->
         </LinearLayout>
-
     </ScrollView>
 
-
-    <!-- Bottom navbar stars there -->
-
+    <!-- 🔻 BOTTOM NAVIGATION -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#E2E8F0" />
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="60dp"
+        android:layout_height="65dp"
+        android:background="#FFFFFF"
         android:orientation="horizontal"
-        android:background="@drawable/bottom_nav_bg"
         android:weightSum="4">
 
-        <!-- Home -->
+        <!-- HOME -->
         <LinearLayout
+            android:id="@+id/llHome"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
-            android:orientation="vertical">
-
+            android:orientation="vertical"
+            android:clickable="true"
+            android:focusable="true">
 
             <ImageView
                 android:id="@+id/gotohomepg"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:src="@drawable/baseline_home_24"/>
+                android:layout_width="26dp"
+                android:layout_height="26dp"
+                android:src="@drawable/baseline_home_24"
+                app:tint="#94A3B8"/>
 
             <TextView
+                android:id="@+id/tvHome"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Home"
-                android:textSize="17dp"/>
+                android:textColor="#94A3B8"
+                android:textSize="12sp"
+                android:layout_marginTop="4dp"/>
         </LinearLayout>
 
-
+        <!-- NOTIFICATION -->
         <LinearLayout
+            android:id="@+id/llNotification"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:clickable="true"
+            android:focusable="true">
 
             <ImageView
                 android:id="@+id/btnNotification"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:src="@drawable/baseline_notifications_24"/>
+                android:layout_width="26dp"
+                android:layout_height="26dp"
+                android:src="@drawable/baseline_notifications_24"
+                app:tint="#94A3B8"/>
 
             <TextView
+                android:id="@+id/tvNotification"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Notification"
-                android:textSize="17dp"/>
+                android:text="Alerts"
+                android:textColor="#94A3B8"
+                android:textSize="12sp"
+                android:layout_marginTop="4dp"/>
         </LinearLayout>
 
+        <!-- STAFF -->
         <LinearLayout
+            android:id="@+id/llStaff"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:clickable="true"
+            android:focusable="true">
 
             <ImageView
-                android:layout_width="24dp"
-                android:layout_height="24dp"
                 android:id="@+id/staff_manage"
-                android:src="@drawable/baseline_person_add_alt_24"/>
+                android:layout_width="26dp"
+                android:layout_height="26dp"
+                android:src="@drawable/baseline_person_add_alt_24"
+                app:tint="#2F6FED"/>
 
             <TextView
+                android:id="@+id/tvStaff"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Staff"
-                android:textSize="17dp"/>
+                android:textColor="#2F6FED"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                android:layout_marginTop="4dp"/>
         </LinearLayout>
 
+        <!-- PROFILE -->
         <LinearLayout
+            android:id="@+id/llProfile"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:clickable="true"
+            android:focusable="true">
 
             <ImageView
-                android:layout_width="24dp"
                 android:id="@+id/imgprof"
-                android:layout_height="24dp"
-                android:src="@drawable/baseline_account_circle_24"/>
+                android:layout_width="26dp"
+                android:layout_height="26dp"
+                android:src="@drawable/baseline_account_circle_24"
+                app:tint="#94A3B8"/>
 
             <TextView
+                android:id="@+id/tvProfile"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Profile"
-                android:textSize="17dp"/>
+                android:textColor="#94A3B8"
+                android:textSize="12sp"
+                android:layout_marginTop="4dp"/>
         </LinearLayout>
-
-
-        <!-- (others same as your code, no change needed) -->
-
-
 
     </LinearLayout>
 
-
-
-
 </LinearLayout>
-

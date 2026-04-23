@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -62,13 +63,21 @@ public class Notification_student extends AppCompatActivity {
         // 🔥 Firestore instance
         db = FirebaseFirestore.getInstance();
 
-        // 📡 Fetch data
-        db.collection("announcements")
+        android.util.Log.d("StudentNotification", "Fetching from student_announcements and announcements collections");
+
+        // 📡 Fetch data from student_announcements
+        db.collection("student_announcements")
                 .orderBy("timestamp", Query.Direction.DESCENDING)
                 .addSnapshotListener((value, error) -> {
 
+                    if (error != null) {
+                        android.util.Log.e("StudentNotification", "Firestore error (student_announcements)", error);
+                        return;
+                    }
+
                     if (value != null) {
                         list.clear();
+                        android.util.Log.d("StudentNotification", "Student documents fetched: " + value.size());
 
                         for (DocumentSnapshot doc : value.getDocuments()) {
                             Notificationpgdatastore model = doc.toObject(Notificationpgdatastore.class);
@@ -79,7 +88,27 @@ public class Notification_student extends AppCompatActivity {
                             }
                         }
 
-                        adapter.notifyDataSetChanged();
+                        // Also fetch from announcements (for "All" target)
+                        db.collection("announcements")
+                                .orderBy("timestamp", Query.Direction.DESCENDING)
+                                .get()
+                                .addOnSuccessListener(allValue -> {
+                                    android.util.Log.d("StudentNotification", "All announcements fetched: " + allValue.size());
+                                    for (DocumentSnapshot doc : allValue.getDocuments()) {
+                                        Notificationpgdatastore model = doc.toObject(Notificationpgdatastore.class);
+                                        if (model != null) {
+                                            model.setId(doc.getId());
+                                            list.add(model);
+                                        }
+                                    }
+                                    // Sort by timestamp
+                                    list.sort((a, b) -> Long.compare(b.getTimestamp(), a.getTimestamp()));
+                                    adapter.notifyDataSetChanged();
+                                })
+                                .addOnFailureListener(e -> {
+                                    android.util.Log.e("StudentNotification", "Error fetching announcements", e);
+                                    adapter.notifyDataSetChanged();
+                                });
                     }
                 });
 
@@ -166,8 +195,8 @@ public class Notification_student extends AppCompatActivity {
         public void onBindViewHolder(ViewHolder holder, int position) {
             Notificationpgdatastore model = list.get(position);
             holder.txtText.setText(model.getText() != null ? model.getText() : "No message");
-            holder.txtWarden.setText("Warden: " + (model.getWardenId() != null ? model.getWardenId() : "Unknown"));
-            
+            holder.txtWarden.setText("Posted by: " + (model.getWardenName() != null ? model.getWardenName() : "Warden"));
+
             String formattedTime = "No time";
             if (model.getTimestamp() != 0) {
                 SimpleDateFormat sdf = new SimpleDateFormat("dd MMM yyyy, hh:mm a");
@@ -180,7 +209,7 @@ public class Notification_student extends AppCompatActivity {
                 AlertDialog.Builder builder = new AlertDialog.Builder(context);
                 builder.setTitle("Notification Details");
                 builder.setMessage("Message: " + model.getText() + "\n\n" +
-                                   "Warden: " + model.getWardenId() + "\n\n" +
+                                   "Posted by: " + (model.getWardenName() != null ? model.getWardenName() : "Warden") + "\n\n" +
                                    "Time: " + displayTime);
                 builder.setPositiveButton("OK", (dialog, which) -> dialog.dismiss());
                 builder.show();

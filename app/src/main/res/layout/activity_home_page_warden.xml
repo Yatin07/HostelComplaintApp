@@ -94,7 +94,27 @@
                 android:gravity="center"
                 android:layout_marginBottom="16dp"
                 android:orientation="horizontal">
-                <!-- Dots added programmatically -->
+                
+                <View
+                    android:id="@+id/dot1"
+                    android:layout_width="8dp"
+                    android:layout_height="8dp"
+                    android:layout_margin="4dp"
+                    android:background="@android:color/darker_gray" />
+
+                <View
+                    android:id="@+id/dot2"
+                    android:layout_width="8dp"
+                    android:layout_height="8dp"
+                    android:layout_margin="4dp"
+                    android:background="@android:color/darker_gray" />
+
+                <View
+                    android:id="@+id/dot3"
+                    android:layout_width="8dp"
+                    android:layout_height="8dp"
+                    android:layout_margin="4dp"
+                    android:background="@android:color/darker_gray" />
             </LinearLayout>
 
             <!-- 🗂️ GRID CARDS -->
@@ -273,11 +293,14 @@
 
         <!-- Home -->
         <LinearLayout
+            android:id="@+id/llHome"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:clickable="true"
+            android:focusable="true">
 
             <ImageView
                 android:id="@+id/home"
@@ -287,6 +310,7 @@
                 app:tint="#2F6FED"/>
 
             <TextView
+                android:id="@+id/tvHome"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Home"
@@ -298,11 +322,14 @@
 
         <!-- Notification -->
         <LinearLayout
+            android:id="@+id/llNotification"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:clickable="true"
+            android:focusable="true">
 
             <ImageView
                 android:id="@+id/imgnotification"
@@ -312,6 +339,7 @@
                 app:tint="#94A3B8"/>
 
             <TextView
+                android:id="@+id/tvNotification"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Alerts"
@@ -322,11 +350,14 @@
 
         <!-- Staff -->
         <LinearLayout
+            android:id="@+id/llStaff"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:clickable="true"
+            android:focusable="true">
 
             <ImageView
                 android:id="@+id/staff_manage"
@@ -336,6 +367,7 @@
                 app:tint="#94A3B8"/>
 
             <TextView
+                android:id="@+id/tvStaff"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Staff"
@@ -346,11 +378,14 @@
 
         <!-- Profile -->
         <LinearLayout
+            android:id="@+id/llProfile"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:clickable="true"
+            android:focusable="true">
 
             <ImageView
                 android:id="@+id/imgprof"
@@ -360,6 +395,7 @@
                 app:tint="#94A3B8"/>
 
             <TextView
+                android:id="@+id/tvProfile"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Profile"

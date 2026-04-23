@@ -7,10 +7,8 @@ plugins {
 
 android {
     namespace = "com.example.hostelcomplaintapp"
-    compileSdk {
-        version = release(36)
-    }
-
+    compileSdk = 36
+ 
     defaultConfig {
         applicationId = "com.example.hostelcomplaintapp"
         minSdk = 24

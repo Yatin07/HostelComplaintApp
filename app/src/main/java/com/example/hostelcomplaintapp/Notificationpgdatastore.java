@@ -4,7 +4,7 @@ import android.widget.Button;
 
 public class Notificationpgdatastore {
 
-    String text, wardenId;
+    String text, wardenId, wardenName;
     long timestamp;
     String id;
 
@@ -18,6 +18,10 @@ public class Notificationpgdatastore {
 
     public String getWardenId() {
         return wardenId;
+    }
+
+    public String getWardenName() {
+        return wardenName;
     }
 
     public long getTimestamp() {

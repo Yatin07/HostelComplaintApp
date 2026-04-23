@@ -67,10 +67,16 @@ public class ComplaintDetailActivity extends AppCompatActivity {
                         model.setDocId(doc.getId());
                         model.setTitle(doc.getString("title"));
                         model.setDescription(doc.getString("description"));
-                        model.setRoomNumber(doc.getString("roomNumber"));
+
+                        // Handle both room and roomNumber fields
+                        Object roomObj = doc.get("room");
+                        if (roomObj == null) roomObj = doc.get("roomNumber");
+                        String roomStr = roomObj != null ? String.valueOf(roomObj) : "N/A";
+                        model.setRoomNumber(roomStr);
+
                         model.setStudentId(doc.getString("studentId"));
                         model.setStatus(doc.getString("status"));
-                        
+
 //                        if (doc.contains("deadline")) {
 //                            Long dl = doc.getLong("deadline");
 //                            if (dl != null) model.setDeadline(dl);

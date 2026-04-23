@@ -5,16 +5,16 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#F6F8FB"
     android:orientation="vertical">
 
-    <!-- Top Navbar Starts here -->
-
-    <!-- ✅ THIS IS THE MAIN FIX -->
+    <!-- 🔵 TOP TOOLBAR -->
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="80dp"
-        android:background="@drawable/toolbar_bg">
+        android:background="@drawable/toolbar_bg"
+        android:elevation="4dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -24,7 +24,6 @@
             android:paddingStart="12dp"
             android:paddingEnd="16dp">
 
-            <!-- BACK ARROW -->
             <ImageView
                 android:id="@+id/btnBack"
                 android:layout_width="24dp"
@@ -33,96 +32,137 @@
                 app:tint="@color/white"
                 android:layout_marginEnd="10dp" />
 
-            <!-- TITLE (CENTER) -->
             <TextView
-                android:id="@+id/tv1WardenName"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Announcement"
+                android:text="New Announcement"
                 android:textColor="@color/white"
-                android:textSize="25sp"
+                android:textSize="22sp"
                 android:textStyle="bold"
                 android:gravity="center" />
 
-            <!-- RIGHT SIDE PROFILE ICON -->
             <ImageView
                 android:layout_width="60dp"
                 android:layout_height="60dp"
                 android:id="@+id/imgnmlogo"
-                android:src="@drawable/nmm"/>
-
+                android:src="@drawable/nmm"
+                android:padding="4dp"/>
         </LinearLayout>
-
     </androidx.appcompat.widget.Toolbar>
 
-    <!-- TOP NAVBAR ENDS HERE-->
-
-
-
-
-    <LinearLayout
+    <!-- CONTENT -->
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
-        android:orientation="vertical">
+        android:layout_weight="1">
 
-
-
-        <!-- Title -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Add Announcement"
-            android:textSize="34sp"
-            android:textStyle="bold"
-            android:layout_marginTop="40dp"
-            android:layout_marginBottom="30dp"
-            android:layout_gravity="center"/>
-
-        <!-- Input -->
-
-
-        <EditText
-            android:id="@+id/addannouncement"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="100dp"
-            android:hint="Add Text Here..."
-            android:layout_margin="20dp"
-            android:layout_marginBottom="30dp"/>
-
-
-        <Button
-            android:id="@+id/addimgtBtn"
-            android:layout_width="200dp"
             android:layout_height="wrap_content"
-            android:text="Add Image"
-            android:layout_gravity="center"
-            android:layout_marginTop="35dp"/>
+            android:orientation="vertical"
+            android:padding="24dp">
 
-        <!-- Button -->
-        <Button
-            android:id="@+id/submitBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Submit"
-            android:layout_gravity="center"
-            android:layout_marginTop="36dp"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Create News"
+                android:textSize="28sp"
+                android:textColor="#0F172A"
+                android:textStyle="bold"
+                android:layout_gravity="center"
+                android:layout_marginBottom="32dp"/>
 
-    </LinearLayout>
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="0dp"
+                app:strokeWidth="1dp"
+                app:strokeColor="#E2E8F0"
+                app:cardBackgroundColor="#FFFFFF">
 
+                <EditText
+                    android:id="@+id/addannouncement"
+                    android:layout_width="match_parent"
+                    android:layout_height="150dp"
+                    android:hint="Type your announcement here..."
+                    android:padding="16dp"
+                    android:gravity="top"
+                    android:background="@android:color/transparent"
+                    android:textColor="#1E293B"
+                    android:textSize="16sp"/>
+            </com.google.android.material.card.MaterialCardView>
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Target Audience"
+                android:textSize="16sp"
+                android:textColor="#0F172A"
+                android:textStyle="bold"
+                android:layout_marginTop="24dp"
+                android:layout_marginBottom="12dp"/>
 
-    <!-- Bottom navbar -->
+            <RadioGroup
+                android:id="@+id/radioGroupTarget"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <RadioButton
+                    android:id="@+id/radioAll"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="All"
+                    android:checked="true"
+                    android:buttonTint="#2F6FED"/>
+
+                <RadioButton
+                    android:id="@+id/radioStaff"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Staff"
+                    android:buttonTint="#2F6FED"/>
+
+                <RadioButton
+                    android:id="@+id/radioStudent"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Student"
+                    android:buttonTint="#2F6FED"/>
+            </RadioGroup>
+
+            <Button
+                android:id="@+id/submitBtn"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:text="Post Announcement"
+                android:backgroundTint="#2F6FED"
+                android:textColor="@color/white"
+                android:layout_marginTop="24dp"
+                android:textStyle="bold"
+                app:cornerRadius="8dp"/>
+
+        </LinearLayout>
+    </ScrollView>
+
+    <!-- 🔻 BOTTOM NAVIGATION -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#E2E8F0" />
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="60dp"
+        android:layout_height="65dp"
+        android:background="#FFFFFF"
         android:orientation="horizontal"
-        android:background="@drawable/bottom_nav_bg"
         android:weightSum="4">
 
-        <!-- Home -->
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
@@ -130,20 +170,21 @@
             android:gravity="center"
             android:orientation="vertical">
 
-
             <ImageView
                 android:id="@+id/gotohomepg"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:src="@drawable/baseline_home_24"/>
+                android:layout_width="26dp"
+                android:layout_height="26dp"
+                android:src="@drawable/baseline_home_24"
+                app:tint="#94A3B8"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Home"
-                android:textSize="17dp"/>
+                android:textColor="#94A3B8"
+                android:textSize="12sp"
+                android:layout_marginTop="4dp"/>
         </LinearLayout>
-
 
         <LinearLayout
             android:layout_width="0dp"
@@ -154,15 +195,18 @@
 
             <ImageView
                 android:id="@+id/btnNotification"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:src="@drawable/baseline_notifications_24"/>
+                android:layout_width="26dp"
+                android:layout_height="26dp"
+                android:src="@drawable/baseline_notifications_24"
+                app:tint="#94A3B8"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Notification"
-                android:textSize="17dp"/>
+                android:text="Alerts"
+                android:textColor="#94A3B8"
+                android:textSize="12sp"
+                android:layout_marginTop="4dp"/>
         </LinearLayout>
 
         <LinearLayout
@@ -174,15 +218,18 @@
 
             <ImageView
                 android:id="@+id/staff_manage"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:src="@drawable/baseline_person_add_alt_24"/>
+                android:layout_width="26dp"
+                android:layout_height="26dp"
+                android:src="@drawable/baseline_person_add_alt_24"
+                app:tint="#94A3B8"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Staff"
-                android:textSize="17dp"/>
+                android:textColor="#94A3B8"
+                android:textSize="12sp"
+                android:layout_marginTop="4dp"/>
         </LinearLayout>
 
         <LinearLayout
@@ -194,25 +241,20 @@
 
             <ImageView
                 android:id="@+id/imgProfile1"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:src="@drawable/baseline_account_circle_24"/>
+                android:layout_width="26dp"
+                android:layout_height="26dp"
+                android:src="@drawable/baseline_account_circle_24"
+                app:tint="#94A3B8"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Profile"
-                android:textSize="17dp"/>
+                android:textColor="#94A3B8"
+                android:textSize="12sp"
+                android:layout_marginTop="4dp"/>
         </LinearLayout>
 
-
-        <!-- (others same as your code, no change needed) -->
-
-
-
     </LinearLayout>
-
-
-
 
 </LinearLayout>
